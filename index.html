@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rex Nursing｜護理師國考自主學習</title>
+<meta name="description" content="Rex Nursing — 護理師國考自主學習頻道。1,300+ 支免費影片，考題逐題解析，不死背、用邏輯破題。">
+<meta name="keywords" content="護理師國考, 護理師, 國考題, 內外科護理學, 基本護理學, Rex Nursing">
+<meta property="og:title" content="Rex Nursing｜護理師國考自主學習">
+<meta property="og:description" content="1,300+ 支免費影片，考題逐題解析，不補習也能考上！">
+<meta property="og:url" content="https://rexnursing.github.io">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal: #1D9E75;
+    --teal-l: #E1F5EE;
+    --teal-d: #085041;
+    --cream: #FAFAF8;
+    --text: #1a1a1a;
+    --muted: #6b7280;
+    --bd: rgba(0,0,0,0.09);
+    --white: #fff;
+    --r: 14px;
+    --rs: 8px;
+  }
+  body { font-family: 'Noto Sans TC', system-ui, sans-serif; background: var(--cream); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+  /* NAV */
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(250,250,248,0.93); backdrop-filter: blur(14px); border-bottom: 1px solid var(--bd); padding: 13px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; color: var(--teal-d); text-decoration: none; cursor: pointer; }
+  .nav-r { display: flex; gap: 24px; align-items: center; }
+  .nav-r a { text-decoration: none; color: var(--muted); font-size: 13.5px; transition: color .2s; }
+  .nav-r a:hover, .nav-r a.active { color: var(--teal); }
+  .nav-yt { background: var(--teal) !important; color: #fff !important; padding: 7px 16px !important; border-radius: 20px !important; font-size: 13px !important; font-weight: 500 !important; transition: background .2s !important; }
+  .nav-yt:hover { background: var(--teal-d) !important; color: #fff !important; }
+
+  /* PAGES */
+  .page { display: none; max-width: 900px; margin: 0 auto; padding: 40px 40px 80px; }
+  .page.active { display: block; }
+
+  /* HERO */
+  .hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; padding: 56px 0 44px; }
+  .badge { display: inline-block; background: var(--teal-l); color: var(--teal-d); font-size: 11.5px; font-weight: 500; padding: 4px 14px; border-radius: 20px; letter-spacing: .07em; margin-bottom: 18px; }
+  .hero h1 { font-family: 'Noto Serif TC', serif; font-size: 34px; line-height: 1.35; font-weight: 700; margin-bottom: 14px; }
+  .hero h1 em { color: var(--teal); font-style: normal; }
+  .hero-desc { color: var(--muted); font-size: 15px; line-height: 1.85; margin-bottom: 26px; }
+  .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-p { background: var(--teal); color: #fff; padding: 11px 22px; border-radius: 50px; text-decoration: none; font-size: 13.5px; font-weight: 500; border: none; cursor: pointer; transition: background .2s, transform .15s; font-family: inherit; display: inline-block; }
+  .btn-p:hover { background: var(--teal-d); transform: translateY(-1px); color: #fff; }
+  .btn-o { border: 1.5px solid var(--teal); color: var(--teal); padding: 10px 22px; border-radius: 50px; background: none; font-size: 13.5px; font-weight: 500; cursor: pointer; transition: background .2s; font-family: inherit; display: inline-block; text-decoration: none; }
+  .btn-o:hover { background: var(--teal-l); }
+  .hero-stats { background: var(--white); border: 1px solid var(--bd); border-radius: var(--r); padding: 26px 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .sbox { background: var(--teal-l); border-radius: 10px; padding: 16px; text-align: center; }
+  .sbox .n { font-family: 'Noto Serif TC', serif; font-size: 24px; font-weight: 700; color: var(--teal-d); }
+  .sbox .l { font-size: 11px; color: var(--teal-d); opacity: .75; margin-top: 3px; }
+  .sbox.full { grid-column: 1 / -1; background: var(--teal); }
+  .sbox.full .n { color: #fff; font-size: 15px; }
+  .sbox.full .l { color: rgba(255,255,255,.75); }
+
+  /* SECTION */
+  .sh { margin-bottom: 22px; }
+  .sh h2 { font-family: 'Noto Serif TC', serif; font-size: 22px; font-weight: 700; }
+  .sh p { color: var(--muted); font-size: 13.5px; margin-top: 5px; }
+  hr.div { border: none; border-top: 1px solid var(--bd); margin: 36px 0; }
+
+  /* CATS */
+  .cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .cat { background: var(--white); border: 1px solid var(--bd); border-radius: var(--rs); padding: 18px 14px; text-align: center; cursor: pointer; transition: border-color .2s, transform .15s; text-decoration: none; color: inherit; display: block; }
+  .cat:hover { border-color: var(--teal); transform: translateY(-2px); }
+  .cat-ico { font-size: 24px; margin-bottom: 8px; }
+  .cat h3 { font-size: 13px; font-weight: 500; }
+  .cat p { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* VIDEOS */
+  .vids { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .vcard { background: var(--white); border: 1px solid var(--bd); border-radius: var(--r); overflow: hidden; text-decoration: none; color: inherit; display: block; transition: transform .15s, box-shadow .15s; }
+  .vcard:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.07); }
+  .thumb { width: 100%; aspect-ratio: 16/9; position: relative; display: flex; align-items: center; justify-content: center; }
+  .play { width: 42px; height: 42px; background: rgba(255,255,255,.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+  .play svg { width: 17px; height: 17px; fill: var(--teal); margin-left: 2px; }
+  .dur { position: absolute; bottom: 9px; right: 10px; background: rgba(0,0,0,.72); color: #fff; font-size: 10.5px; padding: 2px 7px; border-radius: 4px; }
+  .tlabel { position: absolute; top: 10px; left: 10px; color: #fff; font-size: 10.5px; font-weight: 500; padding: 3px 9px; border-radius: 4px; }
+  .vinfo { padding: 14px 16px; }
+  .vinfo h3 { font-size: 14px; font-weight: 500; line-height: 1.55; margin-bottom: 8px; }
+  .vmeta { display: flex; gap: 10px; font-size: 11.5px; color: var(--muted); align-items: center; flex-wrap: wrap; }
+  .tag { font-size: 10.5px; padding: 2px 8px; border-radius: 4px; }
+
+  /* ABOUT */
+  .about-box { background: var(--white); border: 1px solid var(--bd); border-radius: var(--r); padding: 32px; display: flex; gap: 28px; align-items: flex-start; }
+  .av { width: 76px; height: 76px; border-radius: 50%; flex-shrink: 0; background: linear-gradient(135deg, var(--teal), var(--teal-d)); display: flex; align-items: center; justify-content: center; color: #fff; font-family: 'Noto Serif TC', serif; font-size: 22px; font-weight: 700; }
+  .about-box h3 { font-size: 18px; font-weight: 700; margin-bottom: 5px; }
+  .role { color: var(--teal); font-size: 13px; font-weight: 500; margin-bottom: 12px; }
+  .about-box p { color: var(--muted); font-size: 14px; line-height: 1.85; }
+  .slinks { display: flex; gap: 9px; margin-top: 16px; flex-wrap: wrap; }
+  .slink { display: inline-block; padding: 7px 15px; border-radius: 20px; font-size: 12.5px; font-weight: 500; text-decoration: none; border: 1px solid var(--bd); color: var(--text); transition: border-color .2s, background .2s; }
+  .slink:hover { border-color: var(--teal); background: var(--teal-l); color: var(--teal-d); }
+
+  /* CTA */
+  .cta-box { background: var(--teal-d); border-radius: var(--r); padding: 44px 36px; text-align: center; margin-top: 36px; }
+  .cta-box h2 { font-family: 'Noto Serif TC', serif; font-size: 21px; color: #fff; margin-bottom: 8px; }
+  .cta-box p { color: rgba(255,255,255,.7); font-size: 14px; margin-bottom: 24px; }
+  .cta-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .cta-btn { padding: 11px 24px; border-radius: 50px; font-size: 13.5px; font-weight: 500; text-decoration: none; display: inline-block; transition: opacity .2s; border: none; cursor: pointer; font-family: inherit; }
+  .cta-btn:hover { opacity: .88; }
+  .cb1 { background: var(--teal); color: #fff; }
+  .cb2 { background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.3) !important; }
+
+  /* QUESTION SECTION */
+  .submit-card { background: var(--white); border: 1px solid var(--bd); border-radius: var(--r); padding: 1.5rem; margin-bottom: 1.5rem; }
+  .field-label { font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 6px; display: block; }
+  .subj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; margin-bottom: 1.25rem; }
+  .sbtn { padding: 8px 10px; border-radius: var(--rs); border: 1px solid var(--bd); background: var(--white); color: var(--muted); font-size: 12.5px; cursor: pointer; transition: all .15s; font-family: inherit; }
+  .sbtn:hover { border-color: var(--teal); color: var(--teal-d); background: var(--teal-l); }
+  .sbtn.active { border-color: var(--teal); background: var(--teal-l); color: var(--teal-d); font-weight: 500; }
+  textarea { width: 100%; min-height: 130px; resize: vertical; border: 1px solid var(--bd); border-radius: var(--rs); padding: 10px 12px; font-size: 14px; font-family: inherit; color: var(--text); background: var(--white); line-height: 1.7; margin-bottom: 1rem; }
+  textarea:focus { outline: none; border-color: var(--teal); }
+  textarea::placeholder { color: #aaa; }
+  .submit-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .hint { font-size: 12px; color: #aaa; }
+  .success-msg { background: #EAF3DE; border: 1px solid #97C459; border-radius: var(--rs); padding: 10px 14px; font-size: 13.5px; color: #27500A; margin-top: 12px; display: none; }
+
+  .list-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 1rem; }
+  .filter-row { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+  .filter-label { font-size: 12.5px; color: var(--muted); }
+  .fbtn { padding: 5px 14px; border-radius: 20px; border: 1px solid var(--bd); background: var(--white); color: var(--muted); font-size: 12px; cursor: pointer; transition: all .15s; font-family: inherit; }
+  .fbtn:hover { border-color: var(--teal); color: var(--teal-d); }
+  .fbtn.active { background: var(--teal); border-color: var(--teal); color: #fff; }
+
+  .q-list { display: flex; flex-direction: column; gap: 12px; }
+  .qcard { background: var(--white); border: 1px solid var(--bd); border-radius: var(--r); padding: 1.25rem 1.4rem; }
+  .qcard-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  .qmeta { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+  .qtag { font-size: 11px; padding: 3px 9px; border-radius: 4px; font-weight: 500; }
+  .tg-subj { background: var(--teal-l); color: var(--teal-d); }
+  .tg-wait { background: #FAEEDA; color: #633806; }
+  .tg-done { background: #EAF3DE; color: #27500A; }
+  .qdate { font-size: 11.5px; color: #aaa; }
+  .qbody { font-size: 14px; line-height: 1.75; white-space: pre-wrap; word-break: break-word; }
+  .qactions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .qabtn { font-size: 12px; padding: 5px 13px; border-radius: 20px; border: 1px solid var(--bd); background: transparent; color: var(--muted); cursor: pointer; transition: all .15s; font-family: inherit; }
+  .qabtn:hover { border-color: var(--teal); color: var(--teal-d); background: var(--teal-l); }
+  .qanswer { margin-top: 12px; border-top: 1px solid var(--bd); padding-top: 12px; }
+  .qanswer-label { font-size: 12.5px; font-weight: 500; color: var(--teal); margin-bottom: 6px; }
+  .qanswer-body { font-size: 13.5px; color: var(--muted); line-height: 1.85; white-space: pre-wrap; }
+  .qvideo { margin-top: 10px; }
+  .qvideo a { font-size: 13px; color: var(--teal); text-decoration: none; }
+  .qvideo a:hover { text-decoration: underline; }
+  .empty-state { text-align: center; padding: 3rem 1rem; color: #aaa; font-size: 14px; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--bd); padding: 24px 40px; text-align: center; font-size: 13px; color: var(--muted); }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    nav { padding: 12px 16px; }
+    .nav-r { gap: 12px; }
+    .nav-r a { font-size: 12px; }
+    .page { padding: 24px 16px 60px; }
+    .hero { grid-template-columns: 1fr; gap: 28px; padding: 32px 0 24px; }
+    .hero h1 { font-size: 26px; }
+    .hero-stats { grid-template-columns: 1fr 1fr; }
+    .cats { grid-template-columns: repeat(2, 1fr); }
+    .vids { grid-template-columns: 1fr; }
+    .about-box { flex-direction: column; align-items: center; text-align: center; }
+    .slinks { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#" onclick="goPage('home')">Rex Nursing</a>
+  <div class="nav-r">
+    <a href="#" onclick="goPage('home')" id="nav-home" class="active">首頁</a>
+    <a href="#" onclick="goPage('videos')" id="nav-videos">影片</a>
+    <a href="#" onclick="goPage('questions')" id="nav-questions">考題投稿</a>
+    <a href="#" onclick="goPage('about')" id="nav-about">關於</a>
+    <a class="nav-yt" href="https://www.youtube.com/channel/UCLVCrG-U0yhBAgmTVXjK59g" target="_blank">▶ YouTube</a>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div>
+      <span class="badge">🏥 護理師國考自主學習頻道</span>
+      <h1>不補習，也能<em>考上</em><br>護理師國家考試</h1>
+      <p class="hero-desc">Rex 自己讀書不靠補習班，成功通過國考。<br>每支影片用邏輯解題，不死背，<br>幫你建立真正屬於自己的備考實力。</p>
+      <div class="btns">
+        <button class="btn-p" onclick="goPage('questions')">投稿考題</button>
+        <button class="btn-o" onclick="goPage('videos')">看影片解析</button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="sbox"><div class="n">1,300+</div><div class="l">影片集數</div></div>
+      <div class="sbox"><div class="n">免費</div><div class="l">全部開放觀看</div></div>
+      <div class="sbox full"><div class="n">考題逐題解析・邏輯破題不死背</div><div class="l">內外科 × 精神科 × 基護 × 婦兒科 × 護理行政</div></div>
+    </div>
+  </div>
+
+  <hr class="div">
+  <div class="sh"><h2>考科分類</h2><p>點選快速找到對應影片</p></div>
+  <div class="cats">
+    <a class="cat" href="#" onclick="goPage('videos')"><div class="cat-ico">🫀</div><h3>內外科護理學</h3><p>循環、呼吸、內分泌</p></a>
+    <a class="cat" href="#" onclick="goPage('videos')"><div class="cat-ico">🩺</div><h3>基本護理學</h3><p>滴數計算、基礎技術</p></a>
+    <a class="cat" href="#" onclick="goPage('videos')"><div class="cat-ico">🧠</div><h3>精神科護理</h3><p>思覺失調、心理衛生</p></a>
+    <a class="cat" href="#" onclick="goPage('videos')"><div class="cat-ico">🌸</div><h3>婦兒科護理</h3><p>產科、小兒科</p></a>
+    <a class="cat" href="#" onclick="goPage('videos')"><div class="cat-ico">📋</div><h3>護理行政</h3><p>管理、法規、倫理</p></a>
+    <a class="cat" href="#" onclick="goPage('videos')"><div class="cat-ico">🔬</div><h3>基礎醫學</h3><p>病理生理、解剖</p></a>
+    <a class="cat" href="#" onclick="goPage('videos')"><div class="cat-ico">💊</div><h3>藥理學</h3><p>常見藥物分類</p></a>
+    <a class="cat" href="#" onclick="goPage('videos')"><div class="cat-ico">📖</div><h3>歷屆考題</h3><p>逐題解析不死背</p></a>
+  </div>
+
+  <hr class="div">
+  <div class="sh"><h2>最新影片</h2><p>點擊影片直接前往 YouTube 觀看</p></div>
+  <div class="vids">
+    <a class="vcard" href="https://www.youtube.com/watch?v=aGsWvFBwGUs" target="_blank">
+      <div class="thumb" style="background:linear-gradient(135deg,#c8eadc,#9fd9c2)">
+        <span class="tlabel" style="background:var(--teal)">內外科</span>
+        <div class="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <span class="dur">#1285</span>
+      </div>
+      <div class="vinfo"><h3>愛迪生危機的特徵 — 高血鉀？還是其他選項？</h3><div class="vmeta"><span class="tag" style="background:var(--teal-l);color:var(--teal-d)">內外科</span><span>內分泌系統</span></div></div>
+    </a>
+    <a class="vcard" href="https://www.youtube.com/watch?v=gPpbw_3n45I" target="_blank">
+      <div class="thumb" style="background:linear-gradient(135deg,#d4e8f5,#a8cfe8)">
+        <span class="tlabel" style="background:#185FA5">基護</span>
+        <div class="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <span class="dur">#1316</span>
+      </div>
+      <div class="vinfo"><h3>滴數計算 — 精密輸液套管 300 mL 4 小時怎麼算？</h3><div class="vmeta"><span class="tag" style="background:#E6F1FB;color:#0C447C">基護</span><span>計算題攻略</span></div></div>
+    </a>
+    <a class="vcard" href="https://www.youtube.com/watch?v=F-awPbbvSmM" target="_blank">
+      <div class="thumb" style="background:linear-gradient(135deg,#fde8d8,#f5c3a0)">
+        <span class="tlabel" style="background:#D85A30">婦兒科</span>
+        <div class="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <span class="dur">#43</span>
+      </div>
+      <div class="vinfo"><h3>產科｜第一到四產程護理過程完整說明</h3><div class="vmeta"><span class="tag" style="background:#FAECE7;color:#712B13">婦兒科</span><span>分娩護理</span></div></div>
+    </a>
+    <a class="vcard" href="https://www.youtube.com/watch?v=ugsPgJfcucc" target="_blank">
+      <div class="thumb" style="background:linear-gradient(135deg,#eee8f5,#d4c0e8)">
+        <span class="tlabel" style="background:#534AB7">護理行政</span>
+        <div class="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <span class="dur">#1022</span>
+      </div>
+      <div class="vinfo"><h3>護理行政解題 — 我國最高衛生行政機關為何？</h3><div class="vmeta"><span class="tag" style="background:#EEEDFE;color:#3C3489">護理行政</span><span>行政法規</span></div></div>
+    </a>
+  </div>
+  <div style="text-align:center;margin-top:24px"><button class="btn-o" onclick="goPage('videos')">查看全部影片 →</button></div>
+
+  <div class="cta-box">
+    <h2>準備好開始備考了嗎？</h2>
+    <p>訂閱頻道，1,300+ 支影片全部免費，每支用邏輯帶你破解考題</p>
+    <div class="cta-btns">
+      <a class="cta-btn cb1" href="https://www.youtube.com/channel/UCLVCrG-U0yhBAgmTVXjK59g" target="_blank">▶ 前往 YouTube 訂閱</a>
+      <a class="cta-btn cb2" href="https://www.instagram.com/rex_nursing/" target="_blank">📷 追蹤 Instagram</a>
+    </div>
+  </div>
+</div>
+
+<!-- VIDEOS -->
+<div class="page" id="page-videos">
+  <div class="sh"><h2>影片解析</h2><p>點擊影片前往 YouTube 觀看完整解析</p></div>
+  <div class="vids">
+    <a class="vcard" href="https://www.youtube.com/watch?v=aGsWvFBwGUs" target="_blank"><div class="thumb" style="background:linear-gradient(135deg,#c8eadc,#9fd9c2)"><span class="tlabel" style="background:var(--teal)">內外科</span><div class="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><span class="dur">#1285</span></div><div class="vinfo"><h3>愛迪生危機的特徵 — 高血鉀？還是其他選項？</h3><div class="vmeta"><span class="tag" style="background:var(--teal-l);color:var(--teal-d)">內外科</span><span>內分泌系統</span></div></div></a>
+    <a class="vcard" href="https://www.youtube.com/watch?v=gPpbw_3n45I" target="_blank"><div class="thumb" style="background:linear-gradient(135deg,#d4e8f5,#a8cfe8)"><span class="tlabel" style="background:#185FA5">基護</span><div class="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><span class="dur">#1316</span></div><div class="vinfo"><h3>滴數計算 — 精密輸液套管 300 mL 4 小時怎麼算？</h3><div class="vmeta"><span class="tag" style="background:#E6F1FB;color:#0C447C">基護</span><span>計算題攻略</span></div></div></a>
+    <a class="vcard" href="https://www.youtube.com/watch?v=1kRJo7cqzVE" target="_blank"><div class="thumb" style="background:linear-gradient(135deg,#d4e8f5,#a8cfe8)"><span class="tlabel" style="background:#185FA5">基護</span><div class="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><span class="dur">#1318</span></div><div class="vinfo"><h3>D5W 80mL/hr 精密套管，下次換點滴幾點？</h3><div class="vmeta"><span class="tag" style="background:#E6F1FB;color:#0C447C">基護</span><span>計算題攻略</span></div></div></a>
+    <a class="vcard" href="https://www.youtube.com/watch?v=F-awPbbvSmM" target="_blank"><div class="thumb" style="background:linear-gradient(135deg,#fde8d8,#f5c3a0)"><span class="tlabel" style="background:#D85A30">婦兒科</span><div class="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><span class="dur">#43</span></div><div class="vinfo"><h3>產科｜第一到四產程護理過程完整說明</h3><div class="vmeta"><span class="tag" style="background:#FAECE7;color:#712B13">婦兒科</span><span>分娩護理</span></div></div></a>
+    <a class="vcard" href="https://www.youtube.com/watch?v=ugsPgJfcucc" target="_blank"><div class="thumb" style="background:linear-gradient(135deg,#eee8f5,#d4c0e8)"><span class="tlabel" style="background:#534AB7">護理行政</span><div class="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><span class="dur">#1022</span></div><div class="vinfo"><h3>護理行政解題 — 我國最高衛生行政機關</h3><div class="vmeta"><span class="tag" style="background:#EEEDFE;color:#3C3489">護理行政</span><span>行政法規</span></div></div></a>
+    <a class="vcard" href="https://www.youtube.com/watch?v=QcJRMj7wMUA" target="_blank"><div class="thumb" style="background:linear-gradient(135deg,#c8eadc,#9fd9c2)"><span class="tlabel" style="background:var(--teal)">內外科</span><div class="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><span class="dur">#354</span></div><div class="vinfo"><h3>抗甲狀腺硫醯胺類藥物 — 先大劑量再減量？</h3><div class="vmeta"><span class="tag" style="background:var(--teal-l);color:var(--teal-d)">內外科</span><span>內分泌、藥物</span></div></div></a>
+  </div>
+  <div style="text-align:center;margin-top:28px">
+    <a class="btn-p" href="https://www.youtube.com/channel/UCLVCrG-U0yhBAgmTVXjK59g" target="_blank">前往 YouTube 看全部 1,300+ 支影片 ▶</a>
+  </div>
+</div>
+
+<!-- QUESTIONS -->
+<div class="page" id="page-questions">
+  <div class="sh"><h2>考題投稿區</h2><p>把看不懂的考題貼上來，Rex 會在這裡回答或錄成影片解析！</p></div>
+
+  <div class="submit-card">
+    <span class="field-label">考科分類</span>
+    <div class="subj-grid">
+      <button class="sbtn active" onclick="selSubj(this,'內外科')">🫀 內外科</button>
+      <button class="sbtn" onclick="selSubj(this,'基護')">🩺 基護</button>
+      <button class="sbtn" onclick="selSubj(this,'精神科')">🧠 精神科</button>
+      <button class="sbtn" onclick="selSubj(this,'婦兒科')">🌸 婦兒科</button>
+      <button class="sbtn" onclick="selSubj(this,'護理行政')">📋 護理行政</button>
+      <button class="sbtn" onclick="selSubj(this,'基礎醫學')">🔬 基礎醫學</button>
+      <button class="sbtn" onclick="selSubj(this,'藥理學')">💊 藥理學</button>
+      <button class="sbtn" onclick="selSubj(this,'其他')">📌 其他</button>
+    </div>
+    <span class="field-label">貼上考題內容</span>
+    <textarea id="q-input" placeholder="例如：113-3 42. 有關愛迪生危機的特徵，下列何者正確？&#10;(A) 高血鉀&#10;(B) 高血壓&#10;(C) 高血糖&#10;(D) 高血鈉&#10;&#10;（可附上你的疑問或不懂的地方）"></textarea>
+    <div class="submit-row">
+      <button class="btn-p" onclick="submitQ()">投稿考題 ↗</button>
+      <span class="hint">Rex 會盡快回覆或錄影解析</span>
+    </div>
+    <div class="success-msg" id="success-msg">✓ 投稿成功！Rex 收到你的考題了，請稍待回覆。</div>
+  </div>
+
+  <div class="list-header">
+    <div class="sh" style="margin:0"><h2 style="font-size:18px;font-weight:500">考題解析列表</h2><p style="font-size:13px;color:var(--muted);margin-top:3px">同學投稿的考題與 Rex 的解答</p></div>
+    <div class="filter-row">
+      <span class="filter-label">篩選：</span>
+      <button class="fbtn active" onclick="filterQ(this,'全部')">全部</button>
+      <button class="fbtn" onclick="filterQ(this,'待解析')">待解析</button>
+      <button class="fbtn" onclick="filterQ(this,'已解析')">已解析</button>
+    </div>
+  </div>
+  <div class="q-list" id="q-list"><div style="text-align:center;padding:2rem;color:var(--muted);font-size:14px">載入中…</div></div>
+</div>
+
+<!-- ABOUT -->
+<div class="page" id="page-about">
+  <div class="sh"><h2>關於 Rex</h2></div>
+  <div class="about-box">
+    <div class="av">Rex</div>
+    <div>
+      <h3>Rex Nursing</h3>
+      <div class="role">護理師 × 國考教學 YouTuber</div>
+      <p>Rex 考國考時自己讀書、沒有補習，一樣順利考上。深知備考時找資料、整理邏輯的辛苦，因此開始製作影片，讓每位備考生都能用「聽的」來複習，用邏輯解題而不是死背。<br><br>影片裡有任何不懂，歡迎直接在留言區提問，Rex 喜歡被問學理問題！<br>偶爾也會分享國考以外的醫學知識。</p>
+      <div class="slinks">
+        <a class="slink" href="https://www.youtube.com/channel/UCLVCrG-U0yhBAgmTVXjK59g" target="_blank">▶ YouTube @rexnursing</a>
+        <a class="slink" href="https://www.instagram.com/rex_nursing/" target="_blank">📷 Instagram @rex_nursing</a>
+      </div>
+    </div>
+  </div>
+  <div class="cta-box">
+    <h2>訂閱頻道，不錯過任何新影片</h2>
+    <p>1,300+ 支影片全部免費，每支用邏輯帶你破解考題</p>
+    <div class="cta-btns">
+      <a class="cta-btn cb1" href="https://www.youtube.com/channel/UCLVCrG-U0yhBAgmTVXjK59g" target="_blank">▶ 前往 YouTube 訂閱</a>
+      <a class="cta-btn cb2" href="https://www.instagram.com/rex_nursing/" target="_blank">📷 追蹤 Instagram</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Rex Nursing｜護理師國考自主學習頻道｜祝大家金榜題名 🎉</p>
+</footer>
+
+<script>
+const STORAGE_KEY = 'rex_nursing_questions_v1';
+const DEFAULT_Q = [
+  {id:1,subj:'內外科',status:'answered',date:'2026-05-01',body:'113-3 42. 有關愛迪生危機的特徵，下列何者正確？\n(A) 高血鉀\n(B) 高血壓\n(C) 高血糖\n(D) 高血鈉',answer:'答案是 (A) 高血鉀。\n\n愛迪生危機（腎上腺危象）= 腎上腺皮質醇嚴重不足，醛固酮也缺乏\n→ 無法保鈉排鉀 → 高血鉀、低血鈉、低血壓、低血糖\n（注意：不是高血壓！）\n\n記憶口訣：缺醛固酮 = 鈉少鉀多（反過來）',videoUrl:'https://www.youtube.com/watch?v=aGsWvFBwGUs'},
+  {id:2,subj:'基護',status:'answered',date:'2026-05-02',body:'109-2 29. 病人的輸液量剩餘 300 mL，現正使用精密輸液套管輸注，預計 4 小時將此剩餘量輸注完畢，點滴滴速應調為每分鐘多少滴？\n(A) 50\n(B) 75\n(C) 100\n(D) 125',answer:'答案是 (B) 75 滴/分。\n\n精密輸液套管（microdrip）= 60 gtts/mL\n公式：(300 mL ÷ 4 hr ÷ 60 min) × 60 gtts = 75 gtts/min\n\n超實用口訣：精密套管 → mL/hr 的數字直接等於 gtts/min！',videoUrl:'https://www.youtube.com/watch?v=gPpbw_3n45I'},
+  {id:3,subj:'精神科',status:'waiting',date:'2026-05-05',body:'110-2 38. 有關思覺失調症病人的護理措施，下列何者適當？\n(A) 鼓勵病人參加競爭性活動以提升自信\n(B) 避免與病人討論其幻覺內容\n(C) 以堅定一致的態度限制其不適當的行為\n(D) 告知病人幻覺是不真實的以協助其辨別現實',answer:null,videoUrl:null}
+];
+
+let questions = [];
+let currentFilter = '全部';
+let selectedSubj = '內外科';
+
+function loadQuestions() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    questions = raw ? JSON.parse(raw) : DEFAULT_Q;
+  } catch(e) {
+    questions = DEFAULT_Q;
+  }
+  renderList();
+}
+
+function saveQuestions() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(questions)); } catch(e) {}
+}
+
+function goPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-r a[id^="nav-"]').forEach(a => a.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + name);
+  if (navEl) navEl.classList.add('active');
+  if (name === 'questions') loadQuestions();
+  window.scrollTo(0, 0);
+  return false;
+}
+
+function selSubj(el, name) {
+  document.querySelectorAll('.sbtn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  selectedSubj = name;
+}
+
+function submitQ() {
+  const val = document.getElementById('q-input').value.trim();
+  if (!val) { document.getElementById('q-input').focus(); return; }
+  questions.unshift({ id: Date.now(), subj: selectedSubj, status: 'waiting', date: new Date().toISOString().slice(0,10), body: val, answer: null, videoUrl: null });
+  saveQuestions();
+  document.getElementById('q-input').value = '';
+  const msg = document.getElementById('success-msg');
+  msg.style.display = 'block';
+  setTimeout(() => msg.style.display = 'none', 3500);
+  renderList();
+}
+
+function filterQ(el, f) {
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  currentFilter = f;
+  renderList();
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function renderList() {
+  const list = document.getElementById('q-list');
+  let filtered = questions;
+  if (currentFilter === '待解析') filtered = questions.filter(q => q.status === 'waiting');
+  if (currentFilter === '已解析') filtered = questions.filter(q => q.status === 'answered');
+  if (!filtered.length) { list.innerHTML = '<div class="empty-state">目前沒有符合條件的考題</div>'; return; }
+  list.innerHTML = filtered.map(q => `
+    <div class="qcard">
+      <div class="qcard-top">
+        <div class="qmeta"><span class="qtag tg-subj">${esc(q.subj)}</span><span class="qtag ${q.status==='answered'?'tg-done':'tg-wait'}">${q.status==='answered'?'已解析':'待解析'}</span></div>
+        <span class="qdate">${q.date}</span>
+      </div>
+      <div class="qbody">${esc(q.body)}</div>
+      ${q.answer ? `<div class="qanswer"><div class="qanswer-label">Rex 解析</div><div class="qanswer-body">${esc(q.answer)}</div>${q.videoUrl?`<div class="qvideo"><a href="${q.videoUrl}" target="_blank">▶ 觀看完整影片解析</a></div>`:''}</div>` : ''}
+      <div class="qactions">
+        ${q.status==='waiting'?`<button class="qabtn" onclick="markDone(${q.id})">✓ 標記已解析</button>`:''}
+        <button class="qabtn" onclick="copyQ(${q.id})">複製題目</button>
+        <button class="qabtn" onclick="deleteQ(${q.id})">刪除</button>
+      </div>
+    </div>`).join('');
+}
+
+function markDone(id) {
+  const q = questions.find(x => x.id === id);
+  if (q) { q.status = 'answered'; q.answer = '（Rex 解析準備中，請稍候...）'; saveQuestions(); renderList(); }
+}
+function deleteQ(id) { questions = questions.filter(x => x.id !== id); saveQuestions(); renderList(); }
+function copyQ(id) { const q = questions.find(x => x.id === id); if (q) navigator.clipboard.writeText(q.body).catch(()=>{}); }
+</script>
+</body>
+</html>
