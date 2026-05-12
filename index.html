@@ -2323,44 +2323,7 @@ function adminLogout() {
   document.getElementById('admin-pw').value='';
 }
 
-function exportHTML() {
-  // Get current page HTML
-  let pageHtml = document.documentElement.outerHTML;
-  const expls = loadExpls();
 
-  // Replace each question's expl in QS data within the HTML
-  // We update the expl field for each question that has been edited
-  Object.entries(expls).forEach(([n, expl]) => {
-    const qIdx = parseInt(n) - 1;
-    const q = QS[qIdx];
-    if (!q) return;
-
-    // Escape special chars for regex
-    const escOld = q.expl.replace(/[.*+?^${}()|[\]\]/g, '\$&').replace(/
-/g,'\n');
-    const newExplEscaped = expl.replace(/\/g,'\\').replace(/'/g,"\'").replace(/
-/g,'\n');
-
-    try {
-      // Replace expl in the JS QS array
-      const re = new RegExp("(n:" + n + ",[^}]+expl:')[^']*(')", 'g');
-      pageHtml = pageHtml.replace(re, `$1${newExplEscaped}$2`);
-    } catch(e) {}
-  });
-
-  // Create download
-  const blob = new Blob([pageHtml], {type: 'text/html;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'index.html';
-  a.click();
-  URL.revokeObjectURL(url);
-
-  setTimeout(() => {
-    alert('✅ index.html 已下載！\n\n請上傳到 GitHub 的 rex_nursing repository，\n覆蓋舊的 index.html，等 1～2 分鐘後所有考生就能看到更新的解析。');
-  }, 500);
-}
 function filterAdmin(mode) {
   document.getElementById('af-all').style.background=mode==='all'?'var(--teal)':'var(--white)';
   document.getElementById('af-all').style.color=mode==='all'?'#fff':'var(--muted)';
