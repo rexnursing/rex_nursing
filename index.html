@@ -1903,14 +1903,25 @@ document.querySelectorAll('.thumb').forEach(t => {
 
 <script>
 function goPage(name) {
-  // Secret: click "練習考題" 3 times fast to reveal admin
+  // Secret: click "練習考題" 5 times fast to reveal admin
   if (name==='quiz') {
     goPage._qClicks = (goPage._qClicks||0)+1;
     clearTimeout(goPage._qTimer);
-    goPage._qTimer = setTimeout(()=>goPage._qClicks=0, 1500);
+    goPage._qTimer = setTimeout(()=>{ goPage._qClicks=0; }, 1500);
     if (goPage._qClicks>=5) {
       goPage._qClicks=0;
       name='admin';
+    }
+    // Always reset quiz select screen when entering quiz page
+    if (name==='quiz') {
+      setTimeout(()=>{
+        const sel = document.getElementById('quiz-select');
+        const area = document.getElementById('quiz-area');
+        const result = document.getElementById('quiz-result');
+        if(sel) sel.style.display='block';
+        if(area) area.style.display='none';
+        if(result) result.style.display='none';
+      }, 10);
     }
   }
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -2040,24 +2051,27 @@ function saveExpls(obj) {
   try { localStorage.setItem(EXPL_KEY, JSON.stringify(obj)); } catch(e) {}
 }
 // Remote explanations cache (loaded from questions.json if available)
-let remoteExpls = null;
+let _remoteExpls = null;
 
 async function fetchRemoteExpls() {
-  if (remoteExpls !== null) return;
+  if (_remoteExpls !== null) return;
+  _remoteExpls = {}; // set early to prevent double-fetch
   try {
-    const res = await fetch('questions.json', {cache:'no-cache'});
+    const res = await fetch('questions.json?t=' + Date.now(), { cache: 'no-cache' });
     if (res.ok) {
       const data = await res.json();
-      remoteExpls = {};
-      data.forEach(q => { if(q.expl) remoteExpls[q.n] = q.expl; });
-    } else { remoteExpls = {}; }
-  } catch(e) { remoteExpls = {}; }
+      data.forEach(q => { if (q.expl) _remoteExpls[q.n] = q.expl; });
+    }
+  } catch(e) {
+    // questions.json not found or network error - use built-in explanations
+    console.log('questions.json not found, using built-in explanations');
+  }
 }
 
 function getExpl(n) {
   const custom = loadExpls();
   if (custom[n] !== undefined) return custom[n];
-  if (remoteExpls && remoteExpls[n]) return remoteExpls[n];
+  if (_remoteExpls && _remoteExpls[n]) return _remoteExpls[n];
   return QS[n-1]?.expl || '';
 }
 
@@ -2115,8 +2129,8 @@ function startFull() { startExam(); }
 function showSubjSelect() {}
 function toggleSubj() {}
 function startSubj() {}
-function beginQuiz() {
-  fetchRemoteExpls(); // try to load remote questions.json
+async function beginQuiz() {
+  try { await fetchRemoteExpls(); } catch(e) {}
   qIdx = 0; answered = {}; cntOk = 0; cntBad = 0;
   document.getElementById('quiz-select').style.display = 'none';
   document.getElementById('quiz-area').style.display = 'block';
@@ -2142,7 +2156,9 @@ function updateDot(i, res) {
   d.classList.add(res==='ok'?'ok':'bad');
 }
 function renderQ() {
+  if (!qList || !qList.length) return;
   const q = qList[qIdx];
+  if (!q) return;
   const n = qList.length;
   document.getElementById('q-cur').textContent = qIdx+1;
   document.getElementById('prog-bar').style.width = ((qIdx/n)*100)+'%';
