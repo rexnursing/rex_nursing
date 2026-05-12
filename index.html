@@ -2053,25 +2053,18 @@ function saveExpls(obj) {
 // Remote explanations cache (loaded from questions.json if available)
 let _remoteExpls = null;
 
-async function fetchRemoteExpls() {
-  if (_remoteExpls !== null) return;
-  _remoteExpls = {}; // set early to prevent double-fetch
-  try {
-    const res = await fetch('questions.json?t=' + Date.now(), { cache: 'no-cache' });
-    if (res.ok) {
-      const data = await res.json();
-      data.forEach(q => { if (q.expl) _remoteExpls[q.n] = q.expl; });
-    }
-  } catch(e) {
-    // questions.json not found or network error - use built-in explanations
-    console.log('questions.json not found, using built-in explanations');
-  }
+function fetchRemoteExpls() {
+  // No-op: explanations are built into QS data
+  _remoteExpls = {};
 }
 
 function getExpl(n) {
-  const custom = loadExpls();
-  if (custom[n] !== undefined) return custom[n];
-  if (_remoteExpls && _remoteExpls[n]) return _remoteExpls[n];
+  // Check localStorage for admin-edited explanations
+  try {
+    const custom = JSON.parse(localStorage.getItem(EXPL_KEY) || '{}');
+    if (custom[n] !== undefined && custom[n] !== '') return custom[n];
+  } catch(e) {}
+  // Fall back to built-in explanation
   return QS[n-1]?.expl || '';
 }
 
@@ -2095,26 +2088,28 @@ let currentSubjFilter = 'all';
 let wrongQs = []; // store wrong questions for retry
 
 function startExam() {
-  // Start with all questions
   qList = [...QS];
   currentSubjFilter = 'all';
-  beginQuiz();
+  // Show quiz area directly
+  document.getElementById('quiz-select').style.display = 'none';
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('quiz-result').style.display = 'none';
+  qIdx = 0; answered = {}; cntOk = 0; cntBad = 0;
+  document.getElementById('cnt-ok').textContent = 0;
+  document.getElementById('cnt-bad').textContent = 0;
+  document.getElementById('q-tot').textContent = qList.length;
+  document.querySelectorAll('.sf-btn').forEach(b => b.classList.remove('active'));
+  const allBtn = document.querySelector('.sf-btn');
+  if (allBtn) allBtn.classList.add('active');
+  buildDots();
+  renderQ();
 }
 
 function filterSubj(btn, subj) {
-  // Update active button
   document.querySelectorAll('.sf-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   currentSubjFilter = subj;
-
-  // Filter question list
-  if (subj === 'all') {
-    qList = [...QS];
-  } else {
-    qList = QS.filter(q => q.subj === subj);
-  }
-
-  // Reset and restart with filtered list
+  qList = subj === 'all' ? [...QS] : QS.filter(q => q.subj === subj);
   qIdx = 0; answered = {}; cntOk = 0; cntBad = 0;
   document.getElementById('cnt-ok').textContent = 0;
   document.getElementById('cnt-bad').textContent = 0;
@@ -2129,8 +2124,7 @@ function startFull() { startExam(); }
 function showSubjSelect() {}
 function toggleSubj() {}
 function startSubj() {}
-async function beginQuiz() {
-  try { await fetchRemoteExpls(); } catch(e) {}
+function beginQuiz() {
   qIdx = 0; answered = {}; cntOk = 0; cntBad = 0;
   document.getElementById('quiz-select').style.display = 'none';
   document.getElementById('quiz-area').style.display = 'block';
@@ -2300,7 +2294,6 @@ function restartQuiz() {
   document.getElementById('cnt-bad').textContent=0;
   document.getElementById('quiz-result').style.display='none';
   document.getElementById('quiz-area').style.display='block';
-  // Reset to all questions
   qList = currentSubjFilter==='all' ? [...QS] : QS.filter(q=>q.subj===currentSubjFilter);
   document.getElementById('q-tot').textContent=qList.length;
   buildDots(); renderQ();
