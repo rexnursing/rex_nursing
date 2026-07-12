@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-active-lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>測驗 Quiz｜呼吸音圖解系列 Breath Sounds</title>
+<meta name="description" content="9種呼吸音聽音辨識互動測驗，隨機出題、即時回饋。">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">呼吸音圖解系列 <span class="brand-en">Breath Sounds</span></div>
+    <nav class="main-nav">
+      <a href="../index.html" data-lang="zh">首頁</a><a href="../index.html" data-lang="en">Home</a>
+      <a href="../teaching/index.html" data-lang="zh">教學</a><a href="../teaching/index.html" data-lang="en">Learn</a>
+      <a href="../quiz/index.html" class="active" data-lang="zh">測驗</a><a href="../quiz/index.html" class="active" data-lang="en">Quiz</a>
+      <a href="../about/index.html" data-lang="zh">關於</a><a href="../about/index.html" data-lang="en">About</a>
+    </nav>
+    <button id="lang-toggle">EN</button>
+  </div>
+</header>
+
+<main>
+  <h1 class="page-title" data-lang="zh">聽音辨識測驗</h1>
+  <h1 class="page-title" data-lang="en">Audio Identification Quiz</h1>
+  <p class="page-subtitle" data-lang="zh">播放音檔，從4個選項中選出正確的呼吸音名稱。共9題，涵蓋所有有音檔的呼吸音（不含氣管音與呻吟聲）。</p>
+  <p class="page-subtitle" data-lang="en">Listen to each recording and choose the correct breath sound from 4 options. 9 questions total, covering every sound with available audio (excluding tracheal sounds and grunting).</p>
+
+  <div class="quiz-wrap">
+    <div id="quiz-start">
+      <p data-lang="zh">準備好了嗎？測驗會隨機出題與隨機排序選項，答對後會顯示簡短說明。</p>
+      <p data-lang="en">Ready? Questions and answer order are randomized each time. A short explanation appears after each answer.</p>
+      <button class="btn btn-primary" id="start-btn" style="background:var(--blue);color:#fff;" onclick="startQuiz()">
+        <span data-lang="zh">開始測驗</span><span data-lang="en">Start Quiz</span>
+      </button>
+    </div>
+
+    <div id="quiz-body" style="display:none;">
+      <div class="quiz-progress"><span data-lang="zh">第 </span><span id="q-num">1</span><span data-lang="zh"> / 9 題</span><span data-lang="en">Question </span><span id="q-num-en">1</span><span data-lang="en"> / 9</span></div>
+      <div class="quiz-bar"><div class="quiz-bar-fill" id="q-bar"></div></div>
+
+      <div class="quiz-audio-box">
+        <audio id="q-audio" controls></audio>
+        <div class="hint" data-lang="zh">🎧 建議戴耳機聆聽，聽完再作答</div>
+        <div class="hint" data-lang="en">🎧 Headphones recommended — listen fully before answering</div>
+      </div>
+
+      <div class="quiz-options" id="q-options"></div>
+      <div class="quiz-feedback" id="q-feedback"></div>
+      <div class="quiz-actions">
+        <button class="btn btn-primary" id="next-btn" style="background:var(--blue);color:#fff;display:none;" onclick="nextQuestion()">
+          <span data-lang="zh">下一題</span><span data-lang="en">Next</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="quiz-result" style="display:none;">
+      <div class="quiz-result">
+        <p data-lang="zh">測驗完成！</p>
+        <p data-lang="en">Quiz complete!</p>
+        <div class="score" id="final-score">0 / 9</div>
+        <p id="result-msg-zh" data-lang="zh"></p>
+        <p id="result-msg-en" data-lang="en"></p>
+        <button class="btn btn-primary" style="background:var(--blue);color:#fff;" onclick="startQuiz()">
+          <span data-lang="zh">再測一次</span><span data-lang="en">Try Again</span>
+        </button>
+        <a class="btn btn-outline" style="background:var(--white);color:var(--blue);border:1.5px solid var(--blue);margin-left:10px;" href="../teaching/index.html">
+          <span data-lang="zh">回教學頁複習</span><span data-lang="en">Review in Learn</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span data-lang="zh">呼吸音圖解系列 · 護理衛教參考站　｜　內容僅供教育參考，不構成醫療建議</span>
+  <span data-lang="en">Breath Sounds Reference Series · Nursing education resource — for educational reference only, not medical advice</span>
+</footer>
+<script src="../assets/js/lang.js"></script>
+<script src="../assets/js/quiz.js"></script>
+</body>
+</html>
