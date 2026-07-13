@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第6章：傳導阻滯與節律器概念｜EKG 教學專區</title>
+<meta name="description" content="一/二/三度房室傳導阻滯、束支傳導阻滯、節律器心電圖基礎。中英對照＋自我測驗。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="ekg-nav">
+  <a class="logo" href="../index.html">Rex Nursing <span class="divider">/</span> <span class="sub">EKG 教學</span></a>
+  <span class="crumbs"><a href="index.html">學習地圖</a> / 第6章</span>
+  <a class="home-link" href="index.html">← 學習地圖</a>
+</nav>
+
+<div class="ecg-hero">
+  <div class="ecg-hero-inner">
+    <span class="badge">第 6 章・傳導異常</span>
+    <h1 class="page-title">傳導阻滯與節律器概念
+      <span class="en">Conduction Blocks &amp; Pacemaker Basics</span>
+    </h1>
+    <p class="page-desc">訊號在傳導路徑上的任何一站都可能被延遲或擋住。這一章教你怎麼用「梯形圖」的概念看懂三種房室傳導阻滯的差異，以及束支傳導阻滯、節律器心電圖的基本辨識。</p>
+    <div class="meta-row">
+      <span>⏱ 閱讀時間 13 分鐘</span>
+      <span>📝 章節測驗 7 題</span>
+      <span>🎯 建議先讀過第 1、2 章</span>
+    </div>
+  </div>
+  <svg class="ecg-trace" viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,30 L120,30 L145,30 L160,10 L175,50 L190,30 L230,30 L260,30 L280,18 L300,30 L340,30 L360,30 L385,30 L400,10 L415,50 L430,30 L470,30 L500,30 L520,18 L540,30 L580,30 L600,30 L625,30 L640,10 L655,50 L670,30 L710,30 L740,30 L760,18 L780,30 L820,30 L840,30 L865,30 L880,10 L895,50 L910,30 L950,30 L980,30 L1000,18 L1020,30 L1060,30 L1200,30"
+      fill="none" stroke="#C63C3C" stroke-width="2"/>
+  </svg>
+</div>
+
+<div class="wrap page-pad content">
+
+  <h2><span class="num">1</span>房室傳導阻滯：用「梯形圖」看懂三種程度</h2>
+  <p>房室傳導阻滯依嚴重程度分成一度、二度（又分兩型）、三度。最有效的理解方式是看每個 P 波是否成功「連線」到後面的 QRS：</p>
+
+  <div class="figure">
+    <svg viewBox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
+      <g font-family="'Noto Sans TC',sans-serif">
+        <text x="10" y="16" font-size="12.5" font-weight="700" fill="#085041">正常（對照）</text>
+        <line x1="100" y1="10" x2="600" y2="10" stroke="#eee"/>
+        <line x1="100" y1="45" x2="600" y2="45" stroke="#eee"/>
+        <g stroke="#1D9E75" stroke-width="2.5"><line x1="120" y1="3" x2="120" y2="17"/><line x1="220" y1="3" x2="220" y2="17"/><line x1="320" y1="3" x2="320" y2="17"/><line x1="420" y1="3" x2="420" y2="17"/><line x1="520" y1="3" x2="520" y2="17"/></g>
+        <g stroke="#C63C3C" stroke-width="2.5"><line x1="135" y1="38" x2="135" y2="55"/><line x1="235" y1="38" x2="235" y2="55"/><line x1="335" y1="38" x2="335" y2="55"/><line x1="435" y1="38" x2="435" y2="55"/><line x1="535" y1="38" x2="535" y2="55"/></g>
+        <g stroke="#999" stroke-width="1" stroke-dasharray="2 2"><line x1="120" y1="17" x2="135" y2="38"/><line x1="220" y1="17" x2="235" y2="38"/><line x1="320" y1="17" x2="335" y2="38"/><line x1="420" y1="17" x2="435" y2="38"/><line x1="520" y1="17" x2="535" y2="38"/></g>
+
+        <text x="10" y="96" font-size="12.5" font-weight="700" fill="#085041">一度AV阻滯</text>
+        <text x="10" y="110" font-size="10" fill="#6b7280">PR延長但都傳導</text>
+        <line x1="100" y1="90" x2="600" y2="90" stroke="#eee"/>
+        <line x1="100" y1="125" x2="600" y2="125" stroke="#eee"/>
+        <g stroke="#1D9E75" stroke-width="2.5"><line x1="120" y1="83" x2="120" y2="97"/><line x1="220" y1="83" x2="220" y2="97"/><line x1="320" y1="83" x2="320" y2="97"/><line x1="420" y1="83" x2="420" y2="97"/><line x1="520" y1="83" x2="520" y2="97"/></g>
+        <g stroke="#C63C3C" stroke-width="2.5"><line x1="160" y1="118" x2="160" y2="135"/><line x1="260" y1="118" x2="260" y2="135"/><line x1="360" y1="118" x2="360" y2="135"/><line x1="460" y1="118" x2="460" y2="135"/><line x1="560" y1="118" x2="560" y2="135"/></g>
+        <g stroke="#999" stroke-width="1" stroke-dasharray="2 2"><line x1="120" y1="97" x2="160" y2="118"/><line x1="220" y1="97" x2="260" y2="118"/><line x1="320" y1="97" x2="360" y2="118"/><line x1="420" y1="97" x2="460" y2="118"/><line x1="520" y1="97" x2="560" y2="118"/></g>
+
+        <text x="10" y="176" font-size="12.5" font-weight="700" fill="#085041">二度：Mobitz I</text>
+        <text x="10" y="190" font-size="10" fill="#6b7280">PR漸長，直到漏一拍</text>
+        <line x1="100" y1="170" x2="600" y2="170" stroke="#eee"/>
+        <line x1="100" y1="205" x2="600" y2="205" stroke="#eee"/>
+        <g stroke="#1D9E75" stroke-width="2.5"><line x1="120" y1="163" x2="120" y2="177"/><line x1="220" y1="163" x2="220" y2="177"/><line x1="320" y1="163" x2="320" y2="177"/><line x1="420" y1="163" x2="420" y2="177"/><line x1="520" y1="163" x2="520" y2="177"/></g>
+        <g stroke="#C63C3C" stroke-width="2.5"><line x1="140" y1="198" x2="140" y2="215"/><line x1="255" y1="198" x2="255" y2="215"/><line x1="375" y1="198" x2="375" y2="215"/><line x1="540" y1="198" x2="540" y2="215"/></g>
+        <g stroke="#999" stroke-width="1" stroke-dasharray="2 2">
+          <line x1="120" y1="177" x2="140" y2="198"/>
+          <line x1="220" y1="177" x2="255" y2="198"/>
+          <line x1="320" y1="177" x2="375" y2="198"/>
+        </g>
+        <text x="420" y="150" font-size="16" fill="#8f2b2b" text-anchor="middle">✕</text>
+        <line x1="520" y1="177" x2="540" y2="198" stroke="#999" stroke-width="1" stroke-dasharray="2 2"/>
+        <text x="420" y="163" font-size="9.5" fill="#8f2b2b" text-anchor="middle">此P未傳導</text>
+
+        <text x="10" y="256" font-size="12.5" font-weight="700" fill="#085041">二度：Mobitz II</text>
+        <text x="10" y="270" font-size="10" fill="#6b7280">PR固定，突然漏一拍</text>
+        <line x1="100" y1="250" x2="600" y2="250" stroke="#eee"/>
+        <line x1="100" y1="285" x2="600" y2="285" stroke="#eee"/>
+        <g stroke="#1D9E75" stroke-width="2.5"><line x1="120" y1="243" x2="120" y2="257"/><line x1="220" y1="243" x2="220" y2="257"/><line x1="320" y1="243" x2="320" y2="257"/><line x1="420" y1="243" x2="420" y2="257"/><line x1="520" y1="243" x2="520" y2="257"/></g>
+        <g stroke="#C63C3C" stroke-width="2.5"><line x1="145" y1="278" x2="145" y2="295"/><line x1="245" y1="278" x2="245" y2="295"/><line x1="345" y1="278" x2="345" y2="295"/><line x1="545" y1="278" x2="545" y2="295"/></g>
+        <g stroke="#999" stroke-width="1" stroke-dasharray="2 2">
+          <line x1="120" y1="257" x2="145" y2="278"/>
+          <line x1="220" y1="257" x2="245" y2="278"/>
+          <line x1="320" y1="257" x2="345" y2="278"/>
+          <line x1="520" y1="257" x2="545" y2="278"/>
+        </g>
+        <text x="420" y="230" font-size="16" fill="#8f2b2b" text-anchor="middle">✕</text>
+        <text x="420" y="243" font-size="9.5" fill="#8f2b2b" text-anchor="middle">無預警突然漏拍</text>
+
+        <text x="10" y="336" font-size="12.5" font-weight="700" fill="#085041">三度（完全）AV阻滯</text>
+        <text x="10" y="350" font-size="10" fill="#6b7280">P與QRS各自獨立</text>
+        <line x1="100" y1="330" x2="600" y2="330" stroke="#eee"/>
+        <line x1="100" y1="365" x2="600" y2="365" stroke="#eee"/>
+        <g stroke="#1D9E75" stroke-width="2.5"><line x1="120" y1="323" x2="120" y2="337"/><line x1="190" y1="323" x2="190" y2="337"/><line x1="260" y1="323" x2="260" y2="337"/><line x1="330" y1="323" x2="330" y2="337"/><line x1="400" y1="323" x2="400" y2="337"/><line x1="470" y1="323" x2="470" y2="337"/><line x1="540" y1="323" x2="540" y2="337"/></g>
+        <g stroke="#C63C3C" stroke-width="2.5"><line x1="150" y1="358" x2="150" y2="375"/><line x1="290" y1="358" x2="290" y2="375"/><line x1="430" y1="358" x2="430" y2="375"/><line x1="570" y1="358" x2="570" y2="375"/></g>
+        <text x="330" y="400" font-size="11" fill="#6b7280" text-anchor="middle">P波規則（自己的快速率）、QRS也規則（自己的慢速率）——完全沒有關聯</text>
+      </g>
+    </svg>
+    <div class="figure-cap">圖1：房室傳導阻滯梯形圖比較（原創繪製）。綠色=P波，紅色=QRS，灰色虛線=成功傳導的連線。</div>
+  </div>
+
+  <table class="term-table">
+    <tr><th>類型</th><th>English</th><th>關鍵特徵</th></tr>
+    <tr><td>一度AV阻滯</td><td>First-degree AV block</td><td>PR間期延長（&gt;0.20秒），但每個P波都成功傳導，不漏拍</td></tr>
+    <tr><td>二度AV阻滯 Mobitz I</td><td>Second-degree, Mobitz type I (Wenckebach)</td><td>PR間期逐漸拉長，直到某一拍完全不傳導（漏拍），之後循環重來</td></tr>
+    <tr><td>二度AV阻滯 Mobitz II</td><td>Second-degree, Mobitz type II</td><td>PR間期固定不變，卻毫無預警地突然漏拍，較危險</td></tr>
+    <tr><td>三度（完全）AV阻滯</td><td>Third-degree (complete) AV block</td><td>P波與QRS完全各自獨立、互不相關，各自有自己的規則速率</td></tr>
+  </table>
+
+  <div class="pearl">
+    <div class="pearl-label">💡 臨床小提醒</div>
+    <p><strong>Mobitz I 通常是良性、可逆的</strong>（常見於藥物影響或迷走神經張力過高，阻滯位置多在房室結本身），觀察即可，不一定要裝節律器。<strong>Mobitz II 因為毫無預警地漏拍，且阻滯位置通常在希氏束以下（infranodal），有較高機率突然惡化成三度阻滯</strong>，臨床上通常會積極評估是否需要裝置節律器。分清楚這兩型的臨床意義差異，是這一節最重要的重點。</p>
+  </div>
+
+  <h2><span class="num">2</span>三度阻滯時，心臟怎麼還在跳？</h2>
+  <p>回顧第1章的備援機制：三度阻滯時心房與心室的訊號完全斷開，但心室不會因此停止跳動——房室結以下的組織（交界區或浦金氏纖維）會啟動自己的<strong>脫逸心律（escape rhythm）</strong>，以較慢但規則的速率獨立跳動，維持心臟基本的血液輸出。這正是第1章「自動節律性是心臟備援系統」這個觀念的臨床實例。</p>
+
+  <h2><span class="num">3</span>束支傳導阻滯（Bundle Branch Block）</h2>
+  <p>訊號到達希氏束之後，如果左束支或右束支其中一條「路」被阻斷，訊號仍能透過另一側先傳導、再繞道傳到被阻斷那一側，導致<strong>兩側心室無法同步收縮，QRS寬度延長（&gt;0.12秒）</strong>，但整體規律性通常不受影響。</p>
+  <ul>
+    <li><strong>右束支傳導阻滯（RBBB）</strong>：V1 常出現特徵性的「兔耳朵」型態（RSR'，兩個正向峰），Lead I 與 V6 出現寬而淺的S波。</li>
+    <li><strong>左束支傳導阻滯（LBBB）</strong>：V1 主要是寬而深的負向波，Lead I 與 V6 呈現寬大平滑的正向R波、且通常看不到正常的小Q波。LBBB會讓心肌梗塞的心電圖判讀變得困難，是第7章會提到的重要限制之一。</li>
+  </ul>
+
+  <h2><span class="num">4</span>節律器心電圖基礎</h2>
+  <p>人工節律器會在該收縮的時間點發出一個人工電刺激，心電圖上會看到一個<strong>又細又高的垂直「節律器尖波（pacer spike）」</strong>，緊接著才是被刺激誘發出來的寬大QRS（因為電流從心室某一點人工植入的電極開始擴散，不是走正常傳導路徑，形狀類似人工造成的束支傳導阻滯樣式）。看到規則出現的節律器尖波＋接續的寬QRS，就能判斷病人裝有心室節律器並正在運作。</p>
+
+  <div class="trap">
+    <div class="trap-label">⚠️ 容易搞混的地方</div>
+    <p>束支傳導阻滯與心室性心律不整（第5章）的QRS都會寬大，很容易混淆。關鍵鑑別：<strong>束支傳導阻滯每個QRS前面都有正常對應的P波（房室關係正常，只是心室內傳導異常）；心室性心律不整（如PVC、VT）則沒有相對應的正常P波</strong>。看到寬QRS，先確認前面有沒有正常P波，是重要的第一步。</p>
+  </div>
+
+  <div class="summary-box">
+    <h3>📌 本章重點回顧</h3>
+    <ul>
+      <li>一度AV阻滯：PR延長但都傳導，通常良性。</li>
+      <li>Mobitz I：PR漸長後漏拍、循環重來，通常良性可逆。</li>
+      <li>Mobitz II：PR固定、無預警漏拍，較危險，常需評估節律器。</li>
+      <li>三度阻滯：P與QRS完全各自獨立，心室靠脫逸心律維持跳動。</li>
+      <li>束支傳導阻滯：QRS寬大但每個QRS前仍有對應P波，與心室性心律不整的關鍵差異。</li>
+      <li>節律器心電圖：規則的節律器尖波＋接續寬大QRS。</li>
+    </ul>
+  </div>
+
+  <div class="refs">
+    <h4>本章參考</h4>
+    <ol>
+      <li>Thaler MS. <em>The Only EKG Book You'll Ever Need</em>, 10th ed. Wolters Kluwer; 2023. Chapter 4: Conduction Blocks.</li>
+      <li>Meloni S, Mastenbjörk M. <em>EKG/ECG Interpretation</em>, 2nd ed. Medical Creations; 2021. Chapter 5: ECG Diagnosis (AV Block entries; Bundle-Branch Block entries).</li>
+    </ol>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-head">
+      <h2>📝 第六章自我測驗</h2>
+      <div class="quiz-progress" id="qProgress"></div>
+    </div>
+    <div id="quizArea"></div>
+  </div>
+
+  <div class="chapter-nav">
+    <a class="chnav-btn" href="ch5-arrhythmia-ventricular.html">
+      <div class="dir">← 上一章</div>
+      <div class="ttl">第 5 章：常見心律不整 II（心室性）</div>
+    </a>
+    <a class="chnav-btn next" href="ch7-ischemia-mi.html">
+      <div class="dir">下一章 →</div>
+      <div class="ttl">第 7 章：心肌缺血與心肌梗塞</div>
+    </a>
+  </div>
+
+</div>
+
+<footer class="ekg-footer">
+  © 2026 Rex Nursing · EKG 教學專區
+</footer>
+
+<script>
+const QUESTIONS = [
+  {
+    q: "一度房室傳導阻滯（First-degree AV block）的心電圖特徵是？",
+    opts: [
+      "PR間期延長，但每個P波都成功傳導，不漏拍",
+      "PR間期正常，QRS完全消失",
+      "P波與QRS完全各自獨立",
+      "PR間期逐漸拉長直到漏拍"
+    ],
+    correct: 0,
+    exp: {
+      0: "正解。一度AV阻滯只是傳導變慢（PR間期>0.20秒），但每一個P波最終都成功傳導到心室，不會漏拍，通常是良性表現。",
+      1: "一度AV阻滯不會造成QRS消失，每個P波仍會傳導出對應的QRS。",
+      2: "P波與QRS完全各自獨立是三度（完全）AV阻滯的特徵，不是一度。",
+      3: "PR逐漸拉長直到漏拍是Mobitz I的特徵，不是一度AV阻滯（一度阻滯的PR是固定延長，不會逐漸變化）。"
+    }
+  },
+  {
+    q: "「PR間期逐漸拉長，直到某一拍完全不傳導漏掉，然後循環重新開始」，這是哪一種傳導阻滯的典型模式？",
+    opts: ["一度AV阻滯", "二度Mobitz I（Wenckebach）", "二度Mobitz II", "三度AV阻滯"],
+    correct: 1,
+    exp: {
+      0: "一度AV阻滯的PR是固定延長，不會有「逐漸拉長」的變化模式。",
+      1: "正解。這正是Mobitz I（Wenckebach）的經典模式：PR逐拍拉長，直到一拍完全漏掉，之後PR重新從較短開始、循環重複。",
+      2: "Mobitz II的PR間期是固定不變的，不會逐漸拉長，這點正好相反。",
+      3: "三度AV阻滯是P與QRS完全無關聯，不是「逐漸拉長後漏拍」的模式。"
+    }
+  },
+  {
+    q: "為什麼臨床上認為 Mobitz II 比 Mobitz I 更需要積極評估是否裝置節律器？",
+    opts: [
+      "因為Mobitz II的PR間期比較短",
+      "因為Mobitz II漏拍毫無預警、阻滯位置通常較低（希氏束以下），有較高機率突然惡化成三度阻滯",
+      "因為Mobitz II只發生在年輕人身上",
+      "因為Mobitz I完全不會漏拍，所以Mobitz II比較危險"
+    ],
+    correct: 1,
+    exp: {
+      0: "PR間期長短不是兩者危險程度差異的主要原因。",
+      1: "正解。Mobitz II的漏拍沒有預警徵兆（PR固定），且阻滯位置多在希氏束以下的傳導系統，代表病灶較不穩定，有較高風險突然惡化成三度阻滯，因此臨床上會更積極評估節律器置入。",
+      2: "好發年齡不是兩者風險差異的主要原因。",
+      3: "Mobitz I也會漏拍（漸長後漏一拍），這個描述不正確；兩者的差異在於漏拍是否有預警徵兆與阻滯位置。"
+    }
+  },
+  {
+    q: "三度（完全）房室傳導阻滯時，心室為什麼還能維持跳動？",
+    opts: [
+      "因為心室仍然接收到SA node的正常訊號",
+      "因為房室結以下的組織（交界區或浦金氏纖維）啟動自己的脫逸心律，獨立維持心室跳動",
+      "因為此時心室已經停止跳動，不會再有心跳",
+      "因為病人的呼吸會刺激心室收縮"
+    ],
+    correct: 1,
+    exp: {
+      0: "三度阻滯的定義就是訊號完全無法從心房傳到心室，SA node的訊號到不了心室。",
+      1: "正解。這正是第1章介紹的自動節律性備援機制的臨床實例：房室結以下的組織會以自己較慢但規則的速率獨立發出脫逸心律，維持心室基本跳動。",
+      2: "三度阻滯不等於心室完全停止跳動，靠脫逸心律仍能維持基本的心跳與血液輸出。",
+      3: "呼吸不會直接刺激心室產生規律收縮，這不是三度阻滯時心室維持跳動的機轉。"
+    }
+  },
+  {
+    q: "束支傳導阻滯（bundle branch block）與心室性心律不整（如PVC）雖然QRS都會寬大，但關鍵鑑別點是？",
+    opts: [
+      "束支傳導阻滯每個QRS前面都有正常對應的P波，心室性心律不整則沒有",
+      "束支傳導阻滯的QRS一定比心室性心律不整窄",
+      "兩者完全無法區分",
+      "只有心室性心律不整會出現在心電圖上"
+    ],
+    correct: 0,
+    exp: {
+      0: "正解。束支傳導阻滯只是心室內傳導路徑異常，房室之間的關係仍正常，所以每個QRS前仍有對應的正常P波；心室性心律不整（如PVC）則起源於心室本身，QRS前沒有相對應的正常P波。",
+      1: "兩者的QRS都是寬大的（>0.12秒），寬度本身不是可靠的鑑別依據。",
+      2: "兩者是可以透過「QRS前有無對應P波」等線索區分的，並非完全無法區分。",
+      3: "束支傳導阻滯當然也會顯示在心電圖上，這個說法不正確。"
+    }
+  },
+  {
+    q: "心電圖上看到規則出現的「細高垂直尖波」緊接著寬大QRS，最可能代表？",
+    opts: [
+      "病人有心房顫動",
+      "病人裝有心室節律器並正在運作",
+      "病人正在發生心肌梗塞",
+      "這是心電圖機器故障的假影"
+    ],
+    correct: 1,
+    exp: {
+      0: "心房顫動的特徵是無清楚P波、QRS間距不規則，跟節律器尖波無關。",
+      1: "正解。規則出現的節律器尖波（pacer spike）緊接著寬大QRS，是人工節律器刺激心室收縮的典型心電圖表現。",
+      2: "心肌梗塞的典型變化是ST段與T波的改變，不是節律器尖波，兩者是不同的心電圖表現。",
+      3: "規則、有固定形態的尖波是真實的節律器訊號，不是機器故障假影。"
+    }
+  },
+  {
+    q: "右束支傳導阻滯（RBBB）在V1導程常出現的特徵性型態俗稱為？",
+    opts: ["尖端扭轉", "兔耳朵（RSR'型態）", "鋸齒狀撲動波", "delta波"],
+    correct: 1,
+    exp: {
+      0: "尖端扭轉（Torsades de Pointes）是多型性心室頻脈的特殊型態，跟RBBB無關。",
+      1: "正解。RBBB在V1常出現RSR'型態（兩個正向峰），因為形狀像兩隻耳朵，臨床上俗稱「兔耳朵」，是辨識RBBB的重要視覺線索。",
+      2: "鋸齒狀撲動波是心房撲動的特徵，跟束支傳導阻滯無關。",
+      3: "Delta波是預激症候群（WPW）的特徵，跟RBBB無關，這個概念會在後面章節簡短提到。"
+    }
+  }
+];
+
+let cur = 0;
+const answered = new Array(QUESTIONS.length).fill(null);
+
+function renderProgress() {
+  const box = document.getElementById('qProgress');
+  box.innerHTML = QUESTIONS.map((_, i) => {
+    let cls = 'qdot';
+    if (i === cur) cls += ' cur';
+    else if (answered[i] !== null) cls += (answered[i] === QUESTIONS[i].correct ? ' ok' : ' bad');
+    return `<div class="${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+  }).join('');
+}
+
+function goTo(i) { cur = i; renderQuestion(); }
+
+function renderQuestion() {
+  renderProgress();
+  const area = document.getElementById('quizArea');
+  if (cur >= QUESTIONS.length) {
+    const score = answered.filter((a, i) => a === QUESTIONS[i].correct).length;
+    area.innerHTML = `
+      <div class="qcard quiz-result">
+        <div class="score">${score}<span> / ${QUESTIONS.length}</span></div>
+        <p>${score === QUESTIONS.length ? '全對！傳導阻滯分級都分得很清楚。' : '答錯的題目可以點上面的號碼回去看詳解，複習一下再繼續下一章。'}</p>
+        <button class="qbtn primary" onclick="restart()">重新測驗</button>
+      </div>`;
+    return;
+  }
+  const item = QUESTIONS[cur];
+  const picked = answered[cur];
+  const letters = ['A', 'B', 'C', 'D'];
+  area.innerHTML = `
+    <div class="qcard">
+      <div class="qcard-num">第 ${cur + 1} / ${QUESTIONS.length} 題</div>
+      <div class="qcard-text">${item.q}</div>
+      ${item.opts.map((opt, i) => {
+        let cls = 'opt-btn';
+        if (picked !== null) {
+          if (i === item.correct) cls += ' correct';
+          else if (i === picked) cls += ' wrong';
+        }
+        return `<button class="${cls}" ${picked !== null ? 'disabled' : ''} onclick="pick(${i})">
+          <span class="opt-label">${letters[i]}</span><span>${opt}</span>
+        </button>`;
+      }).join('')}
+      <div class="explain ${picked !== null ? 'show' : ''}">
+        ${picked !== null ? item.opts.map((_, i) => `<p><b>${letters[i]}.</b> ${item.exp[i]}</p>`).join('') : ''}
+      </div>
+      <div class="quiz-nav">
+        <button class="qbtn ghost" onclick="goTo(${Math.max(0, cur - 1)})" ${cur === 0 ? 'disabled' : ''}>← 上一題</button>
+        <button class="qbtn primary" onclick="next()" ${picked === null ? 'disabled' : ''}>${cur === QUESTIONS.length - 1 ? '查看結果' : '下一題 →'}</button>
+      </div>
+    </div>`;
+}
+
+function pick(i) {
+  if (answered[cur] !== null) return;
+  answered[cur] = i;
+  renderQuestion();
+}
+
+function next() { cur++; renderQuestion(); }
+function restart() { answered.fill(null); cur = 0; renderQuestion(); }
+
+renderQuestion();
+</script>
+
+</body>
+</html>

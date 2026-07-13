@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第1章：心臟電生理基礎｜EKG 教學專區</title>
+<meta name="description" content="心臟傳導系統、心肌細胞動作電位、P波QRS波群T波的由來、心電圖紙定標。中英對照＋自我測驗。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="ekg-nav">
+  <a class="logo" href="../index.html">Rex Nursing <span class="divider">/</span> <span class="sub">EKG 教學</span></a>
+  <span class="crumbs"><a href="index.html">學習地圖</a> / 第1章</span>
+  <a class="home-link" href="index.html">← 學習地圖</a>
+</nav>
+
+<div class="ecg-hero">
+  <div class="ecg-hero-inner">
+    <span class="badge">第 1 章・基礎生理</span>
+    <h1 class="page-title">心臟電生理基礎
+      <span class="en">Cardiac Electrophysiology — Where the Signal Comes From</span>
+    </h1>
+    <p class="page-desc">心電圖記錄的，其實是心臟裡幾十億顆心肌細胞集體放電的軌跡。這一章從「電從哪裡來」講起，一路講到「心電圖紙上一格代表多少時間」，是後面所有判讀的地基。</p>
+    <div class="meta-row">
+      <span>⏱ 閱讀時間 12 分鐘</span>
+      <span>📝 章節測驗 7 題</span>
+      <span>🎯 建議先讀過第 0 章</span>
+    </div>
+  </div>
+  <svg class="ecg-trace" viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,30 L120,30 L145,30 L160,10 L175,50 L190,30 L230,30 L260,30 L280,18 L300,30 L340,30 L360,30 L385,30 L400,10 L415,50 L430,30 L470,30 L500,30 L520,18 L540,30 L580,30 L600,30 L625,30 L640,10 L655,50 L670,30 L710,30 L740,30 L760,18 L780,30 L820,30 L840,30 L865,30 L880,10 L895,50 L910,30 L950,30 L980,30 L1000,18 L1020,30 L1060,30 L1200,30"
+      fill="none" stroke="#C63C3C" stroke-width="2"/>
+  </svg>
+</div>
+
+<div class="wrap page-pad content">
+
+  <h2><span class="num">1</span>心臟的傳導系統：訊號的高速公路</h2>
+  <p>心臟能夠規律跳動，靠的是一套內建的「電力系統」。整條路徑有固定順序，每一站都有各自的角色：</p>
+
+  <div class="figure">
+    <svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="170" cy="42" r="20" fill="#1D9E75"/>
+      <text x="170" y="47" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">SA</text>
+      <text x="205" y="38" font-size="14" font-weight="700" fill="#085041">竇房結 SA Node</text>
+      <text x="205" y="55" font-size="11.5" fill="#6b7280">正常節律起點・60-100 次/分</text>
+
+      <path d="M170,62 Q170,90 170,95" stroke="#1D9E75" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+      <path d="M120,110 q50,-15 100,0 q50,15 100,0" stroke="#1D9E75" stroke-width="1.5" fill="none" opacity="0.6"/>
+      <text x="330" y="115" font-size="12.5" fill="#085041">← 心房去極化擴散（產生 P 波）</text>
+
+      <path d="M170,120 L170,155" stroke="#1D9E75" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+      <circle cx="170" cy="175" r="17" fill="#085041"/>
+      <text x="170" y="180" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">AV</text>
+      <text x="205" y="171" font-size="14" font-weight="700" fill="#085041">房室結 AV Node</text>
+      <text x="205" y="188" font-size="11.5" fill="#6b7280">延遲訊號・40-60 次/分（備用）</text>
+
+      <path d="M170,192 L170,225" stroke="#085041" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+      <text x="205" y="215" font-size="14" font-weight="700" fill="#085041">希氏束 Bundle of His</text>
+
+      <path d="M170,230 L100,270" stroke="#C63C3C" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+      <path d="M170,230 L240,270" stroke="#C63C3C" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+      <text x="30" y="290" font-size="12.5" font-weight="700" fill="#8f2b2b">左束支</text>
+      <text x="235" y="290" font-size="12.5" font-weight="700" fill="#8f2b2b">右束支</text>
+
+      <g stroke="#C63C3C" stroke-width="1.3" fill="none" opacity="0.75">
+        <path d="M100,275 q-25,20 -45,45"/>
+        <path d="M100,275 q0,25 0,55"/>
+        <path d="M100,275 q25,20 45,45"/>
+        <path d="M240,275 q-25,20 -45,45"/>
+        <path d="M240,275 q0,25 0,55"/>
+        <path d="M240,275 q25,20 45,45"/>
+      </g>
+      <text x="170" y="365" text-anchor="middle" font-size="14" font-weight="700" fill="#8f2b2b">浦金氏纖維 Purkinje Fibers</text>
+      <text x="170" y="382" text-anchor="middle" font-size="11.5" fill="#6b7280">傳導最快・20-40 次/分（最後備援）→ 心室去極化（產生 QRS）</text>
+
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 z" fill="#1D9E75"/>
+        </marker>
+      </defs>
+    </svg>
+    <div class="figure-cap">圖1：心臟傳導系統示意圖（原創繪製，非教科書掃描圖）。訊號由竇房結出發，依序經過房室結、希氏束、左右束支，最後到浦金氏纖維。</div>
+  </div>
+
+  <p>訊號從 <strong>竇房結（SA node）</strong>出發，它位於右心房靠近上腔靜脈的位置，是正常情況下跳動最快、最早發出訊號的地方，因此是正常的「節律指揮中心」。訊號接著擴散到左右心房，讓心房收縮，同時也匯聚到 <strong>房室結（AV node）</strong>。</p>
+
+  <p>房室結有一個很重要的任務：<strong>刻意把訊號延遲大約 0.1 秒</strong>，讓心房有時間先把血液擠進心室，才讓訊號繼續往下傳。訊號通過房室結後，會經過 <strong>希氏束（Bundle of His）</strong>，接著分成 <strong>左束支</strong>與<strong>右束支</strong>，最後散布成細密的 <strong>浦金氏纖維（Purkinje fibers）</strong>，讓訊號幾乎同步傳遍兩側心室，心室才能有效率地收縮、把血液打出去。</p>
+
+  <table class="term-table">
+    <tr><th>英文 English</th><th>詞性</th><th>中文</th><th>記憶提示</th></tr>
+    <tr><td>Sinoatrial (SA) node</td><td>n.</td><td>竇房結</td><td>Sino-竇 + atrial-心房，藏在心房裡的天然節律器</td></tr>
+    <tr><td>Atrioventricular (AV) node</td><td>n.</td><td>房室結</td><td>Atrio-心房 + ventricular-心室，介於兩者之間的檢查哨</td></tr>
+    <tr><td>Bundle of His</td><td>n.</td><td>希氏束</td><td>以發現者 Wilhelm His Jr. 命名</td></tr>
+    <tr><td>Purkinje fibers</td><td>n.</td><td>浦金氏纖維</td><td>以發現者 Jan Purkinje 命名，傳導速度全心臟最快</td></tr>
+    <tr><td>Automaticity</td><td>n.</td><td>自動節律性</td><td>Auto-自己 + -maticity，不需外部刺激就能自己發電的能力</td></tr>
+  </table>
+
+  <div class="pearl">
+    <div class="pearl-label">💡 臨床小提醒</div>
+    <p>SA node、AV node、His bundle、Purkinje fibers 其實<strong>都具有自動節律性</strong>，只是天生的節律速度一個比一個慢。正常情況下 SA node 最快，會壓過其他節律點（這個現象叫 overdrive suppression）。但如果 SA node 故障或訊號傳不下去，下游構造會自己接手發出節律——這就是後面章節會學到的「junctional rhythm（交界性心律）」和「ventricular escape rhythm（心室脫逸心律）」的生理基礎。心臟有備援系統，不會因為單一節點故障就直接停止跳動。</p>
+  </div>
+
+  <h2><span class="num">2</span>心肌細胞怎麼「放電」：動作電位</h2>
+  <p>整個傳導系統之所以能傳電，靠的是每顆心肌細胞細胞膜內外離子濃度差所形成的電位變化，這個過程稱為<strong>動作電位（action potential）</strong>。以心室肌細胞為例，可以分成 5 個時期：</p>
+
+  <div class="figure">
+    <svg viewBox="0 0 520 260" xmlns="http://www.w3.org/2000/svg">
+      <line x1="45" y1="20" x2="45" y2="220" stroke="#bbb" stroke-width="1"/>
+      <line x1="45" y1="220" x2="480" y2="220" stroke="#bbb" stroke-width="1"/>
+      <text x="10" y="35" font-size="11" fill="#6b7280">+20mV</text>
+      <text x="10" y="150" font-size="11" fill="#6b7280">-70mV</text>
+      <text x="10" y="200" font-size="11" fill="#6b7280">-90mV</text>
+      <line x1="45" y1="145" x2="480" y2="145" stroke="#C63C3C" stroke-width="1" stroke-dasharray="4 3" opacity="0.6"/>
+      <text x="440" y="140" font-size="10.5" fill="#8f2b2b">閾值 threshold</text>
+
+      <path d="M45,195 L65,195 L72,40 L85,70 L200,80 L260,195 L480,195"
+        fill="none" stroke="#1D9E75" stroke-width="2.5"/>
+
+      <text x="55" y="240" text-anchor="middle" font-size="12" font-weight="700" fill="#085041">4</text>
+      <text x="75" y="55" text-anchor="middle" font-size="12" font-weight="700" fill="#085041">0</text>
+      <text x="95" y="65" text-anchor="middle" font-size="12" font-weight="700" fill="#085041">1</text>
+      <text x="145" y="72" text-anchor="middle" font-size="12" font-weight="700" fill="#085041">2</text>
+      <text x="230" y="150" text-anchor="middle" font-size="12" font-weight="700" fill="#085041">3</text>
+      <text x="370" y="240" text-anchor="middle" font-size="12" font-weight="700" fill="#085041">4</text>
+    </svg>
+    <div class="figure-cap">圖2：心室肌細胞動作電位示意圖（原創繪製）。橫軸為時間，縱軸為細胞膜電位。</div>
+  </div>
+
+  <ul>
+    <li><strong>Phase 4（靜止期）</strong>：細胞膜電位穩定在約 -90mV（細胞內偏負電），透過 Na⁺/K⁺幫浦與鉀離子通透性維持這個「待命」狀態。</li>
+    <li><strong>Phase 0（快速去極化）</strong>：一旦電位被推到閾值（約 -70mV），大量鈉離子通道瞬間打開，Na⁺快速湧入細胞，電位迅速衝高——這就是動作電位的「起跑」，也是心電圖上快速波形（如 QRS）的能量來源。</li>
+    <li><strong>Phase 1（初期短暫再極化）</strong>：鈉通道關閉，短暫的鉀離子外流造成一個小凹陷。</li>
+    <li><strong>Phase 2（平台期）</strong>：鈣離子緩慢流入，跟鉀離子外流互相抵銷，電位維持在一個相對穩定的「平台」——這段時間對應心電圖上的 ST segment，也是心肌「不反應期」特別長的原因，讓心肌不會像骨骼肌一樣發生強直收縮。</li>
+    <li><strong>Phase 3（再極化）</strong>：鈣離子通道關閉，鉀離子持續外流，電位快速回到靜止狀態。</li>
+  </ul>
+
+  <div class="trap">
+    <div class="trap-label">⚠️ 容易搞混的地方</div>
+    <p>SA node、AV node 這類「節律細胞」的動作電位跟一般心室肌細胞不太一樣——它們的 Phase 4 不是平的，而是會「自己慢慢往上爬」，一爬到閾值就自動觸發下一次去極化，完全不需要外部刺激。這種「Phase 4 自發性去極化」正是自動節律性（automaticity）的生理機制。這一點目前先有印象即可，之後學到心律不整成因時會再深入。</p>
+  </div>
+
+  <h2><span class="num">3</span>從細胞電位到心電圖波形</h2>
+  <p>單一顆心肌細胞的電位變化太微小，體表電極測不到。但心臟有數十億顆心肌細胞，當一大群細胞幾乎同步去極化、再極化時，這些電位變化加總起來形成的「電流方向與大小」（向量），才是體表電極能夠捕捉到、畫成心電圖的訊號。也因此，心電圖記錄的其實是<strong>整個心臟電氣活動的「總和」</strong>，而不是單一細胞的電位。</p>
+
+  <div class="figure">
+    <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+      <line x1="20" y1="110" x2="580" y2="110" stroke="#ddd" stroke-width="1"/>
+      <path d="M20,110 L40,110 Q55,80 65,95 Q75,110 90,110 L108,110 L114,122 L128,35 L142,150 L156,110 L178,110 Q200,78 222,110 L260,110"
+        fill="none" stroke="#C63C3C" stroke-width="2.5"/>
+
+      <text x="55" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#8f2b2b">P</text>
+      <text x="128" y="30" text-anchor="middle" font-size="13" font-weight="700" fill="#8f2b2b">R</text>
+      <text x="114" y="140" text-anchor="middle" font-size="12" fill="#8f2b2b">Q</text>
+      <text x="142" y="168" text-anchor="middle" font-size="12" fill="#8f2b2b">S</text>
+      <text x="200" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="#8f2b2b">T</text>
+
+      <line x1="40" y1="160" x2="114" y2="160" stroke="#1D9E75" stroke-width="1.5"/>
+      <line x1="40" y1="155" x2="40" y2="165" stroke="#1D9E75" stroke-width="1.5"/>
+      <line x1="114" y1="155" x2="114" y2="165" stroke="#1D9E75" stroke-width="1.5"/>
+      <text x="77" y="176" text-anchor="middle" font-size="11" fill="#085041">PR interval</text>
+
+      <line x1="114" y1="185" x2="156" y2="185" stroke="#085041" stroke-width="1.5"/>
+      <line x1="114" y1="180" x2="114" y2="190" stroke="#085041" stroke-width="1.5"/>
+      <line x1="156" y1="180" x2="156" y2="190" stroke="#085041" stroke-width="1.5"/>
+      <text x="135" y="200" text-anchor="middle" font-size="10.5" fill="#085041">QRS</text>
+
+      <line x1="114" y1="30" x2="222" y2="30" stroke="#C63C3C" stroke-width="1.5"/>
+      <line x1="114" y1="25" x2="114" y2="35" stroke="#C63C3C" stroke-width="1.5"/>
+      <line x1="222" y1="25" x2="222" y2="35" stroke="#C63C3C" stroke-width="1.5"/>
+      <text x="168" y="20" text-anchor="middle" font-size="11" fill="#8f2b2b">QT interval</text>
+    </svg>
+    <div class="figure-cap">圖3：單一心搏的 P-QRS-T 波形與主要間期（原創繪製）</div>
+  </div>
+
+  <table class="term-table">
+    <tr><th>波形/間期</th><th>English</th><th>代表的生理事件</th></tr>
+    <tr><td>P 波</td><td>P wave</td><td>心房去極化（atrial depolarization）</td></tr>
+    <tr><td>QRS 波群</td><td>QRS complex</td><td>心室去極化（ventricular depolarization）</td></tr>
+    <tr><td>T 波</td><td>T wave</td><td>心室再極化（ventricular repolarization）</td></tr>
+    <tr><td>PR 間期</td><td>PR interval</td><td>從心房開始去極化到心室開始去極化的總時間（含房室結延遲）</td></tr>
+    <tr><td>QT 間期</td><td>QT interval</td><td>心室去極化＋再極化的總時間</td></tr>
+  </table>
+
+  <div class="trap">
+    <div class="trap-label">⚠️ 容易搞混的地方</div>
+    <p>心房其實也有「再極化」，理論上會產生一個 <strong>Ta wave（atrial repolarization wave）</strong>，但因為它發生的時間點剛好跟振幅大得多的 QRS 波群重疊，正常情況下完全被蓋過、看不見。這不代表心房沒有再極化，只是訊號被淹沒了——這個知識點在之後學「心包膜炎（pericarditis）」時會再用到，先有印象即可。</p>
+  </div>
+
+  <h2><span class="num">4</span>心電圖紙：怎麼把「時間」與「電壓」畫出來</h2>
+  <p>心電圖紙上佈滿了小方格，這些方格不是裝飾，而是實際的測量刻度。標準規格是：</p>
+  <ul>
+    <li><strong>紙速（走紙速度）</strong>：每秒 25mm。所以橫軸上 <strong>1 小格（1mm）＝ 0.04 秒</strong>，<strong>1 大格（5mm，5小格）＝ 0.2 秒</strong>。</li>
+    <li><strong>定標（calibration/gain）</strong>：標準是 10mm＝1mV。所以縱軸上 <strong>1 小格＝0.1mV</strong>。</li>
+  </ul>
+  <p>知道這兩個換算，你才能直接在紙上「量」出心跳速率、PR 間期、QRS 寬度是否正常，這是之後每一章判讀的基本功具。</p>
+
+  <div class="summary-box">
+    <h3>📌 本章重點回顧</h3>
+    <ul>
+      <li>正常節律由 SA node 發起，依序經過 AV node → His bundle → 左右束支 → Purkinje fibers。</li>
+      <li>AV node 會刻意延遲訊號，讓心房先收縮完再讓心室收縮。</li>
+      <li>SA node 以外的構造也有自動節律性，是心臟的備援系統。</li>
+      <li>動作電位分 5 個時期（0-4），Phase 0 由 Na⁺ 快速流入造成。</li>
+      <li>P 波＝心房去極化，QRS＝心室去極化，T 波＝心室再極化。</li>
+      <li>心電圖紙：1 小格＝0.04 秒（橫）／0.1mV（縱），1 大格＝0.2 秒。</li>
+    </ul>
+  </div>
+
+  <div class="refs">
+    <h4>本章參考</h4>
+    <ol>
+      <li>Thaler MS. <em>The Only EKG Book You'll Ever Need</em>, 10th ed. Philadelphia: Wolters Kluwer; 2023. Chapter 1: The Basics.</li>
+      <li>Meloni S, Mastenbjörk M. <em>EKG/ECG Interpretation: Everything You Need to Know About the 12-Lead EKG/ECG Interpretation and How to Diagnose and Treat Arrhythmias</em>, 2nd ed. Medical Creations; 2021. Chapter 2: The Heart; Chapter 3: The ECG Complex.</li>
+      <li>Rowlands A, Sargent A. <em>The ECG Workbook</em>, 2nd ed. Cumbria: M&amp;K Publishing; 2011. Chapter 1-2.</li>
+    </ol>
+  </div>
+
+  <!-- ================= QUIZ ================= -->
+  <div class="quiz-section">
+    <div class="quiz-head">
+      <h2>📝 第一章自我測驗</h2>
+      <div class="quiz-progress" id="qProgress"></div>
+    </div>
+    <div id="quizArea"></div>
+  </div>
+
+  <div class="chapter-nav">
+    <a class="chnav-btn" href="ch0-intro.html">
+      <div class="dir">← 上一章</div>
+      <div class="ttl">第 0 章：如何使用這個學習系統</div>
+    </a>
+    <a class="chnav-btn next" href="ch2-normal-ecg.html">
+      <div class="dir">下一章 →</div>
+      <div class="ttl">第 2 章：正常心電圖判讀</div>
+    </a>
+  </div>
+
+</div>
+
+<footer class="ekg-footer">
+  © 2026 Rex Nursing · EKG 教學專區
+</footer>
+
+<script>
+const QUESTIONS = [
+  {
+    q: "正常情況下，心臟電氣活動的「總指揮」（節律起始點）位於哪裡？",
+    opts: [
+      "房室結（AV node）",
+      "竇房結（SA node）",
+      "希氏束（Bundle of His）",
+      "浦金氏纖維（Purkinje fibers）"
+    ],
+    correct: 1,
+    exp: {
+      0: "AV node 是訊號的必經檢查哨，會延遲訊號，但不是正常的起始點；本身節律性也較慢（約40-60次/分），只在SA node失效時才接手。",
+      1: "正解。SA node 位於右心房近上腔靜脈交界處，自動去極化速度最快（約60-100次/分），正常情況下主導整個心臟的節律。",
+      2: "Bundle of His 是傳導路徑的一段，節律性更慢，屬於備用系統，不是正常起始點。",
+      3: "Purkinje fibers 傳導速度全心臟最快，但自動節律性最慢（約20-40次/分），是最後一道備援防線，不是正常起始點。"
+    }
+  },
+  {
+    q: "電訊號離開房室結（AV node）之後，依序會經過下列哪個正確順序？",
+    opts: [
+      "希氏束 → 左右束支 → 浦金氏纖維",
+      "浦金氏纖維 → 希氏束 → 左右束支",
+      "左右束支 → 希氏束 → 浦金氏纖維",
+      "希氏束 → 浦金氏纖維 → 左右束支"
+    ],
+    correct: 0,
+    exp: {
+      0: "正解。正確路徑：AV node → 希氏束（His bundle）→ 左右束支（bundle branches）→ 浦金氏纖維（Purkinje fibers），最後讓兩側心室幾乎同步去極化。",
+      1: "順序顛倒了，浦金氏纖維是路徑的最末端，不是最先經過的構造。",
+      2: "順序顛倒了，希氏束在左右束支之前，不是之後。",
+      3: "順序錯誤，左右束支應該在希氏束之後、浦金氏纖維之前，不是排在最後。"
+    }
+  },
+  {
+    q: "心電圖上的 P 波，代表的生理事件是？",
+    opts: ["心室去極化", "心房去極化", "心室再極化", "房室結的傳導延遲"],
+    correct: 1,
+    exp: {
+      0: "心室去極化對應的是 QRS 波群，不是 P 波。",
+      1: "正解。P 波是心房去極化（atrial depolarization）在體表心電圖上的表現。",
+      2: "心室再極化對應的是 T 波，不是 P 波。",
+      3: "房室結的傳導延遲不會在心電圖上單獨畫出波形，它反映在 PR segment（P波結束到QRS開始之間的平坦區段）的長度上，而不是 P 波本身。"
+    }
+  },
+  {
+    q: "關於 QRS 波群，下列敘述何者正確？",
+    opts: [
+      "QRS波群只反映心室的電氣活動，跟心房完全無關",
+      "QRS波群代表心室去極化，心房再極化剛好發生在同一時間，但訊號被蓋過看不到",
+      "QRS波群代表心室再極化",
+      "QRS波群裡的Q波在每個正常人身上都一定會出現，沒出現就是異常"
+    ],
+    correct: 1,
+    exp: {
+      0: "描述不精確。QRS 主要反映心室去極化沒錯，但心房再極化（Ta wave）技術上同時發生，只是振幅小被QRS蓋過，用「完全無關」並不準確。",
+      1: "正解。這也是本章特別提醒過的重點：Ta wave 因為被QRS蓋過而看不見，不代表它不存在。",
+      2: "QRS代表的是心室「去極化」，不是「再極化」；心室再極化對應的是T波。",
+      3: "Q波是否出現、大小如何，會因導程與個人心臟解剖角度不同而異，不是每個正常人、每個導程都一定要有Q波才算正常。"
+    }
+  },
+  {
+    q: "標準心電圖紙上，1個小格（1mm）代表多少時間？（紙速25mm/秒）",
+    opts: ["0.02秒", "0.04秒", "0.2秒", "1秒"],
+    correct: 1,
+    exp: {
+      0: "計算錯誤。25mm/秒代表1mm＝1/25秒＝0.04秒，不是0.02秒。",
+      1: "正解。25mm/秒 → 1mm（1小格）＝0.04秒。這是量測心跳速率、PR間期、QRS寬度的基本換算。",
+      2: "0.2秒是「1大格」（5mm，也就是5小格）代表的時間，不是1小格，這是很常見的混淆點。",
+      3: "1秒相當於25mm、也就是5大格，遠大於1小格代表的時間。"
+    }
+  },
+  {
+    q: "心肌細胞動作電位的 Phase 0（快速去極化）主要是哪種離子快速流入造成的？",
+    opts: ["鉀離子 K⁺", "鈉離子 Na⁺", "氯離子 Cl⁻", "鎂離子 Mg²⁺"],
+    correct: 1,
+    exp: {
+      0: "K⁺主要跟Phase 3（再極化）與Phase 4（靜止期電位維持）有關，不是Phase 0。",
+      1: "正解。當電位達到閾值，大量快速鈉離子通道開啟，Na⁺快速湧入細胞內，造成動作電位陡峭的上升段（Phase 0）。",
+      2: "Cl⁻不是Phase 0的主要驅動離子。",
+      3: "Mg²⁺不是心肌動作電位Phase 0的主要驅動離子（雖然鎂離子平衡對心臟電生理穩定度仍有整體影響，會在後面電解質章節提到）。"
+    }
+  },
+  {
+    q: "AV node、希氏束、浦金氏纖維都具有「自動節律性」，這件事對臨床的重要意義是什麼？",
+    opts: [
+      "沒有臨床意義，純粹是理論知識",
+      "代表心臟有備用節律點，當SA node故障或訊號傳不下去時，下游構造能接手發出節律，維持心跳不會完全停止",
+      "代表這些構造平常會同時各自發出節律，正常情況下就會造成心律不整",
+      "代表只要其中一個構造受損，心臟就會立刻完全停止跳動"
+    ],
+    correct: 1,
+    exp: {
+      0: "有明確臨床意義，是後面章節「junctional rhythm」「ventricular escape rhythm」等脫逸心律概念的生理基礎。",
+      1: "正解。這是心臟的備援機制：正常時SA node節律最快、壓過其他節律點（overdrive suppression），但下游構造隨時能在需要時接手，是重要的保護機制。",
+      2: "正常生理狀況下，較快的上游節律點會壓過下游節律點（overdrive suppression），不會同時各自放電造成心律不整；這與病理狀態下的心律不整成因是不同的概念。",
+      3: "恰好相反，正是因為有這些備用節律點，心臟才不會因單一構造故障就完全停止跳動。"
+    }
+  }
+];
+
+let cur = 0;
+const answered = new Array(QUESTIONS.length).fill(null);
+
+function renderProgress() {
+  const box = document.getElementById('qProgress');
+  box.innerHTML = QUESTIONS.map((_, i) => {
+    let cls = 'qdot';
+    if (i === cur) cls += ' cur';
+    else if (answered[i] !== null) cls += (answered[i] === QUESTIONS[i].correct ? ' ok' : ' bad');
+    return `<div class="${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+  }).join('');
+}
+
+function goTo(i) { cur = i; renderQuestion(); }
+
+function renderQuestion() {
+  renderProgress();
+  const area = document.getElementById('quizArea');
+  if (cur >= QUESTIONS.length) {
+    const score = answered.filter((a, i) => a === QUESTIONS[i].correct).length;
+    area.innerHTML = `
+      <div class="qcard quiz-result">
+        <div class="score">${score}<span> / ${QUESTIONS.length}</span></div>
+        <p>${score === QUESTIONS.length ? '全對！這一章的基礎概念你已經很扎實了。' : '答錯的題目可以點上面的號碼回去看詳解，複習一下再繼續下一章。'}</p>
+        <button class="qbtn primary" onclick="restart()">重新測驗</button>
+      </div>`;
+    return;
+  }
+  const item = QUESTIONS[cur];
+  const picked = answered[cur];
+  const letters = ['A', 'B', 'C', 'D'];
+  area.innerHTML = `
+    <div class="qcard">
+      <div class="qcard-num">第 ${cur + 1} / ${QUESTIONS.length} 題</div>
+      <div class="qcard-text">${item.q}</div>
+      ${item.opts.map((opt, i) => {
+        let cls = 'opt-btn';
+        if (picked !== null) {
+          if (i === item.correct) cls += ' correct';
+          else if (i === picked) cls += ' wrong';
+        }
+        return `<button class="${cls}" ${picked !== null ? 'disabled' : ''} onclick="pick(${i})">
+          <span class="opt-label">${letters[i]}</span><span>${opt}</span>
+        </button>`;
+      }).join('')}
+      <div class="explain ${picked !== null ? 'show' : ''}">
+        ${picked !== null ? item.opts.map((_, i) => `<p><b>${letters[i]}.</b> ${item.exp[i]}</p>`).join('') : ''}
+      </div>
+      <div class="quiz-nav">
+        <button class="qbtn ghost" onclick="goTo(${Math.max(0, cur - 1)})" ${cur === 0 ? 'disabled' : ''}>← 上一題</button>
+        <button class="qbtn primary" onclick="next()" ${picked === null ? 'disabled' : ''}>${cur === QUESTIONS.length - 1 ? '查看結果' : '下一題 →'}</button>
+      </div>
+    </div>`;
+}
+
+function pick(i) {
+  if (answered[cur] !== null) return;
+  answered[cur] = i;
+  renderQuestion();
+}
+
+function next() { cur++; renderQuestion(); }
+function restart() { answered.fill(null); cur = 0; renderQuestion(); }
+
+renderQuestion();
+</script>
+
+</body>
+</html>
+                          

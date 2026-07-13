@@ -1,0 +1,296 @@
+/* ============================================================
+   EKG 教學專區 — 共用設計系統
+   延續 Rex Nursing 主站品牌（墨綠 #1D9E75／Noto Serif TC）
+   加入 ECG 心電圖紙紅色網格作為子識別
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* 主站品牌色（與 rexnursing.github.io 一致） */
+  --teal: #1D9E75;
+  --teal-l: #E1F5EE;
+  --teal-d: #085041;
+  --cream: #FAFAF8;
+  --text: #1a1a1a;
+  --muted: #6b7280;
+  --bd: rgba(0,0,0,0.09);
+  --white: #fff;
+  --r: 14px;
+  --rs: 8px;
+
+  /* EKG 專區子識別色：心電圖紙紅 */
+  --ecg-red: #C63C3C;
+  --ecg-red-d: #8f2b2b;
+  --ecg-red-l: #FBEAEA;
+  --ecg-grid-fine: rgba(198,60,60,0.07);
+  --ecg-grid-bold: rgba(198,60,60,0.14);
+
+  /* 測驗配色（沿用主站互動邏輯） */
+  --ok-bg: #EAF3DE; --ok-bd: #27500A; --ok-tx: #1a3d0a;
+  --bad-bg: #FAECE7; --bad-bd: #993C1D; --bad-tx: #7f2b10;
+}
+
+body {
+  font-family: 'Noto Sans TC', system-ui, sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+h1, h2, h3, .serif { font-family: 'Noto Serif TC', serif; }
+
+a { color: var(--teal); }
+
+img, svg { max-width: 100%; }
+
+/* ---------------- NAV ---------------- */
+.ekg-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,250,248,0.95);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--bd);
+  padding: 0 24px;
+  display: flex; align-items: center; gap: 16px;
+  height: 56px;
+}
+.ekg-nav .logo {
+  font-family: 'Noto Serif TC', serif; font-weight: 700; font-size: 15px;
+  color: var(--teal-d); text-decoration: none;
+  display: flex; align-items: center; gap: 8px; white-space: nowrap;
+}
+.ekg-nav .logo .divider { color: var(--bd); font-weight: 300; }
+.ekg-nav .logo .sub { color: var(--ecg-red); }
+.ekg-nav .crumbs { flex: 1; font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ekg-nav .crumbs a { color: var(--muted); text-decoration: none; }
+.ekg-nav .crumbs a:hover { color: var(--teal); }
+.ekg-nav .home-link {
+  font-size: 13px; color: var(--muted); text-decoration: none;
+  border: 1px solid var(--bd); padding: 6px 14px; border-radius: 20px;
+  white-space: nowrap; transition: all .15s;
+}
+.ekg-nav .home-link:hover { border-color: var(--teal); color: var(--teal-d); background: var(--teal-l); }
+
+/* ---------------- LAYOUT ---------------- */
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+.page-pad { padding: 40px 0 90px; }
+
+/* ---------------- ECG GRID HERO ---------------- */
+.ecg-hero {
+  position: relative;
+  background-color: #fff;
+  background-image:
+    linear-gradient(var(--ecg-grid-fine) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ecg-grid-fine) 1px, transparent 1px),
+    linear-gradient(var(--ecg-grid-bold) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ecg-grid-bold) 1px, transparent 1px);
+  background-size: 8px 8px, 8px 8px, 40px 40px, 40px 40px;
+  border-bottom: 1px solid var(--bd);
+  overflow: hidden;
+}
+.ecg-hero-inner { max-width: 860px; margin: 0 auto; padding: 48px 24px 40px; position: relative; z-index: 1; }
+.ecg-trace { position: absolute; left: 0; right: 0; bottom: 18px; height: 60px; opacity: .55; z-index: 0; }
+.ecg-trace path { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: ecgDraw 2.6s ease-out forwards; }
+@keyframes ecgDraw { to { stroke-dashoffset: 0; } }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--ecg-red-l); color: var(--ecg-red-d);
+  font-size: 11.5px; font-weight: 500; padding: 4px 13px;
+  border-radius: 20px; letter-spacing: .03em; margin-bottom: 14px;
+}
+.badge.teal { background: var(--teal-l); color: var(--teal-d); }
+
+.page-title { font-size: 30px; font-weight: 700; line-height: 1.4; margin-bottom: 10px; }
+.page-title .en { display: block; font-size: 15px; font-weight: 400; color: var(--muted); font-family: 'Noto Sans TC', sans-serif; margin-top: 4px; letter-spacing: .02em; }
+.page-desc { color: var(--muted); font-size: 14.5px; line-height: 1.85; max-width: 620px; }
+
+.meta-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 18px; font-size: 12.5px; color: var(--muted); }
+.meta-row span { display: flex; align-items: center; gap: 5px; }
+
+/* ---------------- CONTENT TYPOGRAPHY ---------------- */
+.content h2 {
+  font-size: 21px; margin: 46px 0 16px; padding-top: 6px;
+  display: flex; align-items: center; gap: 10px;
+}
+.content h2 .num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--teal); color: #fff; font-size: 13px; font-family: 'Noto Sans TC', sans-serif; font-weight: 700;
+  flex-shrink: 0;
+}
+.content h3 { font-size: 16.5px; font-weight: 700; margin: 26px 0 10px; color: var(--teal-d); }
+.content p { margin-bottom: 14px; color: #2a2a2a; }
+.content ul, .content ol { margin: 0 0 14px 22px; color: #2a2a2a; }
+.content li { margin-bottom: 6px; }
+.content strong { color: var(--teal-d); font-weight: 700; }
+
+/* ---------------- BILINGUAL TERM BOX ---------------- */
+.term-box {
+  background: var(--white); border: 1px solid var(--bd); border-left: 3px solid var(--teal);
+  border-radius: var(--rs); padding: 14px 18px; margin: 18px 0;
+}
+.term-box .en-term { font-family: 'Noto Serif TC', serif; font-weight: 700; font-size: 15.5px; color: var(--teal-d); }
+.term-box .pos { font-size: 11px; color: var(--muted); font-style: italic; margin-left: 6px; }
+.term-box .zh-term { font-size: 14.5px; margin: 4px 0 8px; }
+.term-box .tip { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.term-box .tip::before { content: "💡 記憶提示："; color: var(--teal); }
+
+.term-table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 13.5px; }
+.term-table th {
+  background: var(--teal-l); color: var(--teal-d); font-weight: 700;
+  text-align: left; padding: 9px 12px; border: 1px solid var(--bd);
+}
+.term-table td { padding: 9px 12px; border: 1px solid var(--bd); vertical-align: top; }
+.term-table td:first-child { font-family: 'Noto Serif TC', serif; font-weight: 700; color: var(--teal-d); white-space: nowrap; }
+
+/* ---------------- CLINICAL PEARL ---------------- */
+.pearl {
+  background: var(--teal-l); border-radius: var(--rs);
+  padding: 16px 20px; margin: 20px 0; position: relative;
+}
+.pearl-label { font-size: 12.5px; font-weight: 700; color: var(--teal-d); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.pearl p { color: var(--teal-d); font-size: 14px; margin-bottom: 0; opacity: .92; }
+
+.trap {
+  background: var(--ecg-red-l); border-radius: var(--rs);
+  padding: 16px 20px; margin: 20px 0;
+}
+.trap-label { font-size: 12.5px; font-weight: 700; color: var(--ecg-red-d); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.trap p { color: var(--ecg-red-d); font-size: 14px; margin-bottom: 0; opacity: .92; }
+
+/* ---------------- FIGURE ---------------- */
+.figure {
+  background: #fff; border: 1px solid var(--bd); border-radius: var(--r);
+  padding: 20px; margin: 22px 0; text-align: center;
+}
+.figure svg { max-width: 100%; height: auto; }
+.figure-cap { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+
+/* ---------------- SUMMARY BOX ---------------- */
+.summary-box {
+  background: var(--teal-d); border-radius: var(--r); padding: 26px 28px;
+  margin: 36px 0; color: #fff;
+}
+.summary-box h3 { color: #fff; font-family: 'Noto Serif TC', serif; font-size: 17px; margin-bottom: 12px; }
+.summary-box ul { margin: 0 0 0 20px; color: rgba(255,255,255,.88); }
+.summary-box li { margin-bottom: 7px; font-size: 14px; line-height: 1.7; }
+
+/* ---------------- CITATION ---------------- */
+.refs {
+  margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--bd);
+}
+.refs h4 { font-size: 12.5px; color: var(--muted); font-weight: 500; margin-bottom: 10px; letter-spacing: .02em; }
+.refs ol { margin-left: 18px; }
+.refs li { font-size: 12.5px; color: var(--muted); line-height: 1.8; margin-bottom: 4px; }
+
+/* ---------------- QUIZ ---------------- */
+@keyframes qFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.quiz-section { margin-top: 52px; padding-top: 36px; border-top: 3px solid var(--ecg-red-l); }
+.quiz-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+.quiz-head h2 { font-size: 20px; display: flex; align-items: center; gap: 8px; }
+.quiz-progress { display: flex; gap: 6px; flex-wrap: wrap; }
+.qdot {
+  width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--bd);
+  background: var(--white); font-size: 11px; font-weight: 500;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s; flex-shrink: 0;
+}
+.qdot.cur { border-color: var(--ecg-red); background: var(--ecg-red); color: #fff; }
+.qdot.ok { border-color: var(--ok-bd); background: var(--ok-bg); color: var(--ok-bd); }
+.qdot.bad { border-color: var(--bad-bd); background: var(--bad-bg); color: var(--bad-bd); }
+
+.qcard { background: var(--white); border: 1px solid var(--bd); border-radius: var(--r); padding: 26px 28px; animation: qFadeIn .3s ease both; }
+.qcard-num { font-size: 12px; color: var(--ecg-red); font-weight: 700; margin-bottom: 8px; }
+.qcard-text { font-size: 16px; font-weight: 500; line-height: 1.7; margin-bottom: 20px; }
+.qcard-text .stem-tag { display: inline-block; font-size: 11px; background: var(--ecg-red-l); color: var(--ecg-red-d); padding: 2px 8px; border-radius: 4px; margin-right: 8px; vertical-align: middle; }
+
+.opt-btn {
+  width: 100%; text-align: left; padding: 13px 16px; border-radius: 10px;
+  border: 1.5px solid var(--bd); background: var(--white);
+  font-size: 14px; font-family: inherit; cursor: pointer; transition: all .15s;
+  display: flex; align-items: flex-start; gap: 11px; line-height: 1.65; margin-bottom: 10px;
+}
+.opt-btn:hover:not(:disabled) { border-color: var(--teal); background: var(--teal-l); }
+.opt-btn.correct { border-color: var(--ok-bd); background: var(--ok-bg); color: var(--ok-tx); }
+.opt-btn.wrong { border-color: var(--bad-bd); background: var(--bad-bg); color: var(--bad-tx); }
+.opt-btn.show-ans { border-color: var(--ok-bd); background: var(--ok-bg); }
+.opt-btn:disabled { cursor: default; }
+.opt-label {
+  width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--bd);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; flex-shrink: 0; margin-top: 1px; transition: all .15s;
+}
+.opt-btn.correct .opt-label { background: var(--ok-bd); border-color: var(--ok-bd); color: #fff; }
+.opt-btn.wrong .opt-label { background: var(--bad-bd); border-color: var(--bad-bd); color: #fff; }
+
+.explain { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--bd); font-size: 13.5px; color: var(--muted); line-height: 1.85; display: none; }
+.explain.show { display: block; animation: qFadeIn .25s ease both; }
+.explain b { color: var(--teal-d); }
+
+.quiz-nav { display: flex; justify-content: space-between; margin-top: 18px; gap: 10px; }
+.qbtn { padding: 10px 22px; border-radius: 50px; font-size: 13.5px; font-weight: 500; border: none; cursor: pointer; font-family: inherit; transition: all .15s; }
+.qbtn.primary { background: var(--teal); color: #fff; }
+.qbtn.primary:hover { background: var(--teal-d); }
+.qbtn.ghost { background: none; border: 1.5px solid var(--bd); color: var(--muted); }
+.qbtn:disabled { opacity: .4; cursor: not-allowed; }
+
+.quiz-result { text-align: center; padding: 40px 20px; animation: qFadeIn .3s ease both; }
+.quiz-result .score { font-family: 'Noto Serif TC', serif; font-size: 44px; font-weight: 700; color: var(--teal); margin-bottom: 6px; }
+.quiz-result .score span { font-size: 20px; color: var(--muted); }
+.quiz-result p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+
+/* ---------------- CHAPTER NAV (prev/next) ---------------- */
+.chapter-nav { display: flex; justify-content: space-between; gap: 14px; margin-top: 56px; flex-wrap: wrap; }
+.chnav-btn {
+  flex: 1; min-width: 220px; background: var(--white); border: 1px solid var(--bd);
+  border-radius: var(--r); padding: 16px 20px; text-decoration: none; color: inherit;
+  transition: all .15s;
+}
+.chnav-btn:hover { border-color: var(--teal); transform: translateY(-2px); }
+.chnav-btn .dir { font-size: 11.5px; color: var(--muted); margin-bottom: 4px; }
+.chnav-btn .ttl { font-size: 14.5px; font-weight: 500; }
+.chnav-btn.next { text-align: right; }
+
+/* ---------------- SECTION HEADER ---------------- */
+.sh-accent h2 { font-family: 'Noto Serif TC', serif; font-size: 20px; font-weight: 700; }
+.sh-accent p { color: var(--muted); font-size: 13.5px; margin-top: 4px; }
+
+/* ---------------- ROADMAP (index page) ---------------- */
+.roadmap { display: flex; flex-direction: column; gap: 12px; margin: 30px 0; }
+.rm-item {
+  display: flex; align-items: center; gap: 16px; background: var(--white);
+  border: 1px solid var(--bd); border-radius: var(--r); padding: 16px 20px;
+  text-decoration: none; color: inherit; transition: all .15s; position: relative;
+}
+.rm-item:not(.locked):hover { border-color: var(--ecg-red); transform: translateX(4px); }
+.rm-num {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Noto Serif TC', serif; font-weight: 700; font-size: 15px;
+  background: var(--teal-l); color: var(--teal-d);
+}
+.rm-item.ready .rm-num { background: var(--ecg-red); color: #fff; }
+.rm-body { flex: 1; }
+.rm-body h3 { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+.rm-body p { font-size: 12.5px; color: var(--muted); }
+.rm-tag { font-size: 11px; padding: 3px 10px; border-radius: 20px; flex-shrink: 0; white-space: nowrap; }
+.rm-tag.ready { background: var(--ecg-red-l); color: var(--ecg-red-d); }
+.rm-tag.locked { background: #f0f0ef; color: #aaa; }
+.rm-item.locked { opacity: .55; cursor: default; }
+.rm-item.locked .rm-num { background: #f0f0ef; color: #bbb; }
+
+/* ---------------- FOOTER ---------------- */
+.ekg-footer { border-top: 1px solid var(--bd); padding: 26px 24px; text-align: center; font-size: 12.5px; color: var(--muted); margin-top: 40px; }
+.ekg-footer a { color: var(--muted); }
+
+/* ---------------- RESPONSIVE ---------------- */
+@media (max-width: 640px) {
+  .wrap, .ecg-hero-inner { padding-left: 18px; padding-right: 18px; }
+  .page-title { font-size: 24px; }
+  .qcard { padding: 20px 18px; }
+  .content h2 { font-size: 18px; }
+  .rm-item { padding: 13px 15px; gap: 12px; }
+  .summary-box { padding: 20px; }
+}

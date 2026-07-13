@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第4章：常見心律不整 I（心房性）｜EKG 教學專區</title>
+<meta name="description" content="竇性心律不整、心房早期收縮、心房顫動、心房撲動、SVT。中英對照＋自我測驗。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="ekg-nav">
+  <a class="logo" href="../index.html">Rex Nursing <span class="divider">/</span> <span class="sub">EKG 教學</span></a>
+  <span class="crumbs"><a href="index.html">學習地圖</a> / 第4章</span>
+  <a class="home-link" href="index.html">← 學習地圖</a>
+</nav>
+
+<div class="ecg-hero">
+  <div class="ecg-hero-inner">
+    <span class="badge">第 4 章・心律不整</span>
+    <h1 class="page-title">常見心律不整 I：心房性
+      <span class="en">Common Arrhythmias I — Supraventricular</span>
+    </h1>
+    <p class="page-desc">從這一章開始進入心律不整的世界。先從發生在心房、房室結周邊的「心房性（supraventricular）」心律不整開始：竇性心律不整、心房早期收縮、心房顫動、心房撲動、SVT。</p>
+    <div class="meta-row">
+      <span>⏱ 閱讀時間 15 分鐘</span>
+      <span>📝 章節測驗 7 題</span>
+      <span>🎯 建議先讀過第 1-2 章</span>
+    </div>
+  </div>
+  <svg class="ecg-trace" viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,30 L120,30 L145,30 L160,10 L175,50 L190,30 L230,30 L260,30 L280,18 L300,30 L340,30 L360,30 L385,30 L400,10 L415,50 L430,30 L470,30 L500,30 L520,18 L540,30 L580,30 L600,30 L625,30 L640,10 L655,50 L670,30 L710,30 L740,30 L760,18 L780,30 L820,30 L840,30 L865,30 L880,10 L895,50 L910,30 L950,30 L980,30 L1000,18 L1020,30 L1060,30 L1200,30"
+      fill="none" stroke="#C63C3C" stroke-width="2"/>
+  </svg>
+</div>
+
+<div class="wrap page-pad content">
+
+  <h2><span class="num">1</span>先建立一個座標：正常竇性心律長什麼樣</h2>
+  <p>後面每一種心律不整，都是拿「正常竇性心律」當作對照組去比較哪裡不一樣，所以先看一次基準線：</p>
+
+  <div class="figure">
+    <svg viewBox="0 0 600 560" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <path id="beat" d="M0,0 L8,0 Q13,-8 18,0 L28,0 L30,4 L34,-32 L38,16 L42,0 L52,0 Q59,-11 66,0 L76,0"/>
+      </defs>
+
+      <text x="10" y="30" font-size="13" font-weight="700" fill="#085041">① 正常竇性心律</text>
+      <line x1="105" y1="70" x2="590" y2="70" stroke="#eee"/>
+      <use href="#beat" x="115" y="70" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <use href="#beat" x="255" y="70" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <use href="#beat" x="395" y="70" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <text x="115" y="95" font-size="10.5" fill="#6b7280">P-QRS-T 規則出現，間距一致</text>
+
+      <text x="10" y="140" font-size="13" font-weight="700" fill="#085041">② 心房早期收縮 PAC</text>
+      <line x1="105" y1="180" x2="590" y2="180" stroke="#eee"/>
+      <use href="#beat" x="115" y="180" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <use href="#beat" x="255" y="180" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <use href="#beat" x="350" y="180" stroke="#C63C3C" stroke-width="2.2" fill="none" transform="scale(0.85,1)" transform-origin="350 180"/>
+      <use href="#beat" x="480" y="180" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <text x="115" y="205" font-size="10.5" fill="#6b7280">第3拍提早出現、P波形狀不同（紅色），之後有代償性停頓</text>
+
+      <text x="10" y="250" font-size="13" font-weight="700" fill="#085041">③ 心房顫動 AFib</text>
+      <line x1="105" y1="290" x2="590" y2="290" stroke="#eee"/>
+      <path d="M105,290 q6,-5 12,0 t12,0 t12,3 t12,-4 t12,2 t12,-3 t12,0 t12,4 t12,-2" stroke="#C63C3C" stroke-width="1.2" fill="none" opacity="0.7"/>
+      <path d="M234,290 L236,258 L240,300 L244,290" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <path d="M105,290 q6,-5 12,0 t12,0" stroke="#C63C3C" stroke-width="1.2" fill="none" opacity="0.7" transform="translate(280,0)"/>
+      <path d="M300,290 L302,258 L306,300 L310,290" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <path d="M370,290 L372,255 L376,300 L380,290" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <path d="M470,290 L472,260 L476,298 L480,290" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <path d="M540,290 L542,257 L546,300 L550,290" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <path d="M105,290 q4,-4 8,0 4,4 8,0 4,-3 8,0 4,4 8,0 4,-4 8,0 4,3 8,0 4,-4 8,0 4,4 8,0 4,-3 8,0 4,4 8,0 4,-4 8,0 4,3 8,0 4,-4 8,0 4,4 8,0 4,-3 8,0 4,4 8,0 4,-4 8,0 4,3 8,0 4,-4 8,0" stroke="#C63C3C" stroke-width="1" fill="none" opacity="0.55"/>
+      <text x="115" y="315" font-size="10.5" fill="#6b7280">看不到清楚P波，基線細微顫動，QRS間距完全不規則</text>
+
+      <text x="10" y="360" font-size="13" font-weight="700" fill="#085041">④ 心房撲動 AFlutter（2:1傳導）</text>
+      <line x1="105" y1="400" x2="590" y2="400" stroke="#eee"/>
+      <path d="M105,400 L117,380 L129,400 L141,380 L153,400 L165,380 L177,400 L189,380 L201,400 L213,380 L225,400 L237,380 L249,400 L261,380 L273,400 L285,380 L297,400 L309,380 L321,400 L333,380 L345,400 L357,380 L369,400 L381,380 L393,400 L405,380 L417,400 L429,380 L441,400 L453,380 L465,400 L477,380 L489,400 L501,380 L513,400 L525,380 L537,400 L549,380 L561,400 L573,380 L585,400" stroke="#8f2b2b" stroke-width="1.3" fill="none" opacity="0.65"/>
+      <path d="M129,400 L131,365 L135,412 L139,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <path d="M153,400 L155,365 L159,412 L163,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <path d="M249,400 L251,365 L255,412 L259,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <path d="M273,400 L275,365 L279,412 L283,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <path d="M369,400 L371,365 L375,412 L379,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <path d="M393,400 L395,365 L399,412 L403,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <path d="M489,400 L491,365 L495,412 L499,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <path d="M513,400 L515,365 L519,412 L523,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
+      <text x="115" y="425" font-size="10.5" fill="#6b7280">規則鋸齒狀撲動波（無等電位基線），每2個撲動波下傳1次QRS</text>
+
+      <text x="10" y="470" font-size="13" font-weight="700" fill="#085041">⑤ SVT（陣發性室上頻脈）</text>
+      <line x1="105" y1="510" x2="590" y2="510" stroke="#eee"/>
+      <use href="#beat" x="115" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="115 510"/>
+      <use href="#beat" x="160" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="160 510"/>
+      <use href="#beat" x="205" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="205 510"/>
+      <use href="#beat" x="250" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="250 510"/>
+      <use href="#beat" x="295" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="295 510"/>
+      <use href="#beat" x="340" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="340 510"/>
+      <use href="#beat" x="385" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="385 510"/>
+      <use href="#beat" x="430" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="430 510"/>
+      <use href="#beat" x="475" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="475 510"/>
+      <use href="#beat" x="520" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="520 510"/>
+      <text x="115" y="535" font-size="10.5" fill="#6b7280">窄QRS、規則、速率快（150-220次/分），P波常埋在前一拍T波裡看不到</text>
+    </svg>
+    <div class="figure-cap">圖1：5種心房性節律的示意波形比較（原創繪製，示意形態非真實病人描記）</div>
+  </div>
+
+  <h2><span class="num">2</span>竇性心律不整（Sinus Arrhythmias）</h2>
+  <p>節律仍由 SA node 主導，只是速率或規律性有變化：</p>
+  <ul>
+    <li><strong>竇性心搏過速（Sinus tachycardia）</strong>：速率&gt;100次/分，P波形態正常，常見於發燒、疼痛、脫水、焦慮、甲狀腺亢進等生理性反應。</li>
+    <li><strong>竇性心搏過緩（Sinus bradycardia）</strong>：速率&lt;60次/分，可能是正常運動員的生理性表現，也可能是病態竇房結症候群等病理狀況。</li>
+    <li><strong>竇性心律不整（Sinus arrhythmia）</strong>：R-R間距隨呼吸週期忽快忽慢（吸氣變快、吐氣變慢），年輕人常見的正常生理現象，屬於「規則地不規則」。</li>
+  </ul>
+
+  <h2><span class="num">3</span>心房早期收縮（PAC）</h2>
+  <p>心房內某個非SA node的位置提早放電，產生一個<strong>形狀跟正常P波不同、且提早出現</strong>的P波，後面通常接著正常形狀的QRS（因為訊號進入房室結之後走的還是正常路徑）。通常良性，健康人身上也很常見，跟咖啡因、壓力、睡眠不足有關；但頻繁出現時也可能是心房顫動的前兆訊號。</p>
+
+  <h2><span class="num">4</span>心房顫動（Atrial Fibrillation, AFib）</h2>
+  <p>心房內出現大量混亂、不同步的微小電氣迴路（reentry），導致心房完全無法有效收縮，只能「顫動」。心電圖上：</p>
+  <ul>
+    <li><strong>完全看不到清楚的P波</strong>，取而代之的是細碎不規則的顫動基線。</li>
+    <li>房室結隨機篩選傳下來的訊號，造成 <strong>QRS間距「不規則地不規則」</strong>——這是AFib最關鍵的判讀特徵。</li>
+  </ul>
+
+  <div class="pearl">
+    <div class="pearl-label">💡 臨床小提醒</div>
+    <p>心房顫動時心房無法有效收縮，血液容易在心房（尤其左心耳）淤積形成血栓，血栓一旦脫落隨血流跑到腦部就會造成中風。這是AFib病人臨床上要積極評估中風風險、考慮抗凝血治療的重要原因，也是護理人員看到AFib病人要提高警覺的原因之一。</p>
+  </div>
+
+  <h2><span class="num">5</span>心房撲動（Atrial Flutter, AFlutter）</h2>
+  <p>心房內是<strong>單一、規則、快速的環形電氣迴路</strong>（不是AFib那種混亂多迴路），心房速率通常在 <strong>250-350次/分</strong>，心電圖上呈現特徵性的<strong>規則鋸齒狀「撲動波」（flutter waves）</strong>，沒有平坦的等電位基線。因為房室結有其不反應期保護，通常不會每個撲動波都下傳，常見 <strong>2:1、3:1、4:1</strong> 等固定比例傳導，因此心室的QRS間距往往反而是<strong>規則的</strong>（除非傳導比例不固定）。</p>
+
+  <div class="trap">
+    <div class="trap-label">⚠️ 容易搞混的地方</div>
+    <p>AFib 與 AFlutter 最容易混的地方：<strong>AFib的QRS間距是「不規則」的，AFlutter在固定傳導比例下QRS間距通常是「規則」的</strong>。判斷關鍵不是看QRS規不規則，而是看基線——AFib是雜亂細碎的顫動，AFlutter是工整的鋸齒狀撲動波。</p>
+  </div>
+
+  <h2><span class="num">6</span>陣發性室上頻脈（SVT / AVNRT）</h2>
+  <p>最常見的機轉是房室結內部形成一個小型折返迴路（AV nodal reentrant tachycardia, AVNRT），訊號在這個迴路裡快速打轉，造成<strong>窄QRS、規則、速率快（常見150-220次/分）</strong>的頻脈，通常<strong>突然開始、突然結束</strong>，P波常因為跟QRS幾乎同時發生而埋在QRS或緊接其後的T波中，不易辨識。</p>
+
+  <table class="term-table">
+    <tr><th>English</th><th>中文</th><th>關鍵特徵</th></tr>
+    <tr><td>Premature atrial contraction (PAC)</td><td>心房早期收縮</td><td>提早出現、P波形狀不同、QRS正常</td></tr>
+    <tr><td>Atrial fibrillation (AFib)</td><td>心房顫動</td><td>無清楚P波、QRS間距不規則地不規則</td></tr>
+    <tr><td>Atrial flutter (AFlutter)</td><td>心房撲動</td><td>規則鋸齒狀撲動波、QRS常規則（固定比例傳導）</td></tr>
+    <tr><td>Supraventricular tachycardia (SVT)</td><td>室上頻脈</td><td>窄QRS、規則、快速、突發突止</td></tr>
+  </table>
+
+  <div class="summary-box">
+    <h3>📌 本章重點回顧</h3>
+    <ul>
+      <li>竇性心律不整：SA node仍主導，只是速率或規律性改變（過速/過緩/隨呼吸變化）。</li>
+      <li>PAC：提早出現、P波形狀異常，通常良性。</li>
+      <li>AFib：無清楚P波、QRS間距「不規則地不規則」，中風風險是臨床重點。</li>
+      <li>AFlutter：規則鋸齒狀撲動波，QRS常因固定比例傳導而規則。</li>
+      <li>SVT：窄QRS、規則、快速、突發突止，P波常埋藏不易見。</li>
+    </ul>
+  </div>
+
+  <div class="refs">
+    <h4>本章參考</h4>
+    <ol>
+      <li>Thaler MS. <em>The Only EKG Book You'll Ever Need</em>, 10th ed. Wolters Kluwer; 2023. Chapter 3: Arrhythmias (Arrhythmias of Sinus Origin; Supraventricular Arrhythmias).</li>
+      <li>Rowlands A, Sargent A. <em>The ECG Workbook</em>, 2nd ed. M&amp;K Publishing; 2011. Common Arrhythmias chapter; Ectopics and Extrasystoles chapter.</li>
+      <li>Meloni S, Mastenbjörk M. <em>EKG/ECG Interpretation</em>, 2nd ed. Medical Creations; 2021. Chapter 5: ECG Diagnosis (Atrial Fibrillation, Atrial Flutter, AVNRT entries).</li>
+    </ol>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-head">
+      <h2>📝 第四章自我測驗</h2>
+      <div class="quiz-progress" id="qProgress"></div>
+    </div>
+    <div id="quizArea"></div>
+  </div>
+
+  <div class="chapter-nav">
+    <a class="chnav-btn" href="ch3-hypertrophy.html">
+      <div class="dir">← 上一章</div>
+      <div class="ttl">第 3 章：心房與心室肥大</div>
+    </a>
+    <a class="chnav-btn next" href="ch5-arrhythmia-ventricular.html">
+      <div class="dir">下一章 →</div>
+      <div class="ttl">第 5 章：常見心律不整 II（心室性）</div>
+    </a>
+  </div>
+
+</div>
+
+<footer class="ekg-footer">
+  © 2026 Rex Nursing · EKG 教學專區
+</footer>
+
+<script>
+const QUESTIONS = [
+  {
+    q: "心房顫動（AFib）心電圖上最關鍵的判讀特徵是？",
+    opts: [
+      "規則鋸齒狀撲動波",
+      "無清楚P波，QRS間距不規則地不規則",
+      "QRS波群寬大變形",
+      "PR間期持續延長"
+    ],
+    correct: 1,
+    exp: {
+      0: "規則鋸齒狀撲動波是心房撲動（AFlutter）的特徵，不是AFib。",
+      1: "正解。AFib因心房內混亂的多重折返，看不到清楚P波，房室結隨機篩選下傳訊號，造成QRS間距完全沒有規律。",
+      2: "QRS寬大變形通常提示心室起源的問題（如心室頻脈）或合併束支傳導阻滯，不是AFib的定義特徵。",
+      3: "PR間期持續延長是房室傳導阻滯的表現，AFib因為沒有清楚P波，PR間期無法測量。"
+    }
+  },
+  {
+    q: "心房撲動（AFlutter）與心房顫動（AFib）最主要的鑑別重點是？",
+    opts: [
+      "AFlutter的QRS一定比AFib快",
+      "AFlutter的基線是規則鋸齒狀撲動波，AFib是雜亂細碎的顫動基線",
+      "AFlutter只發生在年輕人身上",
+      "兩者的心電圖表現完全相同，無法區分"
+    ],
+    correct: 1,
+    exp: {
+      0: "心室速率不是可靠的鑑別依據，AFlutter在不同傳導比例下心室速率變化很大。",
+      1: "正解。基線型態是關鍵鑑別點：AFlutter是單一規則迴路造成的工整鋸齒狀撲動波，AFib是多重混亂迴路造成的雜亂顫動基線。",
+      2: "兩者好發族群沒有這種年齡限定的區別。",
+      3: "兩者的基線型態明顯不同，是可以區分的。"
+    }
+  },
+  {
+    q: "心房撲動常以2:1、3:1、4:1等固定比例傳導，這是因為？",
+    opts: [
+      "心室自己選擇性地不收縮",
+      "房室結有其不反應期，無法讓每一個過快的撲動波都傳導下去",
+      "這是心電圖機器故障造成的假象",
+      "病人的心臟大小影響傳導比例"
+    ],
+    correct: 1,
+    exp: {
+      0: "心室本身不會主動篩選訊號，篩選機制在房室結。",
+      1: "正解。房室結有生理性的不反應期，心房撲動速率太快（250-350次/分）時，房室結無法讓每一個訊號都傳導下去，因此形成固定比例的保護性阻滯。",
+      2: "這是真實的生理機轉，不是機器假象。",
+      3: "心臟大小不是決定傳導比例的主要因素，房室結的不反應期才是關鍵。"
+    }
+  },
+  {
+    q: "心房早期收縮（PAC）在心電圖上的典型表現是？",
+    opts: [
+      "提早出現的P波（形狀與正常不同），後面接正常形狀的QRS",
+      "完全沒有P波",
+      "QRS波群寬大變形",
+      "規則鋸齒狀撲動波"
+    ],
+    correct: 0,
+    exp: {
+      0: "正解。PAC是心房內異位點提早放電，P波形狀因起源位置不同而異常，但訊號進入房室結後走正常路徑，QRS通常維持正常窄波形態。",
+      1: "PAC仍然有P波，只是形狀跟正常不同、且提早出現，不是完全沒有P波。",
+      2: "QRS寬大變形通常提示心室起源的異常，不是PAC的典型表現。",
+      3: "規則鋸齒狀撲動波是AFlutter的特徵，跟PAC無關。"
+    }
+  },
+  {
+    q: "為什麼心房顫動病人臨床上要特別注意中風風險？",
+    opts: [
+      "因為AFib會直接造成腦部血管痙攣",
+      "心房無法有效收縮，血液容易在心房（尤其左心耳）淤積形成血栓，血栓脫落可能造成腦中風",
+      "AFib病人的血壓一定會飆高導致中風",
+      "中風風險與AFib完全無關，只是巧合"
+    ],
+    correct: 1,
+    exp: {
+      0: "AFib不會直接造成腦血管痙攣，中風機轉是透過血栓栓塞。",
+      1: "正解。心房顫動時心房只是顫動、無法有效收縮排空，血液淤積容易形成血栓，血栓脫落隨血流到腦部造成栓塞性中風，這是AFib病人評估抗凝血治療的重要原因。",
+      2: "血壓升高不是AFib造成中風的主要機轉，血栓栓塞才是。",
+      3: "這是錯誤說法，AFib與中風風險有明確的臨床關聯（源自心房內血栓形成），並非巧合。"
+    }
+  },
+  {
+    q: "陣發性室上頻脈（SVT）的典型臨床特徵是？",
+    opts: [
+      "窄QRS、規則、速率快，且通常突然開始、突然結束",
+      "寬QRS、極不規則",
+      "速率通常低於60次/分",
+      "P波總是清晰可見、形狀正常"
+    ],
+    correct: 0,
+    exp: {
+      0: "正解。SVT（常見機轉AVNRT）是窄QRS的規則性頻脈，速率常見150-220次/分，且以突發突止為特徵，跟竇性心搏過速的漸進變化不同。",
+      1: "SVT是窄QRS，不是寬QRS；也是規則的，不是極不規則。",
+      2: "SVT定義上是「頻脈」，速率遠高於60次/分，不是過緩。",
+      3: "SVT的P波常因跟QRS時間點太接近而埋藏在QRS或T波中，不容易清楚辨識。"
+    }
+  },
+  {
+    q: "「竇性心律不整（sinus arrhythmia）」這個名稱雖然有「不整」兩字，但為什麼通常視為正常生理現象？",
+    opts: [
+      "因為它其實跟AFib是同一種疾病",
+      "因為它的R-R間距變化跟呼吸週期有規律地對應，屬於「規則地不規則」，年輕人常見",
+      "因為它一定會惡化成心室顫動",
+      "因為心電圖機無法偵測到，所以視為正常"
+    ],
+    correct: 1,
+    exp: {
+      0: "竇性心律不整跟AFib是完全不同的機轉，前者仍是SA node主導的正常節律，只是速率隨呼吸波動。",
+      1: "正解。竇性心律不整的R-R間距會隨呼吸（吸氣加快、吐氣減慢）呈現規律性變化，屬於「規則地不規則」，是自律神經對竇房結的正常生理調節，年輕族群很常見，通常不需治療。",
+      2: "竇性心律不整不會惡化成心室顫動，兩者機轉完全無關。",
+      3: "心電圖機可以清楚偵測到竇性心律不整的R-R變化，並非偵測不到。"
+    }
+  }
+];
+
+let cur = 0;
+const answered = new Array(QUESTIONS.length).fill(null);
+
+function renderProgress() {
+  const box = document.getElementById('qProgress');
+  box.innerHTML = QUESTIONS.map((_, i) => {
+    let cls = 'qdot';
+    if (i === cur) cls += ' cur';
+    else if (answered[i] !== null) cls += (answered[i] === QUESTIONS[i].correct ? ' ok' : ' bad');
+    return `<div class="${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+  }).join('');
+}
+
+function goTo(i) { cur = i; renderQuestion(); }
+
+function renderQuestion() {
+  renderProgress();
+  const area = document.getElementById('quizArea');
+  if (cur >= QUESTIONS.length) {
+    const score = answered.filter((a, i) => a === QUESTIONS[i].correct).length;
+    area.innerHTML = `
+      <div class="qcard quiz-result">
+        <div class="score">${score}<span> / ${QUESTIONS.length}</span></div>
+        <p>${score === QUESTIONS.length ? '全對！心房性心律不整的判讀重點都掌握了。' : '答錯的題目可以點上面的號碼回去看詳解，複習一下再繼續下一章。'}</p>
+        <button class="qbtn primary" onclick="restart()">重新測驗</button>
+      </div>`;
+    return;
+  }
+  const item = QUESTIONS[cur];
+  const picked = answered[cur];
+  const letters = ['A', 'B', 'C', 'D'];
+  area.innerHTML = `
+    <div class="qcard">
+      <div class="qcard-num">第 ${cur + 1} / ${QUESTIONS.length} 題</div>
+      <div class="qcard-text">${item.q}</div>
+      ${item.opts.map((opt, i) => {
+        let cls = 'opt-btn';
+        if (picked !== null) {
+          if (i === item.correct) cls += ' correct';
+          else if (i === picked) cls += ' wrong';
+        }
+        return `<button class="${cls}" ${picked !== null ? 'disabled' : ''} onclick="pick(${i})">
+          <span class="opt-label">${letters[i]}</span><span>${opt}</span>
+        </button>`;
+      }).join('')}
+      <div class="explain ${picked !== null ? 'show' : ''}">
+        ${picked !== null ? item.opts.map((_, i) => `<p><b>${letters[i]}.</b> ${item.exp[i]}</p>`).join('') : ''}
+      </div>
+      <div class="quiz-nav">
+        <button class="qbtn ghost" onclick="goTo(${Math.max(0, cur - 1)})" ${cur === 0 ? 'disabled' : ''}>← 上一題</button>
+        <button class="qbtn primary" onclick="next()" ${picked === null ? 'disabled' : ''}>${cur === QUESTIONS.length - 1 ? '查看結果' : '下一題 →'}</button>
+      </div>
+    </div>`;
+}
+
+function pick(i) {
+  if (answered[cur] !== null) return;
+  answered[cur] = i;
+  renderQuestion();
+}
+
+function next() { cur++; renderQuestion(); }
+function restart() { answered.fill(null); cur = 0; renderQuestion(); }
+
+renderQuestion();
+</script>
+
+</body>
+</html>
+         

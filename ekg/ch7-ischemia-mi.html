@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第7章：心肌缺血與心肌梗塞｜EKG 教學專區</title>
+<meta name="description" content="STEMI/NSTEMI判斷、ST段演變、梗塞部位定位、對應性改變。中英對照＋自我測驗。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="ekg-nav">
+  <a class="logo" href="../index.html">Rex Nursing <span class="divider">/</span> <span class="sub">EKG 教學</span></a>
+  <span class="crumbs"><a href="index.html">學習地圖</a> / 第7章</span>
+  <a class="home-link" href="index.html">← 學習地圖</a>
+</nav>
+
+<div class="ecg-hero">
+  <div class="ecg-hero-inner">
+    <span class="badge">第 7 章・臨床判讀</span>
+    <h1 class="page-title">心肌缺血與心肌梗塞
+      <span class="en">Ischemia &amp; Myocardial Infarction</span>
+    </h1>
+    <p class="page-desc">心肌梗塞是心電圖臨床應用中最攸關生死的判讀項目。這一章教你ST-T波隨時間演變的規律，以及怎麼從導程組合反推梗塞發生在心臟的哪個部位。</p>
+    <div class="meta-row">
+      <span>⏱ 閱讀時間 15 分鐘</span>
+      <span>📝 章節測驗 7 題</span>
+      <span>🎯 建議先讀過第 1-3 章</span>
+    </div>
+  </div>
+  <svg class="ecg-trace" viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,30 L120,30 L145,30 L160,10 L175,50 L190,30 L230,30 L260,30 L280,18 L300,30 L340,30 L360,30 L385,30 L400,10 L415,50 L430,30 L470,30 L500,30 L520,18 L540,30 L580,30 L600,30 L625,30 L640,10 L655,50 L670,30 L710,30 L740,30 L760,18 L780,30 L820,30 L840,30 L865,30 L880,10 L895,50 L910,30 L950,30 L980,30 L1000,18 L1020,30 L1060,30 L1200,30"
+      fill="none" stroke="#C63C3C" stroke-width="2"/>
+  </svg>
+</div>
+
+<div class="wrap page-pad content">
+
+  <h2><span class="num">1</span>心絞痛 vs 心肌梗塞：可逆 vs 不可逆</h2>
+  <p><strong>心絞痛（angina）</strong>是心肌血流暫時性不足，症狀緩解後心肌細胞沒有真正壞死，屬於<strong>可逆</strong>；<strong>心肌梗塞（myocardial infarction, MI）</strong>則是血流中斷到心肌細胞真正壞死，屬於<strong>不可逆</strong>。心電圖上的表現也對應這個邏輯：暫時性缺血可能只看到暫時性的ST-T改變，梗塞則會留下較持久、甚至永久的痕跡（例如病理性Q波）。</p>
+
+  <h2><span class="num">2</span>心肌梗塞的心電圖演變：一個時間軸</h2>
+  <p>心肌梗塞不是瞬間定格的畫面，而是隨時間演進的一個過程，經典的演變順序是：</p>
+
+  <div class="figure">
+    <svg viewBox="0 0 700 190" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(0,0)">
+        <line x1="0" y1="120" x2="120" y2="120" stroke="#eee"/>
+        <path d="M0,120 L15,120 Q20,112 25,120 L35,120 L37,124 L41,90 L45,135 L49,120 L60,120 Q68,105 76,120 L120,120" fill="none" stroke="#1D9E75" stroke-width="2.3"/>
+        <text x="60" y="155" text-anchor="middle" font-size="11" font-weight="700" fill="#085041">① 正常</text>
+      </g>
+      <g transform="translate(140,0)">
+        <line x1="0" y1="120" x2="120" y2="120" stroke="#eee"/>
+        <path d="M0,120 L15,120 Q20,112 25,120 L35,120 L37,124 L41,92 L45,133 L49,120 L60,120 Q70,55 80,120 L120,120" fill="none" stroke="#C63C3C" stroke-width="2.3"/>
+        <text x="60" y="155" text-anchor="middle" font-size="11" font-weight="700" fill="#8f2b2b">② 超急性T波</text>
+        <text x="60" y="168" text-anchor="middle" font-size="9.5" fill="#6b7280">T波高聳（數分鐘內）</text>
+      </g>
+      <g transform="translate(280,0)">
+        <line x1="0" y1="120" x2="120" y2="120" stroke="#eee"/>
+        <path d="M0,120 L15,120 Q20,113 25,120 L35,120 L37,124 L41,92 L45,133 L49,120 Q65,95 80,105 Q95,110 100,120 L120,120" fill="none" stroke="#C63C3C" stroke-width="2.3"/>
+        <text x="60" y="155" text-anchor="middle" font-size="11" font-weight="700" fill="#8f2b2b">③ ST段上升</text>
+        <text x="60" y="168" text-anchor="middle" font-size="9.5" fill="#6b7280">STEMI（數小時內）</text>
+      </g>
+      <g transform="translate(420,0)">
+        <line x1="0" y1="120" x2="120" y2="120" stroke="#eee"/>
+        <path d="M0,120 L15,120 Q20,113 25,120 L35,120 L37,140 L39,155 L43,105 L47,133 L51,120 Q62,110 73,113 Q85,116 90,120 L120,120" fill="none" stroke="#C63C3C" stroke-width="2.3"/>
+        <text x="60" y="155" text-anchor="middle" font-size="11" font-weight="700" fill="#8f2b2b">④ Q波形成</text>
+        <text x="60" y="168" text-anchor="middle" font-size="9.5" fill="#6b7280">壞死（數小時-數天）</text>
+      </g>
+      <g transform="translate(560,0)">
+        <line x1="0" y1="120" x2="120" y2="120" stroke="#eee"/>
+        <path d="M0,120 L15,120 Q20,113 25,120 L35,120 L37,140 L39,155 L43,108 L47,133 L51,120 L62,120 Q70,145 78,120 L120,120" fill="none" stroke="#8f2b2b" stroke-width="2.3"/>
+        <text x="60" y="155" text-anchor="middle" font-size="11" font-weight="700" fill="#8f2b2b">⑤ T波倒置</text>
+        <text x="60" y="168" text-anchor="middle" font-size="9.5" fill="#6b7280">演變期（數天後）＋Q波持續存在</text>
+      </g>
+    </svg>
+    <div class="figure-cap">圖1：心肌梗塞心電圖隨時間演變的經典順序（原創繪製，時間為概略教學參考值，實際個案差異大）</div>
+  </div>
+
+  <table class="term-table">
+    <tr><th>階段</th><th>對應病理</th><th>心電圖表現</th></tr>
+    <tr><td>缺血 Ischemia</td><td>心肌供氧不足</td><td>T波改變（高聳或倒置）</td></tr>
+    <tr><td>損傷 Injury</td><td>細胞受損但未壞死</td><td>ST段上升（STEMI）</td></tr>
+    <tr><td>壞死 Infarction</td><td>心肌細胞死亡</td><td>病理性Q波（常持續存在）</td></tr>
+  </table>
+
+  <div class="pearl">
+    <div class="pearl-label">💡 臨床小提醒</div>
+    <p>「時間就是心肌（Time is muscle）」——ST段上升的階段是搶救心肌、避免壞死擴大的黃金時間，這也是為什麼STEMI病人需要立即啟動心導管或溶栓治療的原因。反過來說，如果心電圖只看到病理性Q波、沒有ST上升，通常代表已經是<strong>陳舊性（過去發生過)</strong>的心肌梗塞，處置的急迫性和方向會不同。</p>
+  </div>
+
+  <h2><span class="num">3</span>定位梗塞部位：導程組合反推血管</h2>
+  <p>不同導程對應心臟不同的解剖區域，出現ST上升的導程組合，可以反推是哪一條冠狀動脈阻塞：</p>
+
+  <table class="term-table">
+    <tr><th>部位</th><th>相關導程</th><th>主要供應血管</th></tr>
+    <tr><td>下壁 Inferior</td><td>II、III、aVF</td><td>右冠狀動脈（RCA）多數情況</td></tr>
+    <tr><td>前壁／前中隔 Anterior/Anteroseptal</td><td>V1-V4</td><td>左前降支（LAD）</td></tr>
+    <tr><td>側壁 Lateral</td><td>I、aVL、V5、V6</td><td>左迴旋支（LCx）</td></tr>
+  </table>
+
+  <h2><span class="num">4</span>對應性改變（Reciprocal Changes）：反方向的線索</h2>
+  <p>當某個區域出現ST上升，<strong>電氣方向相反的導程</strong>常會同時出現<strong>ST下降</strong>，這稱為對應性改變。例如下壁梗塞（II、III、aVF ST上升）時，常在 aVL 看到對應性ST下降。這不是另一個獨立的問題，而是同一個電氣事件從相反角度看的鏡像結果——出現對應性改變，反而是<strong>支持真正心肌梗塞診斷</strong>的有力證據（相對於其他會造成ST上升的良性原因）。</p>
+
+  <h2><span class="num">5</span>NSTEMI：沒有ST上升，不代表沒事</h2>
+  <p><strong>非ST段上升心肌梗塞（NSTEMI）</strong>心電圖上可能只看到ST下降或T波倒置，沒有達到STEMI的ST上升標準，但透過血液中的心肌損傷指標（如troponin）仍可確診真正發生了心肌壞死。臨床處置的急迫程度雖與STEMI不同，但<strong>NSTEMI依然是需要積極處理的心肌梗塞，不是「比較不嚴重可以放著」的意思</strong>，只是心電圖表現不同，需要搭配抽血數據綜合判斷。</p>
+
+  <div class="trap">
+    <div class="trap-label">⚠️ 容易搞混的地方</div>
+    <p>回顧第3章提過的「strain pattern（心室肥厚合併次發性ST-T改變）」——它也會出現ST壓低、T波倒置，外觀上可能跟缺血變化相似。另外，<strong>左束支傳導阻滯（LBBB，第6章）</strong>本身就會讓QRS與ST-T波形改變，大幅增加心肌梗塞心電圖判讀的難度，臨床上需要搭配專門的判讀準則（如Sgarbossa criteria）來輔助判斷，這部分屬於較進階的技巧，這裡先知道「LBBB會讓MI判讀變困難」這個限制即可。</p>
+  </div>
+
+  <div class="summary-box">
+    <h3>📌 本章重點回顧</h3>
+    <ul>
+      <li>心絞痛可逆，心肌梗塞不可逆；心電圖表現也對應這個時間演變過程。</li>
+      <li>經典演變順序：超急性T波高聳 → ST段上升 → Q波形成 → T波倒置。</li>
+      <li>下壁看II/III/aVF、前壁看V1-V4、側壁看I/aVL/V5-V6，可反推阻塞血管。</li>
+      <li>對應性ST下降是支持真正心肌梗塞診斷的重要證據。</li>
+      <li>NSTEMI沒有ST上升，但仍是需要積極處理的心肌梗塞，需搭配抽血數據判斷。</li>
+      <li>Strain pattern與LBBB都會增加心肌梗塞心電圖判讀的難度。</li>
+    </ul>
+  </div>
+
+  <div class="refs">
+    <h4>本章參考</h4>
+    <ol>
+      <li>Thaler MS. <em>The Only EKG Book You'll Ever Need</em>, 10th ed. Wolters Kluwer; 2023. Chapter 6: Myocardial Ischemia and Infarction.</li>
+      <li>Meloni S, Mastenbjörk M. <em>EKG/ECG Interpretation</em>, 2nd ed. Medical Creations; 2021. Chapter 5: ECG Diagnosis (Anterior/Lateral/Posterior STEMI, Sgarbossa Criteria entries).</li>
+    </ol>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-head">
+      <h2>📝 第七章自我測驗</h2>
+      <div class="quiz-progress" id="qProgress"></div>
+    </div>
+    <div id="quizArea"></div>
+  </div>
+
+  <div class="chapter-nav">
+    <a class="chnav-btn" href="ch6-blocks-pacemaker.html">
+      <div class="dir">← 上一章</div>
+      <div class="ttl">第 6 章：傳導阻滯與節律器概念</div>
+    </a>
+    <a class="chnav-btn next" href="ch8-electrolytes-drugs.html">
+      <div class="dir">下一章 →</div>
+      <div class="ttl">第 8 章：電解質與藥物影響</div>
+    </a>
+  </div>
+
+</div>
+
+<footer class="ekg-footer">
+  © 2026 Rex Nursing · EKG 教學專區
+</footer>
+
+<script>
+const QUESTIONS = [
+  {
+    q: "心肌梗塞經典的心電圖演變順序是？",
+    opts: [
+      "Q波形成 → ST上升 → T波高聳 → T波倒置",
+      "T波高聳 → ST上升 → Q波形成 → T波倒置",
+      "T波倒置 → Q波形成 → ST上升 → T波高聳",
+      "順序完全隨機，沒有規律"
+    ],
+    correct: 1,
+    exp: {
+      0: "順序錯誤，Q波形成是較晚期的變化，不會排在最前面。",
+      1: "正解。經典演變順序：超急性期T波高聳（數分鐘）→ ST段上升／STEMI（數小時內）→ Q波形成代表壞死（數小時到數天）→ T波倒置（演變期，數天後）。",
+      2: "順序完全顛倒了，T波高聳是最早期的變化，不是最後。",
+      3: "這個演變是有明確病理生理規律的，並非隨機。"
+    }
+  },
+  {
+    q: "STEMI（ST段上升心肌梗塞）的心電圖核心特徵是？",
+    opts: ["病理性Q波", "ST段上升", "PR間期延長", "P波消失"],
+    correct: 1,
+    exp: {
+      0: "病理性Q波代表已經壞死，是較晚期的變化，STEMI的核心定義特徵是「ST段上升」，這也是這個名稱的由來。",
+      1: "正解。STEMI（ST-elevation myocardial infarction）顧名思義，核心診斷特徵就是特定導程組合出現顯著的ST段上升。",
+      2: "PR間期延長是房室傳導阻滯的表現，跟STEMI無關。",
+      3: "P波消失是心房顫動等心律不整的表現，跟STEMI無關。"
+    }
+  },
+  {
+    q: "下壁心肌梗塞（inferior MI）最常出現ST上升的導程是？",
+    opts: ["V1-V4", "I、aVL、V5、V6", "II、III、aVF", "aVR單獨"],
+    correct: 2,
+    exp: {
+      0: "V1-V4對應的是前壁／前中隔，不是下壁。",
+      1: "I、aVL、V5、V6對應的是側壁，不是下壁。",
+      2: "正解。II、III、aVF是「看」心臟下壁的導程組合，下壁梗塞（多數由右冠狀動脈RCA阻塞造成）會在這三個導程出現ST上升。",
+      3: "aVR單獨ST上升有特殊臨床意義（提示左主冠狀動脈或多支病變），但不是下壁梗塞的典型定位導程。"
+    }
+  },
+  {
+    q: "「對應性改變（reciprocal changes）」指的是什麼現象？",
+    opts: [
+      "與梗塞區域電氣方向相反的導程出現ST下降，是同一電氣事件的鏡像結果",
+      "病人同時發生兩個完全獨立的心臟疾病",
+      "心電圖機器訊號干擾造成的假影",
+      "只會出現在健康人身上，沒有臨床意義"
+    ],
+    correct: 0,
+    exp: {
+      0: "正解。對應性改變是同一個ST上升事件從電氣方向相反的角度呈現出的鏡像ST下降，不是另一個獨立問題，出現時反而支持真正心肌梗塞的診斷。",
+      1: "這不是兩個獨立疾病，而是同一個梗塞事件的不同角度表現。",
+      2: "這是真實的電氣生理現象，不是機器假影。",
+      3: "對應性改變是重要的臨床診斷線索，具有實質意義，並非只出現在健康人身上（健康人不會有這個表現）。"
+    }
+  },
+  {
+    q: "NSTEMI（非ST段上升心肌梗塞）的臨床意義是？",
+    opts: [
+      "只是良性變化，完全不需要處理",
+      "雖然心電圖沒有ST上升，但透過心肌損傷指標仍確診壞死，依然是需要積極處理的心肌梗塞",
+      "NSTEMI比STEMI更危險，永遠優先處理",
+      "NSTEMI只發生在心電圖完全正常的病人身上"
+    ],
+    correct: 1,
+    exp: {
+      0: "NSTEMI是真正的心肌梗塞（有心肌壞死證據），不是可以忽略的良性變化。",
+      1: "正解。NSTEMI心電圖可能只有ST下降或T波倒置、沒有達到ST上升標準，但透過troponin等心肌損傷指標仍可確診心肌壞死，是需要積極處理的疾病，只是處置時程與STEMI不同。",
+      2: "兩者處置的緊急程度需視臨床整體狀況判斷，不能直接說NSTEMI「永遠」比STEMI更危險或更優先。",
+      3: "NSTEMI病人的心電圖通常仍有異常表現（ST下降或T波倒置），不是心電圖完全正常。"
+    }
+  },
+  {
+    q: "為什麼左束支傳導阻滯（LBBB）會讓心肌梗塞的心電圖判讀變得困難？",
+    opts: [
+      "LBBB會讓病人完全沒有心電圖訊號",
+      "LBBB本身就會造成QRS與ST-T波形改變，與缺血變化容易混淆，需要專門準則輔助判斷",
+      "LBBB病人不可能發生心肌梗塞",
+      "LBBB只影響心房，跟心室的ST-T變化無關"
+    ],
+    correct: 1,
+    exp: {
+      0: "LBBB病人仍有正常的心電圖訊號，只是QRS與ST-T形態因傳導異常而改變，不是完全沒有訊號。",
+      1: "正解。LBBB本身造成的QRS增寬與續發ST-T改變，容易與心肌梗塞的缺血變化混淆，臨床上需要搭配Sgarbossa criteria等專門準則輔助判斷，這是本章提到的重要判讀限制。",
+      2: "LBBB病人仍然可能發生心肌梗塞，只是心電圖判讀難度較高，不是「不可能發生」。",
+      3: "LBBB是心室內傳導路徑異常，直接影響的正是心室的QRS與ST-T表現，跟心房無關的說法不正確。"
+    }
+  },
+  {
+    q: "「Strain pattern」（第3章學過的心室肥厚次發性改變）容易跟心肌缺血混淆，是因為？",
+    opts: [
+      "兩者都可能出現ST壓低與T波倒置等相似外觀變化",
+      "兩者的P波表現完全相同",
+      "Strain pattern只發生在心房，跟心室缺血無關，兩者其實不會混淆",
+      "兩者的QRS電壓標準完全相同，無法用電壓區分"
+    ],
+    correct: 0,
+    exp: {
+      0: "正解。兩者都可能表現為ST壓低合併T波倒置，外觀相似，需要綜合QRS電壓是否符合肥厚標準、變化分布區域、病史等線索鑑別，這是第3章與本章都提到的重要鑑別課題。",
+      1: "跟P波無關，兩者的鑑別重點在ST-T波與QRS電壓。",
+      2: "Strain pattern是心室肥厚的次發性改變，發生在心室，確實容易與心室缺血變化混淆，這是需要注意的鑑別重點。",
+      3: "Strain pattern常伴隨明顯的肥厚電壓標準（如Sokolow-Lyon），這本身就是重要的鑑別線索之一，並非無法用電壓區分。"
+    }
+  }
+];
+
+let cur = 0;
+const answered = new Array(QUESTIONS.length).fill(null);
+
+function renderProgress() {
+  const box = document.getElementById('qProgress');
+  box.innerHTML = QUESTIONS.map((_, i) => {
+    let cls = 'qdot';
+    if (i === cur) cls += ' cur';
+    else if (answered[i] !== null) cls += (answered[i] === QUESTIONS[i].correct ? ' ok' : ' bad');
+    return `<div class="${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+  }).join('');
+}
+
+function goTo(i) { cur = i; renderQuestion(); }
+
+function renderQuestion() {
+  renderProgress();
+  const area = document.getElementById('quizArea');
+  if (cur >= QUESTIONS.length) {
+    const score = answered.filter((a, i) => a === QUESTIONS[i].correct).length;
+    area.innerHTML = `
+      <div class="qcard quiz-result">
+        <div class="score">${score}<span> / ${QUESTIONS.length}</span></div>
+        <p>${score === QUESTIONS.length ? '全對！心肌梗塞的判讀邏輯都掌握了。' : '答錯的題目可以點上面的號碼回去看詳解，複習一下再繼續下一章。'}</p>
+        <button class="qbtn primary" onclick="restart()">重新測驗</button>
+      </div>`;
+    return;
+  }
+  const item = QUESTIONS[cur];
+  const picked = answered[cur];
+  const letters = ['A', 'B', 'C', 'D'];
+  area.innerHTML = `
+    <div class="qcard">
+      <div class="qcard-num">第 ${cur + 1} / ${QUESTIONS.length} 題</div>
+      <div class="qcard-text">${item.q}</div>
+      ${item.opts.map((opt, i) => {
+        let cls = 'opt-btn';
+        if (picked !== null) {
+          if (i === item.correct) cls += ' correct';
+          else if (i === picked) cls += ' wrong';
+        }
+        return `<button class="${cls}" ${picked !== null ? 'disabled' : ''} onclick="pick(${i})">
+          <span class="opt-label">${letters[i]}</span><span>${opt}</span>
+        </button>`;
+      }).join('')}
+      <div class="explain ${picked !== null ? 'show' : ''}">
+        ${picked !== null ? item.opts.map((_, i) => `<p><b>${letters[i]}.</b> ${item.exp[i]}</p>`).join('') : ''}
+      </div>
+      <div class="quiz-nav">
+        <button class="qbtn ghost" onclick="goTo(${Math.max(0, cur - 1)})" ${cur === 0 ? 'disabled' : ''}>← 上一題</button>
+        <button class="qbtn primary" onclick="next()" ${picked === null ? 'disabled' : ''}>${cur === QUESTIONS.length - 1 ? '查看結果' : '下一題 →'}</button>
+      </div>
+    </div>`;
+}
+
+function pick(i) {
+  if (answered[cur] !== null) return;
+  answered[cur] = i;
+  renderQuestion();
+}
+
+function next() { cur++; renderQuestion(); }
+function restart() { answered.fill(null); cur = 0; renderQuestion(); }
+
+renderQuestion();
+</script>
+
+</body>
+</html>

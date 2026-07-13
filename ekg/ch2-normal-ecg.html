@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第2章：正常心電圖判讀｜EKG 教學專區</title>
+<meta name="description" content="12導程系統、六軸系統、心率計算法、心軸判讀入門。中英對照＋自我測驗。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="ekg-nav">
+  <a class="logo" href="../index.html">Rex Nursing <span class="divider">/</span> <span class="sub">EKG 教學</span></a>
+  <span class="crumbs"><a href="index.html">學習地圖</a> / 第2章</span>
+  <a class="home-link" href="index.html">← 學習地圖</a>
+</nav>
+
+<div class="ecg-hero">
+  <div class="ecg-hero-inner">
+    <span class="badge">第 2 章・基礎生理</span>
+    <h1 class="page-title">正常心電圖判讀
+      <span class="en">Reading the Normal 12-Lead ECG</span>
+    </h1>
+    <p class="page-desc">12 導程其實是 12 個從不同角度看心臟的「攝影機」。這一章教你怎麼架設這些攝影機的概念、怎麼算心跳速率、怎麼看心律規不規則，是判讀任何一張心電圖的起手式。</p>
+    <div class="meta-row">
+      <span>⏱ 閱讀時間 14 分鐘</span>
+      <span>📝 章節測驗 7 題</span>
+      <span>🎯 建議先讀過第 1 章</span>
+    </div>
+  </div>
+  <svg class="ecg-trace" viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,30 L120,30 L145,30 L160,10 L175,50 L190,30 L230,30 L260,30 L280,18 L300,30 L340,30 L360,30 L385,30 L400,10 L415,50 L430,30 L470,30 L500,30 L520,18 L540,30 L580,30 L600,30 L625,30 L640,10 L655,50 L670,30 L710,30 L740,30 L760,18 L780,30 L820,30 L840,30 L865,30 L880,10 L895,50 L910,30 L950,30 L980,30 L1000,18 L1020,30 L1060,30 L1200,30"
+      fill="none" stroke="#C63C3C" stroke-width="2"/>
+  </svg>
+</div>
+
+<div class="wrap page-pad content">
+
+  <h2><span class="num">1</span>12 導程：從 12 個角度看同一顆心臟</h2>
+  <p>心電圖的「導程（lead）」不是 12 條電極線各自獨立記錄，而是用<strong>身上黏貼的電極，兩兩組合或參照出 12 種不同的觀察角度</strong>，去看同一個電氣事件。可以想成在心臟周圍架了 12 台攝影機，每台拍到的角度不同，合在一起才能拼出完整的立體資訊。</p>
+
+  <h3>肢導程（Limb leads）——看額狀面（垂直面）</h3>
+  <ul>
+    <li><strong>雙極肢導程 I、II、III</strong>：由右手、左手、左腳兩兩配對組成，這就是最早由 Einthoven 提出的「艾因托芬三角」。</li>
+    <li><strong>加壓單極肢導程 aVR、aVL、aVF</strong>：分別代表右手、左手、左腳「看」心臟的角度（R=right、L=left、F=foot）。</li>
+  </ul>
+
+  <h3>胸導程（Precordial leads）——看水平面</h3>
+  <p>V1-V6 貼在胸前固定位置，由右往左依序繞過心臟前方，讓我們能看到心臟水平切面的電氣活動，對定位心肌梗塞部位特別重要（第7章會用到）。</p>
+
+  <table class="term-table">
+    <tr><th>English</th><th>中文</th><th>看的角度</th></tr>
+    <tr><td>Bipolar limb leads (I, II, III)</td><td>雙極肢導程</td><td>額狀面</td></tr>
+    <tr><td>Augmented limb leads (aVR, aVL, aVF)</td><td>加壓單極肢導程</td><td>額狀面</td></tr>
+    <tr><td>Precordial leads (V1-V6)</td><td>胸導程</td><td>水平面</td></tr>
+  </table>
+
+  <h2><span class="num">2</span>六軸系統：幫心軸定位的量角器</h2>
+  <p>把 I、II、III、aVR、aVL、aVF 這 6 個肢導程的角度畫在同一個圓上，就會形成「六軸系統（hexaxial reference system）」——本質上是一個以心臟為中心的量角器，每個導程都固定在特定角度：</p>
+
+  <div class="figure">
+    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="200" cy="200" r="150" fill="none" stroke="#eee" stroke-width="1"/>
+      <path d="M200,200 L330,125 A150,150 0 0,1 200,350 Z" fill="#1D9E75" opacity="0.12"/>
+
+      <line x1="50" y1="200" x2="350" y2="200" stroke="#1D9E75" stroke-width="1.5"/>
+      <line x1="125" y1="70" x2="275" y2="330" stroke="#1D9E75" stroke-width="1.5"/>
+      <line x1="275" y1="70" x2="125" y2="330" stroke="#1D9E75" stroke-width="1.5"/>
+      <line x1="200" y1="50" x2="200" y2="350" stroke="#C63C3C" stroke-width="1.5"/>
+      <line x1="70" y1="275" x2="330" y2="125" stroke="#C63C3C" stroke-width="1.5"/>
+      <line x1="330" y1="275" x2="70" y2="125" stroke="#C63C3C" stroke-width="1.5"/>
+
+      <circle cx="200" cy="200" r="3" fill="#333"/>
+      <text x="358" y="204" font-size="14" font-weight="700" fill="#085041">I (0°)</text>
+      <text x="280" y="348" font-size="14" font-weight="700" fill="#085041">II (60°)</text>
+      <text x="60" y="348" font-size="14" font-weight="700" fill="#085041" text-anchor="end">III (120°)</text>
+      <text x="200" y="368" font-size="14" font-weight="700" fill="#8f2b2b" text-anchor="middle">aVF (90°)</text>
+      <text x="336" y="118" font-size="13.5" font-weight="700" fill="#8f2b2b">aVL (-30°)</text>
+      <text x="64" y="118" font-size="13.5" font-weight="700" fill="#8f2b2b" text-anchor="end">aVR (-150°)</text>
+
+      <text x="240" y="230" font-size="11" fill="#1D9E75" opacity="0.9">正常心軸區間</text>
+    </svg>
+    <div class="figure-cap">圖1：六軸系統（原創繪製）。綠色扇形範圍（-30°到+90°）是成人正常心軸區間。</div>
+  </div>
+
+  <div class="pearl">
+    <div class="pearl-label">💡 臨床小提醒（快速判斷心軸的口訣）</div>
+    <p>不用背角度也能快速篩檢心軸：只看 <strong>Lead I</strong> 和 <strong>aVF</strong> 這兩個導程的 QRS 主要方向（往上是正，往下是負）。
+    <strong>I正、aVF正</strong> → 正常軸。
+    <strong>I正、aVF負</strong> → 可能左偏，需再確認。
+    <strong>I負、aVF正</strong> → 右偏。
+    <strong>I負、aVF負</strong> → 極度異常軸（少見，須警覺）。
+    這個口訣之後判讀心室肥大、傳導阻滯時都會一直用到。</p>
+  </div>
+
+  <h2><span class="num">3</span>心跳速率怎麼算</h2>
+  <p>心電圖紙 1 大格＝0.2 秒（上一章教過），只要數 R 波之間隔了幾大格，就能快速換算心跳速率。</p>
+
+  <h3>方法一：規則心律 —— 「300 法則」</h3>
+  <p>從一個 R 波開始數到下一個 R 波，數過幾個大格，對應速率依序是：</p>
+  <div class="figure">
+    <svg viewBox="0 0 560 90" xmlns="http://www.w3.org/2000/svg">
+      <g font-family="'Noto Sans TC',sans-serif">
+        <text x="30" y="25" font-size="13" fill="#6b7280" text-anchor="middle">大格數</text>
+        <text x="30" y="60" font-size="18" font-weight="700" fill="#085041" text-anchor="middle">1</text>
+        <text x="130" y="60" font-size="18" font-weight="700" fill="#085041" text-anchor="middle">2</text>
+        <text x="230" y="60" font-size="18" font-weight="700" fill="#085041" text-anchor="middle">3</text>
+        <text x="330" y="60" font-size="18" font-weight="700" fill="#085041" text-anchor="middle">4</text>
+        <text x="430" y="60" font-size="18" font-weight="700" fill="#085041" text-anchor="middle">5</text>
+        <text x="530" y="60" font-size="18" font-weight="700" fill="#085041" text-anchor="middle">6</text>
+        <text x="30" y="85" font-size="13" fill="#C63C3C" text-anchor="middle">300</text>
+        <text x="130" y="85" font-size="13" fill="#C63C3C" text-anchor="middle">150</text>
+        <text x="230" y="85" font-size="13" fill="#C63C3C" text-anchor="middle">100</text>
+        <text x="330" y="85" font-size="13" fill="#C63C3C" text-anchor="middle">75</text>
+        <text x="430" y="85" font-size="13" fill="#C63C3C" text-anchor="middle">60</text>
+        <text x="530" y="85" font-size="13" fill="#C63C3C" text-anchor="middle">50</text>
+      </g>
+    </svg>
+    <div class="figure-cap">圖2：「300-150-100-75-60-50」口訣（原創整理）。上排＝相隔大格數，下排＝對應心跳速率(次/分)。</div>
+  </div>
+  <p>口訣就是 <strong>300、150、100、75、60、50</strong>，這 6 個數字建議直接背起來，臨床上掃一眼心電圖就能大概估出速率。</p>
+
+  <h3>方法二：更精確 —— 「1500 法則」</h3>
+  <p>數兩個 R 波之間的<strong>小格</strong>數，用 <strong>1500 ÷ 小格數</strong>，可以得到更精確的數字（因為 1 分鐘＝60秒÷0.04秒／小格＝1500 小格）。</p>
+
+  <h3>方法三：心律不規則時 —— 「6秒法則」</h3>
+  <p>心電圖紙上通常會有每 3 秒一個的標記。數 <strong>6 秒內</strong>出現幾個完整 QRS，再乘以 <strong>10</strong>，就是每分鐘心跳速率。心律不規則（例如心房顫動）時，這是最實用的方法，因為前兩種方法都假設節律是規則的。</p>
+
+  <div class="trap">
+    <div class="trap-label">⚠️ 容易搞混的地方</div>
+    <p>「300法則」和「1500法則」都只適用在<strong>規則心律</strong>。如果 R-R 間距忽長忽短，用這兩個方法算出來的數字沒有意義，一定要換成「6秒法則」，或是直接用心電圖機／監視器上的數字讀值搭配肉眼確認。</p>
+  </div>
+
+  <h2><span class="num">4</span>心律規不規則，怎麼看</h2>
+  <p>用尺或分規量每一段 R-R 間距，比較是否一致。<strong>規則</strong>：每段 R-R 間距幾乎相等。<strong>不規則</strong>：R-R 間距忽長忽短，又分成「規則地不規則」（有固定的變化模式，例如每隔幾拍就提早一次）和「不規則地不規則」（完全沒有固定模式，心房顫動是典型代表，第4章會學到）。</p>
+
+  <div class="summary-box">
+    <h3>📌 本章重點回顧</h3>
+    <ul>
+      <li>12 導程＝12 個觀察心臟電氣活動的角度：肢導程看額狀面，胸導程看水平面。</li>
+      <li>六軸系統把 I、II、III、aVR、aVL、aVF 固定在特定角度，是判斷心軸的量角器。</li>
+      <li>快速判軸口訣：看 Lead I 與 aVF 的 QRS 方向（正/負）。</li>
+      <li>規則心律算心率：300法則（快速估算）或1500法則（精確）。</li>
+      <li>不規則心律算心率：6秒法則（數QRS數×10）。</li>
+    </ul>
+  </div>
+
+  <div class="refs">
+    <h4>本章參考</h4>
+    <ol>
+      <li>Thaler MS. <em>The Only EKG Book You'll Ever Need</em>, 10th ed. Wolters Kluwer; 2023. Chapter 1: The Basics; Chapter 2: Hypertrophy and Enlargement (Axis section).</li>
+      <li>Meloni S, Mastenbjörk M. <em>EKG/ECG Interpretation</em>, 2nd ed. Medical Creations; 2021. Chapter 4: Making Interpretations.</li>
+      <li>Rowlands A, Sargent A. <em>The ECG Workbook</em>, 2nd ed. M&amp;K Publishing; 2011. Chapter 1-2.</li>
+    </ol>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-head">
+      <h2>📝 第二章自我測驗</h2>
+      <div class="quiz-progress" id="qProgress"></div>
+    </div>
+    <div id="quizArea"></div>
+  </div>
+
+  <div class="chapter-nav">
+    <a class="chnav-btn" href="ch1-electrophysiology.html">
+      <div class="dir">← 上一章</div>
+      <div class="ttl">第 1 章：心臟電生理基礎</div>
+    </a>
+    <a class="chnav-btn next" href="ch3-hypertrophy.html">
+      <div class="dir">下一章 →</div>
+      <div class="ttl">第 3 章：心房與心室肥大</div>
+    </a>
+  </div>
+
+</div>
+
+<footer class="ekg-footer">
+  © 2026 Rex Nursing · EKG 教學專區
+</footer>
+
+<script>
+const QUESTIONS = [
+  {
+    q: "下列何者屬於「胸導程（precordial leads）」？",
+    opts: ["I、II、III", "aVR、aVL、aVF", "V1-V6", "以上皆是"],
+    correct: 2,
+    exp: {
+      0: "I、II、III 是雙極肢導程，不是胸導程。",
+      1: "aVR、aVL、aVF 是加壓單極肢導程，不是胸導程。",
+      2: "正解。V1-V6 貼在胸前，是胸導程，負責看心臟的水平面。",
+      3: "不正確，只有 V1-V6 屬於胸導程，其餘都是肢導程。"
+    }
+  },
+  {
+    q: "六軸系統中，aVF 的角度是幾度？",
+    opts: ["0°", "-30°", "90°", "-150°"],
+    correct: 2,
+    exp: {
+      0: "0° 是 Lead I 的角度，不是 aVF。",
+      1: "-30° 是 aVL 的角度，不是 aVF。",
+      2: "正解。aVF 位於 90°，正對心臟「下方」，這也是為什麼判斷下壁心肌梗塞常會看 aVF。",
+      3: "-150° 是 aVR 的角度，不是 aVF。"
+    }
+  },
+  {
+    q: "用「快速判軸口訣」，如果 Lead I 的 QRS 主要往上（正）、aVF 的 QRS 主要往下（負），大致可以判斷是？",
+    opts: ["正常軸", "可能左偏，需再確認", "右偏", "極度異常軸"],
+    correct: 1,
+    exp: {
+      0: "正常軸應該是 I正、aVF也正，這裡aVF是負的，不符合。",
+      1: "正解。I正、aVF負，提示心軸可能左偏，臨床上通常會再搭配 Lead II 的方向做更精確的確認。",
+      2: "右偏的典型組合是 I負、aVF正，跟題目描述相反。",
+      3: "極度異常軸是 I負、aVF也負，跟題目描述不符。"
+    }
+  },
+  {
+    q: "心律「規則」的情況下，R波之間相隔3大格，心跳速率大約是多少？",
+    opts: ["50次/分", "75次/分", "100次/分", "150次/分"],
+    correct: 2,
+    exp: {
+      0: "50次/分對應的是相隔6大格，不是3大格。",
+      1: "75次/分對應的是相隔4大格，不是3大格。",
+      2: "正解。用300法則：相隔3大格 → 300÷3＝100次/分。",
+      3: "150次/分對應的是相隔2大格，不是3大格。"
+    }
+  },
+  {
+    q: "病人的心律「不規則」（R-R間距忽長忽短），這時候要用哪一種方法計算心跳速率最恰當？",
+    opts: ["300法則", "1500法則", "6秒法則（數6秒內QRS數×10）", "以上方法效果都一樣"],
+    correct: 2,
+    exp: {
+      0: "300法則假設心律規則，用在不規則心律上算出來的數字沒有意義。",
+      1: "1500法則同樣假設心律規則，不適合不規則心律。",
+      2: "正解。心律不規則時，300法則與1500法則都會失準，6秒法則直接數實際出現的QRS數量，不受節律規不規則影響，是最恰當的方法。",
+      3: "不正確，300法則與1500法則在不規則心律下會給出誤導性的數字。"
+    }
+  },
+  {
+    q: "「不規則地不規則（irregularly irregular）」的R-R間距型態，是下列哪個心律不整的典型特徵（第4章會詳細學到）？",
+    opts: ["竇性心律不整", "心房顫動", "第一度房室傳導阻滯", "竇性心搏過速"],
+    correct: 1,
+    exp: {
+      0: "竇性心律不整的R-R變化通常跟呼吸有關，有一定規律性（規則地不規則），不是完全無規律。",
+      1: "正解。心房顫動是「不規則地不規則」的典型代表，R-R間距完全沒有固定模式，這是後面章節的重要判讀線索。",
+      2: "第一度房室傳導阻滯只是PR間期延長，R-R間距本身通常仍是規則的。",
+      3: "竇性心搏過速的R-R間距通常是規則的，只是速率較快。"
+    }
+  },
+  {
+    q: "Einthoven三角指的是哪三個導程之間的幾何關係？",
+    opts: ["V1、V2、V3", "aVR、aVL、aVF", "Lead I、II、III", "V1、aVF、Lead II"],
+    correct: 2,
+    exp: {
+      0: "V1、V2、V3是胸導程，跟Einthoven三角無關。",
+      1: "aVR、aVL、aVF是加壓單極肢導程，是後來衍生的，不是Einthoven三角本身。",
+      2: "正解。Einthoven三角由右手、左手、左腳的電極兩兩配對，組成雙極肢導程 I、II、III，是最早的心電圖導程系統。",
+      3: "這是混合搭配的組合，不是Einthoven三角的定義。"
+    }
+  }
+];
+
+let cur = 0;
+const answered = new Array(QUESTIONS.length).fill(null);
+
+function renderProgress() {
+  const box = document.getElementById('qProgress');
+  box.innerHTML = QUESTIONS.map((_, i) => {
+    let cls = 'qdot';
+    if (i === cur) cls += ' cur';
+    else if (answered[i] !== null) cls += (answered[i] === QUESTIONS[i].correct ? ' ok' : ' bad');
+    return `<div class="${cls}" onclick="goTo(${i})">${i + 1}</div>`;
+  }).join('');
+}
+
+function goTo(i) { cur = i; renderQuestion(); }
+
+function renderQuestion() {
+  renderProgress();
+  const area = document.getElementById('quizArea');
+  if (cur >= QUESTIONS.length) {
+    const score = answered.filter((a, i) => a === QUESTIONS[i].correct).length;
+    area.innerHTML = `
+      <div class="qcard quiz-result">
+        <div class="score">${score}<span> / ${QUESTIONS.length}</span></div>
+        <p>${score === QUESTIONS.length ? '全對！心率計算與心軸判斷都掌握了。' : '答錯的題目可以點上面的號碼回去看詳解，複習一下再繼續下一章。'}</p>
+        <button class="qbtn primary" onclick="restart()">重新測驗</button>
+      </div>`;
+    return;
+  }
+  const item = QUESTIONS[cur];
+  const picked = answered[cur];
+  const letters = ['A', 'B', 'C', 'D'];
+  area.innerHTML = `
+    <div class="qcard">
+      <div class="qcard-num">第 ${cur + 1} / ${QUESTIONS.length} 題</div>
+      <div class="qcard-text">${item.q}</div>
+      ${item.opts.map((opt, i) => {
+        let cls = 'opt-btn';
+        if (picked !== null) {
+          if (i === item.correct) cls += ' correct';
+          else if (i === picked) cls += ' wrong';
+        }
+        return `<button class="${cls}" ${picked !== null ? 'disabled' : ''} onclick="pick(${i})">
+          <span class="opt-label">${letters[i]}</span><span>${opt}</span>
+        </button>`;
+      }).join('')}
+      <div class="explain ${picked !== null ? 'show' : ''}">
+        ${picked !== null ? item.opts.map((_, i) => `<p><b>${letters[i]}.</b> ${item.exp[i]}</p>`).join('') : ''}
+      </div>
+      <div class="quiz-nav">
+        <button class="qbtn ghost" onclick="goTo(${Math.max(0, cur - 1)})" ${cur === 0 ? 'disabled' : ''}>← 上一題</button>
+        <button class="qbtn primary" onclick="next()" ${picked === null ? 'disabled' : ''}>${cur === QUESTIONS.length - 1 ? '查看結果' : '下一題 →'}</button>
+      </div>
+    </div>`;
+}
+
+function pick(i) {
+  if (answered[cur] !== null) return;
+  answered[cur] = i;
+  renderQuestion();
+}
+
+function next() { cur++; renderQuestion(); }
+function restart() { answered.fill(null); cur = 0; renderQuestion(); }
+
+renderQuestion();
+</script>
+
+</body>
+</html>
