@@ -91,6 +91,8 @@ header.site-header {
 }
 
 .brand-parent {
+  display: inline-flex;
+  align-items: center;
   color: var(--subink);
   font-weight: 600;
   font-size: 0.95rem;
@@ -98,6 +100,17 @@ header.site-header {
 }
 .brand-parent:hover { color: var(--blue); text-decoration: underline; }
 .brand-sep { color: var(--border); font-weight: 400; }
+
+.brand-logo {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 6px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  flex-shrink: 0;
+}
 
 nav.main-nav {
   display: flex;
@@ -143,11 +156,43 @@ main.wide { max-width: 1080px; }
 
 /* ---------- Hero (首頁) ---------- */
 .hero {
+  position: relative;
   background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
   color: var(--white);
   border-radius: 24px;
   padding: 56px 40px;
   margin-bottom: 40px;
+}
+.hero-mascot {
+  position: absolute;
+  top: 28px;
+  right: 32px;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  box-shadow: var(--shadow-md);
+  background: var(--white);
+}
+@media (max-width: 640px) {
+  .hero-mascot { width: 64px; height: 64px; top: 20px; right: 20px; }
+}
+
+.about-sketch {
+  max-width: 320px;
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  margin: 14px 0 6px;
+}
+.about-sketch-caption {
+  font-size: 0.82rem;
+  color: var(--subink);
+  margin-bottom: 4px;
 }
 .hero .eyebrow {
   font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em;
