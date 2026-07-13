@@ -90,6 +90,15 @@ header.site-header {
   text-transform: uppercase;
 }
 
+.brand-parent {
+  color: var(--subink);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+.brand-parent:hover { color: var(--blue); text-decoration: underline; }
+.brand-sep { color: var(--border); font-weight: 400; }
+
 nav.main-nav {
   display: flex;
   gap: 4px;
