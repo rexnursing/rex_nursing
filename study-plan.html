@@ -84,6 +84,9 @@ header.site nav a:hover{color:var(--teal)}
 .day-row .subj-tag{background:var(--teal-l);color:var(--teal-d);font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:12px;white-space:nowrap}
 .day-row .pm-tag{background:#F0F0EC;color:#555;font-size:12.5px;padding:3px 10px;border-radius:12px;white-space:nowrap}
 .day-row .rest-txt{color:var(--muted);font-size:13.5px}
+.day-select{font-family:inherit;font-size:12.5px;padding:4px 10px;border:1.5px solid var(--teal-l);border-radius:12px;background:var(--teal-l);color:var(--teal-d);font-weight:600;cursor:pointer;max-width:230px}
+.day-select.pm-select{background:#F0F0EC;border-color:#F0F0EC;color:#555}
+.day-select:hover{border-color:var(--teal)}
 .day-row .milestone{background:var(--amber-l);color:var(--amber);font-size:12px;font-weight:600;padding:3px 10px;border-radius:12px;white-space:nowrap}
 .day-row.exam-day{background:var(--amber-l);border-radius:var(--rs);padding:9px 10px}
 .day-row.exam-day .wd b{color:var(--amber)}
@@ -157,6 +160,7 @@ footer.site a{color:var(--muted)}
     <ol>
       <li><b>上午讀新進度</b>：以捷徑、補習班講義為主，快速抓重點。內外科護理學份量最重，佔比最高。</li>
       <li><b>下午馬上寫該科的歷屆國考題</b>（計時），對答案後每一個選項都要搞懂——不只是「為什麼選這個」，也要搞懂「為什麼其他選項不能選」。選項的詳細解析建議回頭查課本，會比講義更完整。</li>
+      <li>下方每天的科目、下午安排都是<b>下拉選單、可以自己改</b>：預設的搭配（例如週一上午內外、下午寫內外考古題）只是建議，如果某科進度超前或落後，隨時可以換成其他科目，下午也能改成「繼續讀」而不是寫考古題。</li>
       <li><b>錯的題目先別急著跳過</b>：翻開課本目錄找到對應章節，複習完再把自己常忘記的地方寫進筆記本，留到最後一週考前衝刺用。</li>
       <li><b>週末是彈性時間</b>：進度沒落後就放鬆，落後就用來補進度或補檢討。</li>
       <li>因為只剩10週左右，跟時間較長的讀書計畫不同：不會先花數月只讀新內容、最後才切換成整份寫題，而是<b>從第一週開始就上午讀新進度、下午同步寫該科考古題</b>，讓內容跟考古題互相印證，加深記憶。時間比一般3個月版更緊繃，建議優先顧內外科和這次沒過的弱科。</li>
@@ -185,7 +189,7 @@ footer.site a{color:var(--muted)}
   <div id="week-list"></div>
 
   <div class="disclaimer">
-    <b>使用說明：</b>起始日預設為115年第二次放榜／報名開始前後的週一（115/8/31），考試日預設為115年第三次國考（115/11/8），兩者都可自行調整——如果你的放榜日或決定重考的時間點不同，直接改起始日欄位即可。每週會依序輪替一個歷屆考期（最新從115年第二次開始往回推），對應下方「歷屆進度表」，寫完記得回去打勾。打勾記錄存在這台裝置的瀏覽器中，換裝置或清除瀏覽器資料會重置，建議定期列印或截圖備份。若考選部公告日期有異動，請自行調整欄位。
+    <b>使用說明：</b>起始日預設為115年第二次放榜／報名開始前後的週一（115/8/31），考試日預設為115年第三次國考（115/11/8），兩者都可自行調整——如果你的放榜日或決定重考的時間點不同，直接改起始日欄位即可。每天要讀哪一科、下午要寫考古題還是繼續讀當科內容，都可以用下拉選單自己調整，預設的搭配只是建議。每週會依序輪替一個歷屆考期（最新從115年第二次開始往回推），對應下方「歷屆進度表」，寫完記得回去打勾。打勾記錄和每天的科目選擇都存在這台裝置的瀏覽器中，換裝置或清除瀏覽器資料會重置，建議定期列印或截圖備份。若考選部公告日期有異動，請自行調整欄位。
   </div>
 
   <div class="section-divider"><span>📊 護理師國考歷屆進度表</span></div>
@@ -262,10 +266,11 @@ const MILESTONES = {
 const DEFAULT_EXAM = '2026-11-08';
 const DEFAULT_START = '2026-08-31'; // 115-3報名開始那週的下一個週一
 
-const START_KEY = 'rex_studyplan2_start';
-const EXAM_KEY  = 'rex_studyplan2_exam';
-const DONE_KEY  = 'rex_studyplan2_done';
-const TRACK_KEY = 'rex_examprog_v1';
+const START_KEY  = 'rex_studyplan2_start';
+const EXAM_KEY   = 'rex_studyplan2_exam';
+const DONE_KEY   = 'rex_studyplan2_done';
+const CHOICE_KEY = 'rex_studyplan2_choice'; // 使用者自訂：某天上午選哪科／下午繼續讀還是寫考古題
+const TRACK_KEY  = 'rex_examprog_v1';
 
 /* ═══════════════ 日期工具 ═══════════════ */
 function toISO(d) {
@@ -319,6 +324,15 @@ function buildWeeks(startISO, examISO) {
 function getStr(key, fallback) { return localStorage.getItem(key) || fallback; }
 function getDone() { try { return JSON.parse(localStorage.getItem(DONE_KEY)) || {}; } catch(e) { return {}; } }
 function setDone(o) { localStorage.setItem(DONE_KEY, JSON.stringify(o)); }
+function getChoices() { try { return JSON.parse(localStorage.getItem(CHOICE_KEY)) || {}; } catch(e) { return {}; } }
+function setChoices(o) { localStorage.setItem(CHOICE_KEY, JSON.stringify(o)); }
+function setDayChoice(iso, field, value) {
+  const c = getChoices();
+  if (!c[iso]) c[iso] = {};
+  c[iso][field] = value;
+  setChoices(c);
+  renderCalendar();
+}
 function getTrack() { try { return JSON.parse(localStorage.getItem(TRACK_KEY)) || {}; } catch(e) { return {}; } }
 function setTrack(o) { localStorage.setItem(TRACK_KEY, JSON.stringify(o)); }
 
@@ -351,6 +365,7 @@ function renderCalendar() {
 
   const weeks = buildWeeks(startISO, examISO);
   const done = getDone();
+  const choices = getChoices();
   const list = document.getElementById('week-list');
   list.innerHTML = '';
 
@@ -376,13 +391,24 @@ function renderCalendar() {
         totalChk += 2;
         if (done[amId]) doneChk++;
         if (done[pmId]) doneChk++;
+        const dayChoice = choices[day.iso] || {};
+        const chosenKey = dayChoice.subj || day.subj.key;
+        const chosenSubj = SUBJECTS.find(s => s.key === chosenKey) || day.subj;
+        const pmMode = dayChoice.pm || 'practice'; // 預設建議：下午寫考古題
+        const subjOptions = SUBJECTS.map(s =>
+          `<option value="${s.key}" ${s.key===chosenKey?'selected':''}>${s.emoji} ${s.name}</option>`
+        ).join('');
+        const pmOptions = `
+          <option value="practice" ${pmMode==='practice'?'selected':''}>✍️ 寫${chosenSubj.short}考古題（${sessionLabel(day.session)}）</option>
+          <option value="content" ${pmMode==='content'?'selected':''}>📖 繼續讀${chosenSubj.short}</option>
+        `;
         rowsHtml += `<div class="day-row">
           <div class="wd">週${day.wd}<b>${fmtMD(day.iso)}</b></div>
           <div class="content">
             <span class="chk-group"><input type="checkbox" ${done[amId]?'checked':''} onclick="toggleChk('${amId}')">上午</span>
-            <span class="subj-tag">${day.subj.emoji} ${day.subj.name}</span>
+            <select class="day-select" onchange="setDayChoice('${day.iso}','subj',this.value)">${subjOptions}</select>
             <span class="chk-group"><input type="checkbox" ${done[pmId]?'checked':''} onclick="toggleChk('${pmId}')">下午</span>
-            <span class="pm-tag">✍️ ${sessionLabel(day.session)}考古題</span>
+            <select class="day-select pm-select" onchange="setDayChoice('${day.iso}','pm',this.value)">${pmOptions}</select>
             ${milestoneHtml}
           </div>
         </div>`;
