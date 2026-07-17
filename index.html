@@ -2026,15 +2026,18 @@ function goPage(name) {
       goPage._qClicks=0;
       name='admin';
     }
-    // Always reset quiz select screen when entering quiz page
+    // Always reset to 科目選擇 screen when entering quiz page
     if (name==='quiz') {
       setTimeout(()=>{
+        const courseSel = document.getElementById('course-select');
         const sel = document.getElementById('quiz-select');
         const area = document.getElementById('quiz-area');
         const result = document.getElementById('quiz-result');
-        if(sel) sel.style.display='block';
+        if(courseSel) courseSel.style.display='block';
+        if(sel) sel.style.display='none';
         if(area) area.style.display='none';
         if(result) result.style.display='none';
+        if (typeof currentCourse !== 'undefined') { try { currentCourse = null; } catch(e) {} }
       }, 10);
     }
   }
