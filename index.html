@@ -991,14 +991,65 @@
   </div>
 
   <!-- ① 考卷選擇頁 -->
-  <div id="quiz-select">
+  <!-- ⓪ 科目選擇頁 -->
+  <div id="course-select">
     <div style="margin-bottom:20px">
-      <h3 style="font-size:17px;font-weight:500;margin-bottom:4px">選擇考卷</h3>
-      <p style="font-size:13px;color:var(--muted)">點選考卷直接開始作答</p>
+      <h3 style="font-size:17px;font-weight:500;margin-bottom:4px">選擇科目</h3>
+      <p style="font-size:13px;color:var(--muted)">點選科目查看該科歷屆考卷</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px">
+
+      <!-- 內外科護理學（已上線） -->
+      <div onclick="selectCourse('medsurg')" style="background:var(--white);border:1.5px solid var(--bd);border-radius:var(--r);padding:26px 20px;cursor:pointer;transition:all .2s;text-align:center" onmouseover="this.style.borderColor='var(--teal)';this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(29,158,117,.12)'" onmouseout="this.style.borderColor='var(--bd)';this.style.transform='';this.style.boxShadow=''">
+        <div style="font-size:34px;margin-bottom:10px">🩺</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:10px">內外科護理學</div>
+        <span id="medsurg-examcount" style="font-size:11.5px;background:var(--teal-l);color:var(--teal-d);padding:3px 12px;border-radius:20px;font-weight:500">3 份考卷</span>
+      </div>
+
+      <!-- 基礎醫學（未上線） -->
+      <div style="background:var(--white);border:1.5px dashed var(--bd);border-radius:var(--r);padding:26px 20px;text-align:center;opacity:.55;cursor:default">
+        <div style="font-size:34px;margin-bottom:10px">🔬</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:var(--muted)">基礎醫學</div>
+        <span style="font-size:11.5px;background:#f3f4f6;color:#6b7280;padding:3px 12px;border-radius:20px;font-weight:500">即將上線</span>
+      </div>
+
+      <!-- 基本護理學與護理行政（未上線） -->
+      <div style="background:var(--white);border:1.5px dashed var(--bd);border-radius:var(--r);padding:26px 20px;text-align:center;opacity:.55;cursor:default">
+        <div style="font-size:34px;margin-bottom:10px">📋</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:var(--muted)">基本護理學與護理行政</div>
+        <span style="font-size:11.5px;background:#f3f4f6;color:#6b7280;padding:3px 12px;border-radius:20px;font-weight:500">即將上線</span>
+      </div>
+
+      <!-- 產兒科護理學（未上線） -->
+      <div style="background:var(--white);border:1.5px dashed var(--bd);border-radius:var(--r);padding:26px 20px;text-align:center;opacity:.55;cursor:default">
+        <div style="font-size:34px;margin-bottom:10px">👶</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:var(--muted)">產兒科護理學</div>
+        <span style="font-size:11.5px;background:#f3f4f6;color:#6b7280;padding:3px 12px;border-radius:20px;font-weight:500">即將上線</span>
+      </div>
+
+      <!-- 精神衛生與社區護理學（未上線） -->
+      <div style="background:var(--white);border:1.5px dashed var(--bd);border-radius:var(--r);padding:26px 20px;text-align:center;opacity:.55;cursor:default">
+        <div style="font-size:34px;margin-bottom:10px">🧠</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:10px;color:var(--muted)">精神衛生與社區護理學</div>
+        <span style="font-size:11.5px;background:#f3f4f6;color:#6b7280;padding:3px 12px;border-radius:20px;font-weight:500">即將上線</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ① 考卷選擇頁 -->
+  <div id="quiz-select" style="display:none">
+    <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:20px">
+      <div style="flex:1">
+        <h3 style="font-size:17px;font-weight:500;margin-bottom:4px">選擇考卷</h3>
+        <p style="font-size:13px;color:var(--muted)">點選考卷直接開始作答</p>
+      </div>
+      <button onclick="backToCourseSelect()" style="padding:6px 14px;border-radius:20px;border:1px solid var(--bd);background:none;color:var(--muted);font-size:12.5px;cursor:pointer;font-family:inherit;white-space:nowrap">← 換科目</button>
     </div>
 
     <!-- 考卷卡片 -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
+    <div id="examgrid-medsurg" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
 
       <!-- 115-1 內外科 -->
       <div onclick="startExam('115-1')" style="background:var(--white);border:1.5px solid var(--bd);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--teal)';this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(29,158,117,.12)'" onmouseout="this.style.borderColor='var(--bd)';this.style.transform='';this.style.boxShadow=''">
@@ -2048,6 +2099,7 @@ function selSubj(el, name) {
    ════════════════════════════════ */
 const STATS_KEY = 'rex_quiz_stats_v2';
 
+const EXAM_COURSE = {'115-1':'medsurg','114-2':'medsurg','114-1':'medsurg'};
 const QS = [
   {n:1,  subj:'神經系統',   q:'陳先生T3～T5脊髓損傷，目前血壓250/140 mmHg，心跳50～55次／分，有大量出汗情形，主訴頭部嚴重疼痛、看東西模糊，超過6小時以上未解尿，陳先生可能發生何種現象？', opts:['A.神經性休克','B.自主神經過度反射','C.脊髓自動症','D.脊髓休克'], ans:[1], expl:'自主神經過度反射（Autonomic Dysreflexia）好發於T6以上脊髓損傷。觸發因素最常見為膀胱過度膨脹（>6小時未解尿）。表現：高血壓、反射性心跳變慢、大量出汗、頭痛、視力模糊。處理：立即坐起、導尿排除誘因。'},
   {n:2,  subj:'神經系統',   q:'有關重症肌無力之敘述，下列何者正確？①屬於自體免疫疾病，體內產生攻擊Ach接受器的抗體 ②第一型僅侵犯眼肌，造成複視和眼瞼下垂 ③四肢肌肉的無力發生在遠端和下肢且為不對稱 ④當侵犯肋間肌，通氣容積會減少，嚴重呼吸困難致死', opts:['A.①②③','B.①②④','C.①③④','D.②③④'], ans:[1], expl:'重症肌無力是自體免疫疾病，抗體攻擊Ach受器（①✓）。第一型僅侵犯眼肌（②✓）。四肢無力為近端、對稱性（③✗）。侵犯肋間肌→呼吸衰竭（④✓）。答案①②④=B。'},
@@ -2201,7 +2253,14 @@ const QS = [
   {n:150, no:50, subj:'其他', q:'有關登革熱的敘述，下列何者正確？', opts:['A.臉部出現不痛不癢的紅斑', 'B.病毒從呼吸道檢體分離是確診的主要依據', 'C.為第三類法定傳染病', 'D.馬鞍狀發燒，發燒3天後體溫下降1～2天後，又再度發燒'], ans:[3], expl:'登革熱典型的發燒型態為「馬鞍狀發燒（saddleback fever）」：發燒數日後體溫短暫下降1～2天，之後又再度發燒，為本題正確敘述（D✓）。登革熱依台灣傳染病防治法歸類為「第二類」法定傳染病，並非第三類（C✗）；確診主要依賴血清學檢驗、NS1抗原或PCR等實驗室方法，並非呼吸道檢體病毒分離（B✗）；臉部潮紅（flushing）而非無痛無癢紅斑是較典型描述，此選項精確度不足（A✗）。'},
 ];
 
-QS.forEach(q => { q.exam = q.n <= 50 ? '115-1' : (q.n <= 100 ? '114-2' : '114-1'); });
+QS.forEach(q => { q.exam = q.n <= 50 ? '115-1' : (q.n <= 100 ? '114-2' : '114-1'); q.course = EXAM_COURSE[q.exam] || 'medsurg'; });
+(function(){
+  const el = document.getElementById('medsurg-examcount');
+  if (el) {
+    const cnt = new Set(QS.filter(q=>q.course==='medsurg').map(q=>q.exam)).size;
+    el.textContent = cnt + ' 份考卷';
+  }
+})();
 
 const SUBJ_ALL = ['神經系統','消化系統','心臟血管','呼吸系統','泌尿系統','內分泌系統','腫瘤血液','骨骼肌肉','感官系統','其他'];
 const ADMIN_PW = 'rexnursing2024';
@@ -2251,6 +2310,17 @@ let cntOk = 0, cntBad = 0;
 let selectedSubjs = new Set();
 let currentSubjFilter = 'all';
 let currentExamFilter = '115-1';
+let currentCourse = null;
+function selectCourse(courseKey) {
+  currentCourse = courseKey;
+  document.getElementById('course-select').style.display = 'none';
+  document.getElementById('quiz-select').style.display = 'block';
+}
+function backToCourseSelect() {
+  document.getElementById('quiz-select').style.display = 'none';
+  document.getElementById('course-select').style.display = 'block';
+  currentCourse = null;
+}
 let wrongQs = []; // store wrong questions for retry
 
 function startExam(examKey) {
