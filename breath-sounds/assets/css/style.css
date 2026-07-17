@@ -415,6 +415,27 @@ footer {
   font-size: 0.82rem;
 }
 
+.footer-contact {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+.footer-contact-label {
+  font-weight: 700;
+  color: var(--ink);
+}
+.footer-contact a {
+  color: var(--subink);
+  font-weight: 600;
+}
+.footer-contact a:hover { color: var(--blue); text-decoration: underline; }
+
 /* ---------- Disclaimer ---------- */
 .disclaimer {
   background: var(--amber-bg);
