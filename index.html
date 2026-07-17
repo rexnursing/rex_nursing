@@ -1233,7 +1233,8 @@
           <span id="fb-icon" style="font-size:22px"></span>
           <span id="fb-title" style="font-size:15px;font-weight:500"></span>
         </div>
-        <p id="fb-text" style="font-size:13.5px;line-height:1.9;margin-bottom:14px;white-space:pre-wrap"></p>
+        <p id="fb-text" style="font-size:13.5px;line-height:1.9;margin-bottom:10px;white-space:pre-wrap"></p>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;padding-top:10px;border-top:1px dashed rgba(0,0,0,.1);line-height:1.6">💡 解析由 AI 協助生成，如發現內容有誤，歡迎透過 <a href="https://www.instagram.com/rex_nursing/" target="_blank" rel="noopener" style="color:var(--teal)">Instagram</a> 或 <a href="https://www.facebook.com/profile.php?id=61589207085959&amp;locale=zh_TW" target="_blank" rel="noopener" style="color:var(--teal)">Facebook</a> 私訊 Rex</div>
         <div id="fb-stats" style="border-top:1px solid rgba(0,0,0,.08);padding-top:12px">
           <div style="font-size:12px;color:var(--muted);margin-bottom:8px">全站答題分佈</div>
           <div id="stats-bars"></div>
@@ -2606,7 +2607,7 @@ function showResult() {
     }
   });
   document.getElementById('wrong-list').innerHTML = wrongHtml
-    ? '<div style="font-size:14px;font-weight:500;margin-bottom:12px">📋 錯題複習</div>'+wrongHtml
+    ? '<div style="font-size:14px;font-weight:500;margin-bottom:4px">📋 錯題複習</div><div style="font-size:11px;color:var(--muted);margin-bottom:14px">💡 解析由 AI 協助生成，如發現內容有誤，歡迎透過 <a href="https://www.instagram.com/rex_nursing/" target="_blank" rel="noopener" style="color:var(--teal)">Instagram</a> 或 <a href="https://www.facebook.com/profile.php?id=61589207085959&amp;locale=zh_TW" target="_blank" rel="noopener" style="color:var(--teal)">Facebook</a> 私訊 Rex</div>'+wrongHtml
     : '<div style="text-align:center;color:var(--teal);font-size:14px;padding:10px 0">🎊 全部答對，完美！</div>';
 }
 function restartQuiz() {
