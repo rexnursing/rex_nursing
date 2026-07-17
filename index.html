@@ -535,12 +535,6 @@
   <div class="nav-r">
     <a href="#" onclick="goPage('home')" id="nav-home" class="active">首頁</a>
     <a href="health.html" id="nav-health" style="color:#0B6FB8;font-weight:600">🩺 健康衛教</a>
-    <!-- breath-sounds-nav:start (請保留此區塊，勿於重新產生導覽列時移除) -->
-    <a href="breath-sounds/index.html" id="nav-breath">🫁 呼吸音教學</a>
-    <!-- breath-sounds-nav:end -->
-    <!-- ekg-nav:start (請保留此區塊，勿於重新產生導覽列時移除) -->
-    <a href="ekg/index.html" id="nav-ekg">🫀 心電圖教學</a>
-    <!-- ekg-nav:end -->
     <a href="exam-countdown.html" id="nav-countdown">⏰ 考試倒數</a>
     <a href="study-plan.html" id="nav-studyplan">📅 讀書計畫</a>
     <a href="#" onclick="goPage('playlists')" id="nav-playlists">📋 播放清單</a>
@@ -1007,7 +1001,7 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
 
       <!-- 115-1 內外科 -->
-      <div onclick="startExam()" style="background:var(--white);border:1.5px solid var(--bd);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--teal)';this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(29,158,117,.12)'" onmouseout="this.style.borderColor='var(--bd)';this.style.transform='';this.style.boxShadow=''">
+      <div onclick="startExam('115-1')" style="background:var(--white);border:1.5px solid var(--bd);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--teal)';this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(29,158,117,.12)'" onmouseout="this.style.borderColor='var(--bd)';this.style.transform='';this.style.boxShadow=''">
         <!-- 卡片頂部色塊 -->
         <div style="background:linear-gradient(135deg,#1D9E75,#085041);padding:20px 22px;position:relative;overflow:hidden">
           <div style="position:absolute;right:-15px;top:-15px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.08)"></div>
@@ -1031,7 +1025,37 @@
             <span style="font-size:10.5px;padding:2px 8px;border-radius:4px;background:#f3f4f6;color:#374151">🧬 內分泌</span>
             <span style="font-size:10.5px;padding:2px 8px;border-radius:4px;background:#f3f4f6;color:#374151">+6 系統</span>
           </div>
-          <button onclick="startExam()" style="width:100%;background:var(--teal);color:#fff;border:none;padding:11px;border-radius:50px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='var(--teal-d)'" onmouseout="this.style.background='var(--teal)'">
+          <button onclick="startExam('115-1')" style="width:100%;background:var(--teal);color:#fff;border:none;padding:11px;border-radius:50px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='var(--teal-d)'" onmouseout="this.style.background='var(--teal)'">
+            開始練習 →
+          </button>
+        </div>
+      </div>
+
+      <!-- 114-2 內外科 -->
+      <div onclick="startExam('114-2')" style="background:var(--white);border:1.5px solid var(--bd);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='var(--teal)';this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(29,158,117,.12)'" onmouseout="this.style.borderColor='var(--bd)';this.style.transform='';this.style.boxShadow=''">
+        <!-- 卡片頂部色塊 -->
+        <div style="background:linear-gradient(135deg,#1D9E75,#085041);padding:20px 22px;position:relative;overflow:hidden">
+          <div style="position:absolute;right:-15px;top:-15px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.08)"></div>
+          <div style="position:absolute;right:20px;bottom:-20px;width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.06)"></div>
+          <div style="font-size:11px;letter-spacing:.08em;color:rgba(255,255,255,.7);margin-bottom:6px">護理師國考</div>
+          <div style="font-size:17px;font-weight:700;color:#fff;margin-bottom:2px">114年第二次</div>
+          <div style="font-size:14px;color:rgba(255,255,255,.85)">內外科護理學</div>
+        </div>
+        <!-- 卡片資訊 -->
+        <div style="padding:16px 22px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+            <span style="font-size:11.5px;background:var(--teal-l);color:var(--teal-d);padding:3px 10px;border-radius:20px;font-weight:500">50 題</span>
+            <span style="font-size:11.5px;background:#FAEEDA;color:#633806;padding:3px 10px;border-radius:20px;font-weight:500">2025年7月</span>
+          </div>
+          <!-- 系統標籤 -->
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px">
+            <span style="font-size:10.5px;padding:2px 8px;border-radius:4px;background:#f3f4f6;color:#374151">🫃 消化</span>
+            <span style="font-size:10.5px;padding:2px 8px;border-radius:4px;background:#f3f4f6;color:#374151">💉 腫瘤</span>
+            <span style="font-size:10.5px;padding:2px 8px;border-radius:4px;background:#f3f4f6;color:#374151">🧠 神經</span>
+            <span style="font-size:10.5px;padding:2px 8px;border-radius:4px;background:#f3f4f6;color:#374151">🦴 骨骼</span>
+            <span style="font-size:10.5px;padding:2px 8px;border-radius:4px;background:#f3f4f6;color:#374151">+6 系統</span>
+          </div>
+          <button onclick="startExam('114-2')" style="width:100%;background:var(--teal);color:#fff;border:none;padding:11px;border-radius:50px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='var(--teal-d)'" onmouseout="this.style.background='var(--teal)'">
             開始練習 →
           </button>
         </div>
@@ -2044,8 +2068,60 @@ const QS = [
   {n:47, subj:'其他',       q:'有關過敏性休克之敘述，下列何者正確？①接觸的過敏原可能來自藥物、食物、昆蟲叮咬等 ②發生嚴重支氣管擴張及呼吸困難 ③脈搏次數增快、血壓可能正常或降低 ④通常可立即注射epinephrine改善情況', opts:['A.①②③','B.①②④','C.①③④','D.②③④'], ans:[2], expl:'過敏性休克：過敏原多元①✓；支氣管「收縮」（不是擴張）②✗；心跳快、血壓降低③✓；Epinephrine首選④✓。答案①③④=C。'},
   {n:48, subj:'其他',       q:'有關有機磷中毒臨床處置之敘述，下列何者錯誤？', opts:['A.給予Apomorphine是因此藥為有機磷中毒的拮抗劑','B.進行胃灌洗、應維持呼吸道通暢必要時給與插管','C.其可從皮膚吸收，照護者須戴口罩、手套及穿隔離衣','D.對於沾有嘔吐物的衣物應除去並協助沐浴'], ans:[0], expl:'有機磷中毒解毒劑是Atropine（阻斷毒蕈效應）和Pralidoxime（PAM，重活化膽鹼酯酶）。Apomorphine是催吐劑，不是有機磷拮抗劑（A✗）。'},
   {n:49, subj:'其他',       q:'有關病人誤食強鹼溶液之處置，下列何者錯誤？', opts:['A.立即給與胃灌洗','B.不可給與中和劑','C.疑似胃潰瘍應先採取禁食','D.注意口腔與食道之灼傷'], ans:[0], expl:'誤食強鹼禁止催吐和胃灌洗（灌洗管插入可能穿孔，且強鹼已燒傷食道）（A✗）。禁止中和劑（中和反應產熱加重傷害）✓；注意氣道保護和灼傷評估✓。'},
-  {n:50, subj:'其他',       q:'有關H1N1流感之敘述，下列何者錯誤？', opts:['A.病原菌屬於H型流感病毒','B.大部分病人症狀輕微，一週內可痊癒','C.主要經由飛沫與接觸傳染','D.治療藥物為Tamiflu及Relenza'], ans:[0], expl:'H1N1是A型（Influenza A）流感病毒的亞型，選項A說「H型」流感病毒是錯誤分類（A✗）。Tamiflu、Relenza是神經胺酸酶抑制劑✓。'}
+  {n:50, subj:'其他',       q:'有關H1N1流感之敘述，下列何者錯誤？', opts:['A.病原菌屬於H型流感病毒','B.大部分病人症狀輕微，一週內可痊癒','C.主要經由飛沫與接觸傳染','D.治療藥物為Tamiflu及Relenza'], ans:[0], expl:'H1N1是A型（Influenza A）流感病毒的亞型，選項A說「H型」流感病毒是錯誤分類（A✗）。Tamiflu、Relenza是神經胺酸酶抑制劑✓。'},
+  {n:51, no:1, subj:'神經系統', q:'有關巴金森氏症（Parkinson\'s disease）的主要典型症狀，下列敘述何者正確？①震顫 ②吞嚥困難 ③僵硬 ④運動遲緩 ⑤腹瀉', opts:['A.①②③', 'B.①③④', 'C.①③⑤', 'D.①②⑤'], ans:[1], expl:'巴金森氏症四大主症（TRAP）：顫抖（Tremor，靜止性震顫）、僵硬（Rigidity，齒輪狀肌強直）、動作遲緩（Bradykinesia）、姿勢不穩（Postural instability），故①③④正確。吞嚥困難屬病程進展後的併發症，並非最主要典型症狀；且因自主神經退化、腸胃蠕動下降，典型腸胃症狀是「便秘」而非腹瀉，⑤錯誤。答案①③④＝B。'},
+  {n:52, no:2, subj:'神經系統', q:'有關顱內腫瘤病人顱內壓ICP=18mmHg，其照護之敘述，下列何者正確？', opts:['A.出現複視時，應鼓勵多下床活動', 'B.採高劑量類固醇治療時，應該要監測其血糖值', 'C.出現腦組織灌流失效時，應鼓勵液體攝取', 'D.出現極痛是病情惡化之早期臨床表徵'], ans:[1], expl:'顱內腫瘤病人常使用高劑量類固醇（如Dexamethasone）減緩腦水腫，其副作用之一為血糖上升，須密切監測血糖（B✓）。複視代表顱神經受壓迫，應限制活動、避免ICP升高的動作，而非鼓勵下床（A✗）；腦灌流失效（CPP下降）時應限制水分攝取以避免加重腦水腫，而非鼓勵攝取（C✗）；劇烈頭痛通常是ICP升高「惡化」的表現，早期徵象多為意識程度的細微改變、躁動不安，而非劇痛（D✗）。'},
+  {n:53, no:3, subj:'消化系統', q:'下列何者不是肝硬化病人發生肝性腦病變的主要誘發因子？', opts:['A.感染', 'B.便秘', 'C.腸胃道出血', 'D.高血鉀'], ans:[3], expl:'肝硬化病人發生肝性腦病變的常見誘發因子包括：感染、便秘（腸道氨吸收增加）、腸胃道出血（血液分解產生氨）、低血鉀及鹼中毒。教科書明確指出是「低血鉀」而非「高血鉀」為誘發因子（Lewis\'s Medical-Surgical Nursing教科書Table 46.12：Potassium ions are needed by brain to metabolize ammonia），故高血鉀並非誘發因子，答案為D。記憶：鉀離子是大腦代謝氨所需要的重要離子，低血鉀反而會惡化高血氨。'},
+  {n:54, no:4, subj:'神經系統', q:'有關癲癇藥物處置的敘述，下列何者正確？', opts:['A.多種抗癲癇藥物同時使用效果最佳', 'B.考慮停藥時可先行選擇半衰期較長的藥物逐漸減量', 'C.服用抗癲癇藥物phenytoin類（如Dilantin），一旦懷孕須立即停藥，避免胎兒畸形', 'D.病人於服藥期間2～3年內無任何癲癇發作，且神經學及腦波檢查正常，可考慮慢慢停藥'], ans:[3], expl:'抗癲癇藥物治療原則：癲癇獲得良好控制（服藥後2～3年無發作）且腦波、神經學檢查正常時，可與醫師討論「緩慢逐步減量」停藥，不可驟停（D✓）。治療應以單一藥物（monotherapy）為優先，多重藥物合併使用會增加交互作用與副作用，非效果最佳（A✗）；懷孕不可自行驟停phenytoin類藥物，因癲癇發作對母胎的風險遠大於藥物本身的致畸風險，須由醫師評估調整劑量或改藥（C✗）。'},
+  {n:55, no:5, subj:'神經系統', q:'有關病人因頸椎脊髓損傷處於脊髓休克期的敘述，下列何者錯誤？', opts:['A.心跳50次/分、呼吸15次/分、血壓160/100 mmHg', 'B.主要是因喪失自主神經的控制', 'C.受傷部位以下的所有運動、感覺、反射可能減弱或消失', 'D.出現尿滯留及膀胱動作下降'], ans:[0], expl:'脊髓損傷後脊髓休克期因喪失自主神經（交感神經）張力，典型表現為低血壓與心搏過緩（副交感神經相對優勢），而非血壓上升；選項血壓160/100 mmHg（高血壓）不符合脊髓休克的血流動力學表現，故A錯誤，為本題答案。B、C、D皆正確描述脊髓休克特徵：自主神經功能喪失、受傷平面以下運動感覺反射減弱消失、膀胱無張力導致尿滯留。'},
+  {n:56, no:6, subj:'消化系統', q:'有關膽囊炎病人的護理評估及照護，下列何者正確？', opts:['A.急性期症狀為右上腹部痛可能輻射至右下腹部', 'B.膽囊手術後須監測腹脹、腹部僵硬、嘔吐等腹膜炎徵象', 'C.可用morphine緩解疼痛與痙攣', 'D.術後引流液為墨綠色時需立刻通知醫師'], ans:[1], expl:'膽囊切除術後應密切監測腹膜炎徵象（腹脹、腹部僵硬、噁心嘔吐、發燒），以早期偵測膽汁滲漏或感染（B✓）。膽囊炎疼痛典型輻射至右肩胛或右肩，而非右下腹（A✗）。Morphine可能引起Oddi氏括約肌痙攣、加劇膽絞痛，臨床上多避免使用（C✗）。T型管引流液呈墨綠色（膽汁色）為正常現象，不需立即通知醫師，除非出現大量鮮血或引流量驟減（D✗）。'},
+  {n:57, no:7, subj:'消化系統', q:'有關食道癌之敘述，下列何者錯誤？', opts:['A.食道下端之癌症可採行胃造口術維持身體營養需要', 'B.食道重建手術適用於中段的食道癌', 'C.光動力治療後需避光約1個月', 'D.鼓勵病人採低蛋白及高醣類高渣飲食，維持適當的營養'], ans:[3], expl:'食道癌病人常因吞嚥困難導致營養不良，飲食應採「高蛋白、高熱量、低渣（少纖維、質地軟）」飲食，以維持營養並減少通過狹窄食道的阻力；選項卻寫「低蛋白、高渣」，方向完全相反，故D錯誤，為本題答案。下段食道癌可行胃造口灌食維持營養（A✓）；中段食道癌適合食道重建手術（B✓）；光動力治療的光敏劑會使皮膚對光敏感，術後需避光約4～6週（約1個月）（C✓）。'},
+  {n:58, no:8, subj:'消化系統', q:'有關上腸胃道出血的照護，下列何者錯誤？', opts:['A.監測嘔吐物性質和大便的顏色', 'B.監測是否有肢端冰冷、指甲床蒼白等現象', 'C.出血停止後立刻停止血管加壓素的使用', 'D.評估腹部是否有腹脹僵硬情形'], ans:[2], expl:'血管加壓素（Vasopressin）需「逐漸減量」後停用，驟然停藥可能導致出血反彈或血管痙攣反彈，C敘述「出血停止後立刻停止」為錯誤處置，是本題答案。監測嘔吐物性質、大便顏色（觀察咖啡渣狀嘔吐物、解黑便）、肢端灌流（冰冷、蒼白代表低血容性休克）、腹部腹脹僵硬（評估併發症如穿孔）皆為正確的護理評估重點。'},
+  {n:59, no:9, subj:'消化系統', q:'有關食道靜脈曲張出血病人的護理指導，下列何者不適當？', opts:['A.避免用力咳嗽及提重物', 'B.採用軟質飲食，避免粗糙食物', 'C.須注意食物的溫度，避免過熱與過冷', 'D.須服用鎮靜劑以減輕焦慮'], ans:[3], expl:'肝硬化病人肝臟代謝藥物能力下降，鎮靜劑易蓄積並誘發肝性腦病變，因此不會常規指導病人服用鎮靜劑緩解焦慮，應以非藥物方式（如衛教、陪伴）處理焦慮，D為不適當之指導，是本題答案。避免用力咳嗽、搬提重物（增加腹壓／門脈壓）、採軟質避免粗糙飲食、避免過熱過冷食物（防止機械或溫度刺激導致曲張靜脈破裂出血）皆為正確衛教內容。'},
+  {n:60, no:10, subj:'消化系統', q:'王先生，170cm，88Kg，從事搬運工，因腹股溝疝氣接受手術治療，有關疝氣手術後護理指導，下列何者正確？①傷口處熱敷，以減輕疼痛與腫脹 ②不需要特別減重以免營養不良 ③陰囊應給與支托後再下床 ④平時應多吃蔬果以預防便秘 ⑤出院後可立即上班從事搬運工作', opts:['A.①②', 'B.②③', 'C.③④', 'D.④⑤'], ans:[2], expl:'疝氣術後應以彈性支托或陰囊托給予支撐，減少腫脹與牽扯疼痛（③✓）；並鼓勵攝取蔬果、水分，預防便秘、避免用力解便增加腹內壓（④✓）。急性期應冰敷而非熱敷（①✗）；病人身高170cm、體重88kg，BMI約30.4已達肥胖範圍，減重有助降低腹內壓及復發率，並非不需要（②✗）；從事搬運工作者術後應避免提重物一段時間（約4～6週），不可出院後立即恢復粗重工作，以防復發（⑤✗）。答案③④＝C。'},
+  {n:61, no:11, subj:'骨骼肌肉', q:'下列何者為骨質疏鬆的危險因子？①停經前之婦女 ②攝取大量咖啡茶飲 ③規律的運動 ④靜態生活或長期臥床 ⑤日曬時間不足', opts:['A.①②③', 'B.①③④', 'C.②④⑤', 'D.③④⑤'], ans:[2], expl:'骨質疏鬆危險因子包括：停經後雌激素缺乏（並非停經前，①✗）、過量咖啡因攝取增加尿鈣排出（②✓）、缺乏負重運動或長期臥床導致骨質流失（④✓）、日曬不足使維生素D活化不足、影響鈣吸收（⑤✓）。規律運動（尤其負重運動）則是「保護因子」而非危險因子（③✗）。答案②④⑤＝C。'},
+  {n:62, no:12, subj:'骨骼肌肉', q:'有關病人因左膝關節退化性關節炎接受全關節置換術之術後照護，下列何者最不適當？', opts:['A.術後可用枕頭抬高左下肢，以促進血液循環', 'B.術後1～2天可使用持續被動運動機（CPM）進行運動', 'C.助行器手把高度需與病人腰同高且手舉可彎曲≦30度', 'D.教導病人返家後，多上下樓梯、走遠路，以促進膝關節血液循環'], ans:[3], expl:'全膝關節置換術後應循序漸進增加活動量，「返家後應多上下樓梯、走遠路」屬過度負重的錯誤指導，可能造成人工關節過度磨損或跌倒風險，最不適當，為本題答案（D✗）。抬高患肢促進循環消腫（A✓）；術後1～2天開始使用CPM機進行被動運動，有助關節活動度恢復（B✓）；助行器高度應與腰部（大轉子）同高、手肘彎曲約15～30度，是正確的輔具調整原則（C✓）。'},
+  {n:63, no:13, subj:'骨骼肌肉', q:'有關移除下肢石膏後病人護理指導之敘述，下列何者不適當？', opts:['A.鼓勵病人立即下床行走，增加患肢平衡感', 'B.避免過度曝曬皮膚', 'C.行走時患肢可使用彈性繃帶包紮', 'D.患肢皮膚上布滿黃棕色鱗片是正常的現象'], ans:[0], expl:'石膏移除後，患肢肌肉因長期未使用已萎縮無力、關節僵硬，應循序漸進恢復活動，逐步增加負重與行走訓練，而非立即下床行走，A為不適當之指導，是本題答案。剛拆石膏的皮膚較脆弱，應避免過度曝曬（B✓）；行走過渡期可用彈性繃帶提供支托（C✓）；石膏內皮屑、油脂堆積形成黃棕色鱗屑，屬正常現象，非感染徵象，清潔即可（D✓）。'},
+  {n:64, no:14, subj:'感官系統', q:'下列何者為白內障最主要的病變構造？', opts:['A.角膜', 'B.水晶體', 'C.鞏膜', 'D.視神經'], ans:[1], expl:'白內障（Cataract）是水晶體（水晶體蛋白）因老化、外傷、代謝疾病等因素產生混濁病變，導致視力模糊，病變構造為水晶體（B✓）。角膜混濁稱為角膜病變，非白內障；青光眼與房水、眼壓相關；視神經病變則見於青光眼末期或其他神經疾病，皆非白內障主要病變構造。'},
+  {n:65, no:15, subj:'感官系統', q:'病人左耳聽力正常，右耳有聽力障礙，以韋伯試驗（Weber test）發現右耳比較大聲，再以任內試驗（Rinne test）發現左耳空氣傳導＞骨傳導、右耳空氣傳導≦骨傳導，下列何者是病人右耳最可能的病變位置？①外耳 ②中耳 ③內耳 ④耳蝸神經', opts:['A.①②', 'B.①③', 'C.②④', 'D.③④'], ans:[0], expl:'Weber test偏向較大聲的一側，代表該耳為傳導性聽力障礙（或對側為感音性聽力障礙），本題偏向右耳，故右耳可能為傳導性聽損。Rinne test右耳「骨傳導≥氣傳導」（正常應氣傳導＞骨傳導），確認右耳為傳導性聽力障礙。傳導性聽損的病變位置在外耳或中耳（聲音傳導路徑受阻，如耳垢栓塞、中耳炎、耳硬化症），而非內耳或耳蝸神經（感音性聽損的病變位置）。答案①②＝A。'},
+  {n:66, no:16, subj:'心臟血管', q:'下列何者為左心衰竭的臨床表徵？', opts:['A.下肢水腫', 'B.肝脾腫大', 'C.中心靜脈壓上升', 'D.端坐呼吸'], ans:[3], expl:'左心衰竭導致肺循環淤血，典型表徵為端坐呼吸（orthopnea）、呼吸困難、咳嗽、肺部囉音（D✓）。下肢水腫、肝脾腫大、中心靜脈壓上升則是「右心衰竭」導致體循環淤血的表徵，並非左心衰竭表現（A、B、C皆為右心衰竭表現）。記憶：左心衰竭影響肺（呼吸道症狀）；右心衰竭影響全身（水腫、肝脾腫大）。'},
+  {n:67, no:17, subj:'心臟血管', q:'有關心臟復健之敘述，下列何者正確？①依基礎代謝率（BMR）選擇活動內容 ②依代謝當量（MET）選擇活動內容 ③為增加心肺耐力，鼓勵做有氧運動 ④為加強肌力量，鼓勵等長運動', opts:['A.①③', 'B.①④', 'C.②③', 'D.②④'], ans:[2], expl:'心臟復健活動強度應依「代謝當量（MET）」分級選擇活動內容，而非基礎代謝率BMR（②✓，①✗）。有氧運動可增進心肺耐力，是心臟復健的核心運動處方（③✓）。等長運動（如用力握拳、憋氣出力）會使血壓與心臟後負荷驟升，心臟病人應避免或謹慎使用，建議採等張（動態）運動來訓練肌力，而非等長運動（④✗）。答案②③＝C。'},
+  {n:68, no:18, subj:'心臟血管', q:'有關預防靜脈血栓形成之措施，下列何者不適當？', opts:['A.術後早期下床活動', 'B.多穿著緊身衣', 'C.抬高下肢促進靜脈回流', 'D.穿著彈性襪'], ans:[1], expl:'預防靜脈血栓應避免任何會壓迫下肢血循的緊身衣物，一般緊身衣反而阻礙靜脈回流、增加血栓風險，B為不適當措施，是本題答案。術後及早下床活動可減少靜脈滯留（A✓）；抬高下肢促進靜脈回流（C✓）；穿著醫療級彈性襪（由遠端至近端呈階梯式壓力設計）可促進靜脈回流，屬正確預防措施（D✓）。'},
+  {n:69, no:19, subj:'心臟血管', q:'有關心律去顫整流術（defibrillation）之敘述，下列何者錯誤？', opts:['A.初次治療電量介於50～200焦耳', 'B.電擊板放置處為胸骨右緣第2肋間與左腋前線第5肋間', 'C.常用於心房纖維顫動', 'D.電擊時切勿碰觸病人與其病床'], ans:[2], expl:'本題所稱「心律去顫整流術（defibrillation）」為非同步電擊去顫，主要用於心室震顫（VF）及無脈性心室頻脈（pulseless VT）等致命性心律不整；心房纖維顫動（AFib）病人通常仍有脈搏、屬於有效循環之心律不整，臨床應使用「同步心律整流術（synchronized cardioversion）」處理，而非去顫，故C敘述錯誤，為本題答案。初次電量依機型（單相／雙相）建議介於50～200焦耳範圍內（A✓）；電擊板標準位置為胸骨右緣第2肋間（心底）與左腋前線第5肋間（心尖）（B✓）；電擊瞬間所有人員都不可碰觸病人或病床，以免遭電擊或影響電流傳導（D✓）。'},
+  {n:70, no:20, subj:'心臟血管', q:'下列何者不是心衰竭時心臟代償徵象？', opts:['A.心跳變快', 'B.心室擴張', 'C.心肌需氧減少', 'D.心肌肥厚'], ans:[2], expl:'心臟衰竭的代償機轉包括心跳加快（交感神經興奮）、心室擴張（Frank-Starling機轉增加心搏量）、心肌肥厚（增加收縮力），這些代償反而會「增加」心肌氧氣需求，形成惡性循環，而非減少氧需求，故C「心肌需氧減少」不是代償徵象，為本題答案（不是代償表現）。'},
+  {n:71, no:21, subj:'腫瘤血液', q:'有關瀕死期癌症病人之臨終關懷，下列何者正確？', opts:['A.評估病人面對死亡的調適能力', 'B.減少開放性溝通模式', 'C.持續給予保證與灌注希望', 'D.醫護人員此期採被動方式協助'], ans:[0], expl:'臨終關懷應主動評估病人對死亡的因應與調適能力，提供符合其心理需求的照護（A✓，本題答案）。此階段應鼓勵「開放性溝通」，讓病人表達感受與心願，而非減少溝通（B✗）；面對瀕死病人應避免不實的保證或灌注不切實際的希望，應以誠實、同理的態度陪伴（C✗）；醫護人員應採取主動積極的舒適照護與陪伴，而非被動方式（D✗）。'},
+  {n:72, no:22, subj:'腫瘤血液', q:'正在接受sorafenib（Nexavar）治療的癌症病人表示：「服藥後手掌和腳掌都出現脫皮、龜裂、刺痛情形，怎麼會這樣呢？」下列護理指導何者正確？①洗手時不用力搓洗，穿著寬鬆舒適鞋子 ②可塗抹尿素乳膏或凡士林在患部後穿襪就寢 ③外出須戴帽撐傘防曬，但不可以擦防曬乳 ④皮膚乾癢不適時應給與冰敷或熱敷緩解症狀', opts:['A.①②', 'B.③④', 'C.②③', 'D.②④'], ans:[0], expl:'Sorafenib常見副作用為手足症候群（hand-foot syndrome），照護重點為減少摩擦、避免高溫刺激：洗手勿用力搓揉、穿寬鬆鞋襪減少摩擦（①✓）；睡前塗抹尿素乳膏或凡士林加強保濕，再穿棉襪加強吸收（②✓）。外出防曬應同時使用陽傘、帽子「與」防曬乳，而非排除防曬乳（③✗）；患部應避免熱敷（熱會加重發炎、血管擴張），選項並列「冰敷或熱敷」但熱敷並不適用，敘述不正確（④✗）。答案①②＝A。'},
+  {n:73, no:23, subj:'腫瘤血液', q:'王小華熱愛打籃球，最近剛被確診為血友病，下列護理指導何者不適當？', opts:['A.不可自行服用阿斯匹靈（aspirin）止痛劑', 'B.避免激烈及發生碰撞的活動', 'C.頻繁地抽血監測凝血相關指數', 'D.避免不必要的注射或手術'], ans:[2], expl:'血友病病人凝血因子缺乏，應盡量減少不必要的侵入性處置（含抽血、注射），以降低出血及血腫風險；「頻繁抽血監測」本身即增加穿刺部位出血機會，屬不適當之指導，C為本題答案（不適當）。避免服用阿斯匹靈等抗血小板藥物（A✓）、避免碰撞性運動（B✓）、避免不必要注射或手術（D✓）皆為正確衛教原則。'},
+  {n:74, no:24, subj:'腫瘤血液', q:'下列何者不是放射線治療病人皮膚出現的急性反應？', opts:['A.色素沉著', 'B.發紅敏感', 'C.乾性脫屑', 'D.濕性脫屑'], ans:[0], expl:'放射線治療皮膚反應依嚴重度可分為：發紅敏感（紅斑）→乾性脫屑→濕性脫屑，這些都屬於急性反應（B、C、D皆屬急性反應）。色素沉著則多屬延遲性、較晚出現的皮膚變化（黑色素細胞受刺激所致），並非急性反應，故A為本題答案（不是急性反應）。'},
+  {n:75, no:25, subj:'腫瘤血液', q:'王先生接受輸血治療過程中發生乾咳、血壓上升、嚴重呼吸困難等情形，下列何者為其最有可能發生的輸血不良反應？', opts:['A.循環過度負荷', 'B.過敏反應', 'C.熱原反應', 'D.溶血反應'], ans:[0], expl:'乾咳、血壓「上升」、嚴重呼吸困難為典型「循環過度負荷（TACO, Transfusion-Associated Circulatory Overload）」表現，好發於輸血速度過快或心腎功能不佳病人，肺部因輸血容積負荷過大而淤血（A✓）。過敏反應以蕁麻疹、搔癢、血管性水腫為主；熱原反應以發燒畏寒為主；溶血反應以腰背痛、茶色尿、發燒畏寒為主，皆與本題「血壓上升、乾咳」的表現不符，故答案為A。'},
+  {n:76, no:26, subj:'腫瘤血液', q:'承上題，有關王先生的護理與處置，下列何者正確？', opts:['A.協助平躺', 'B.給予類固醇', 'C.持續輸血', 'D.協助做放血術'], ans:[3], expl:'承上題TACO的處置原則：立即減緩或暫停輸血、協助採坐姿或半坐臥（而非平躺，以減少靜脈回流）、給予氧氣、必要時使用利尿劑；對嚴重案例（尤其利尿劑效果不佳或腎功能不良者），可考慮執行治療性放血術（therapeutic phlebotomy），緊急移除部分血液以快速降低循環負荷（D✓，本題答案）。協助「平躺」反而會增加靜脈回流、加重肺水腫，是錯誤處置（A✗）；類固醇是過敏反應的處置藥物，非TACO的主要治療（B✗）；持續輸血將使循環負荷更加嚴重，應立即減緩或停止，而非持續（C✗）。'},
+  {n:77, no:27, subj:'腫瘤血液', q:'有關腫瘤溶解症候群之處置，下列何者錯誤？', opts:['A.給與Sodium Bicarbonate促進尿酸溶解', 'B.給與Kayexalate治療高血鉀', 'C.減少輸液降低心臟負擔', 'D.給與Allopurinol抑制尿酸生成'], ans:[2], expl:'腫瘤溶解症候群的處置原則為「積極輸液」（大量等張溶液），以增加腎臟血流與尿酸排除，預防急性腎損傷，而非減少輸液，故C「減少輸液降低心臟負擔」為錯誤處置，是本題答案。給予Sodium Bicarbonate鹼化尿液以促進尿酸溶解排出（A✓，屬傳統教學重點）；Kayexalate（Sodium polystyrene sulfonate）用於降低血鉀（B✓）；Allopurinol抑制黃嘌呤氧化酶、減少尿酸生成（D✓）。'},
+  {n:78, no:28, subj:'其他', q:'有關疥瘡之敘述，下列何者錯誤？', opts:['A.經由皮膚、衣物等接觸而感染', 'B.不會藉由寵物攜帶疥蟲而傳染', 'C.接觸疥蟲後4週才會出現疥瘡的症狀', 'D.疥蟲離開人體後2週才會死亡'], ans:[1], expl:'疥瘡主要透過人與人皮膚直接接觸傳染，長時間共用衣物寢具也可能傳染（A✓）。人疥蟲（Sarcoptes scabiei var. hominis）雖主要侷限於人與人之間傳染，但密切接觸感染疥蟲的寵物（如犬疥蟲等動物變異株）仍可能造成人體暫時性、自限性的皮膚過敏反應，故「完全不會透過寵物傳染」的絕對敘述並不正確，B為本題答案（錯誤敘述）。初次感染疥蟲後，因遲發性過敏反應需要時間致敏，通常於接觸後約4週左右才出現搔癢等症狀（C✓）；疥蟲離開人體後仍可在環境中存活一段時間才死亡，故接觸隔離與環境處理仍屬必要防護措施（D✓，依教材所述）。'},
+  {n:79, no:29, subj:'其他', q:'有關第一型單純皰疹之敘述，下列何者正確？①容易再度復發 ②感染痊癒後會潛伏於神經根節 ③由水痘病毒感染後所引起的 ④多感染於會陰部', opts:['A.①②', 'B.①④', 'C.②③', 'D.③④'], ans:[0], expl:'第一型單純皰疹病毒（HSV-1）感染具有潛伏－復發特性，好發於口腔周圍（唇皰疹），初次感染痊癒後病毒會潛伏於三叉神經節等感覺神經節內，遇誘因（如發燒、日曬、壓力）時再活化復發（①②✓）。HSV-1與水痘－帶狀疱疹病毒（VZV）是不同種病毒，並非由水痘病毒引起（③✗）。好發於會陰部者主要為第二型單純皰疹病毒（HSV-2），HSV-1則多好發於口腔顏面部（④✗）。答案①②＝A。'},
+  {n:80, no:30, subj:'骨骼肌肉', q:'有關全身性紅斑性狼瘡之護理處置，下列何者不適當？', opts:['A.病情控制良好後3～6個月，可與醫生討論懷孕計畫', 'B.腎臟受侵犯時應採低鈉、低鉀、低蛋白飲食', 'C.關節炎的急性期可冷敷', 'D.避孕方法最好採取口服避孕藥'], ans:[3], expl:'SLE病人因雌激素可能誘發疾病惡化，且SLE病人常合併抗磷脂抗體症候群，使用含雌激素的口服避孕藥會增加血栓及疾病活動風險，一般不建議作為首選避孕方式，應考慮屏障式避孕法等其他替代方案，D為不適當之指導，是本題答案。病情穩定3～6個月後可與醫師討論懷孕計畫（A✓）；狼瘡腎炎病人採低鈉、低鉀、低蛋白飲食以減輕腎臟負擔（B✓）；急性關節炎期可冷敷消腫止痛（C✓）。'},
+  {n:81, no:31, subj:'骨骼肌肉', q:'有關類風濕性關節炎復健治療之敘述，下列何者正確？', opts:['A.運動治療建議一天至少二次，以被動運動為主', 'B.冷水池中進行運動治療，可以減輕關節疼痛', 'C.建議可進行園藝、編織等活動', 'D.建議病人長期臥床，減少活動'], ans:[2], expl:'類風濕性關節炎病人可鼓勵從事園藝、編織等精細動作及職能治療活動，有助維持關節活動度與手部功能（C✓，本題答案）。運動治療應以「主動」關節活動運動為主，並依病情調整頻率，而非以被動運動為主（A✗）；水療應在溫水池中進行，溫熱可放鬆肌肉、減輕關節疼痛與僵硬，冷水反而會加劇僵硬（B✗）；除急性發炎期需適度休息外不宜長期臥床，以免關節攣縮、肌肉萎縮，應維持規律的活動與休息平衡（D✗）。'},
+  {n:82, no:32, subj:'泌尿系統', q:'有關高血鈉之敘述，下列何者正確？①血鈉的濃度＞130mEq/L ②導因之一為醛固酮過多症導致 ③尿比重上升 ④指導低鈉飲食如蘇打餅乾、白麵包', opts:['A.①②', 'B.①④', 'C.②③', 'D.③④'], ans:[2], expl:'高血鈉定義為血鈉大於145 mEq/L（並非大於130 mEq/L，①✗，130 mEq/L已接近或低於正常下限）。醛固酮過多症會促進腎小管保鈉排鉀，是高血鈉成因之一（②✓）。高血鈉常伴隨體液容積不足（自由水流失），使尿液濃縮、尿比重上升（③✓）。蘇打餅乾（含碳酸氫鈉）與白麵包（製作過程常添加鹽）皆屬含鈉量較高的食物，並非低鈉飲食範例，④之衛教內容錯誤。答案②③＝C。'},
+  {n:83, no:33, subj:'呼吸系統', q:'有關預防吸入性肺炎病人之護理措施，下列何者最不適當？', opts:['A.進餐後立採平躺姿勢，以防止嗆咳', 'B.睡覺時，需協助病人以床頭抬高的15～30度半側臥姿的方式休息', 'C.教導家屬鼻胃管灌食前，需評估病人胃殘餘量，以避免不慎嗆咳', 'D.吞嚥困難病人進食前，應評估作嘔反射，以選擇適當的進食方式'], ans:[0], expl:'進食後應維持坐姿或半坐臥至少30～60分鐘，以利消化並降低胃食道逆流、嗆咳誤吸的風險；「進餐後立即採平躺姿勢」反而大幅增加吸入性肺炎風險，是最不適當的措施，A為本題答案。睡眠時抬高床頭15～30度、採半側臥可減少分泌物或逆流物嗆入氣管（B✓）；鼻胃管灌食前評估胃殘餘量可避免灌食過量、嘔吐嗆咳（C✓）；吞嚥困難病人進食前評估作嘔反射，有助判斷是否適合經口進食（D✓）。'},
+  {n:84, no:34, subj:'呼吸系統', q:'急性呼吸窘迫症候群（ARDS）病人產生表面張力素的肺細胞受損，會導致病人出現下列何種問題？', opts:['A.支氣管收縮', 'B.肺擴張不全', 'C.肺栓塞', 'D.肺纖維化'], ans:[1], expl:'第二型肺泡細胞受損會使表面張力素（surfactant）分泌減少，肺泡表面張力增加，導致肺泡塌陷、肺擴張不全（atelectasis），是ARDS病理生理的重要機轉之一（B✓，本題答案）。支氣管收縮、肺栓塞、肺纖維化則非表面張力素缺乏所直接導致的病理結果。'},
+  {n:85, no:35, subj:'呼吸系統', q:'以脈搏血氧測量儀（pulse oximetry）所測得的數值，下列何者表示組織氧合（oxygenation）正常？', opts:['A.80～90 mmHg', 'B.95～100 mmHg', 'C.80～90%', 'D.95～100%'], ans:[3], expl:'脈搏血氧測量儀（pulse oximetry）測得的是血氧「飽和度」（SpO2），單位為百分比%，正常值為95～100%（D✓，本題答案）。mmHg為動脈血氧分壓（PaO2）之單位，並非脈搏血氧儀的測量單位，選項A、B單位錯誤；80～90%則屬於低血氧狀態，並非正常值。'},
+  {n:86, no:36, subj:'呼吸系統', q:'有關慢性阻塞性肺疾病（COPD）病人之護理指導，下列何者最為適當？', opts:['A.鼓勵餐前走路半小時', 'B.增加醣類的攝取量', 'C.採取少量多餐', 'D.給予高流量氧氣以改善心肺功能'], ans:[2], expl:'COPD病人建議採取「少量多餐」，避免一次進食過多造成腹脹上頂橫膈，加重呼吸負擔，也可減少進食造成的疲憊與喘（C✓，本題答案）。COPD病人通常安排「餐前休息」而非運動，以保留體力進食、減少呼吸困難（A✗）；醣類代謝會產生較多二氧化碳，可能加重CO2蓄積，COPD飲食建議適度限醣、增加脂肪比例，而非增加醣類攝取（B✗）；COPD病人（尤其慢性CO2蓄積者）呼吸驅動力依賴低血氧刺激，給予高濃度、高流量氧氣可能抑制呼吸中樞、導致CO2麻醉，臨床上採低流量、控制性給氧，且與心肺功能改善並無直接相關（D✗）。'},
+  {n:87, no:37, subj:'泌尿系統', q:'有關尿液檢查之敘述，下列何者錯誤？', opts:['A.除了早晨第一次尿外，任何時間採集的尿液稱之為隨機尿', 'B.導尿管留置可由蓄尿袋採尿送檢查', 'C.尿液檢體應於30分鐘內送檢查為宜', 'D.常規尿液收集是要取中段尿送檢查'], ans:[1], expl:'留置導尿管病人採檢尿液應由採尿孔（sampling port）以無菌技術抽取新鮮尿液，不可直接自蓄尿袋取尿，因袋內尿液可能已滋生細菌、放置過久，會影響檢驗結果準確性，B為錯誤敘述，是本題答案。除晨尿外任何時間留取的尿液稱隨機尿（A✓）；尿液檢體應盡速（約30分鐘內）送檢，避免細菌孳生或成分分解影響結果（C✓）；常規尿液檢查建議收集中段尿以減少污染（D✓）。'},
+  {n:88, no:38, subj:'泌尿系統', q:'有關血液透析病人動靜脈瘻管（A-V fistula）之護理措施，下列何者正確？', opts:['A.觸診瘻管摸到血流雜聲，表此處可能阻塞應速處理', 'B.每天測量動靜脈瘻管手臂之血壓，以評估血循狀況', 'C.可運用彈性繃帶包紮或著長袖彈力衣，以保護瘻管', 'D.教導執行握球運動強化血管，以促進瘻管的血流量'], ans:[3], expl:'教導病人規律執行握球運動，可強化血管壁、促進瘻管血流量與成熟度，是正確的自我照護指導（D✓，本題答案）。觸摸到震顫（thrill）或聽到雜音（bruit）代表瘻管血流通暢，屬正常現象，「摸不到」震顫或雜音才代表可能阻塞、需立即處理，A敘述相反、錯誤。瘻管手臂應避免測量血壓、抽血、打點滴，以防壓迫瘻管、影響血流甚至導致栓塞，B錯誤。瘻管手臂也應避免穿著過緊衣物或以彈性繃帶包紮，以免壓迫瘻管造成阻塞，C錯誤。'},
+  {n:89, no:39, subj:'泌尿系統', q:'有關腎臟結石接受體外震波術後護理措施之敘述，下列何者錯誤？', opts:['A.儘量攝取開水，勿以茶、啤酒或是果汁來取代水分', 'B.術後鼓勵下床活動、多喝水並觀察尿液顏色、氣味', 'C.術後疼痛是正常，可先觀察不用止痛藥以免傷害腎臟', 'D.結石成分為尿酸，需指導避免食用內臟、香菇或海鮮'], ans:[2], expl:'術後疼痛屬正常現象（結石碎片通過輸尿管引起腎絞痛），應依醫囑給予適當止痛藥物緩解，而非為了「保護腎臟」而放任病人忍痛不予處理，C敘述錯誤、為不當之照護觀念，是本題答案。震波碎石術後應鼓勵多喝白開水（勿以茶、酒、果汁取代），促進碎石排出並沖淡尿液（A✓）；鼓勵下床活動幫助結石排出，並觀察尿液顏色氣味以監測血尿或感染徵象（B✓）；尿酸結石病人應避免高普林食物如內臟、香菇、海鮮，以減少尿酸生成（D✓）。'},
+  {n:90, no:40, subj:'泌尿系統', q:'有關泌尿道感染及衛教之敘述，下列何者最適當？', opts:['A.建議食用鹼化尿液的食物如柑橘及奶製品', 'B.女性病人最常見的感染源為陰道滴蟲感染', 'C.泌尿道感染病人的典型症狀為無癥性血尿', 'D.院內泌尿道感染常見於泌尿道侵入性檢查後'], ans:[3], expl:'院內泌尿道感染最常見的原因為泌尿道侵入性處置（如導尿管留置、膀胱鏡檢查等），破壞正常防禦機轉並引入病原菌，D為最適當之敘述，是本題答案。UTI預防飲食應著重「酸化尿液」（如蔓越莓汁、維生素C），減少細菌附著於尿路上皮，柑橘與奶製品偏鹼性，方向錯誤（A✗）；女性UTI最常見致病菌為大腸桿菌（E. coli，經會陰上行感染），並非陰道滴蟲（滴蟲是造成陰道炎的病原體，非UTI最常見感染源）（B✗）；泌尿道感染典型症狀為頻尿、解尿灼熱刺痛、急尿感等「有症狀」表現，並非無症性血尿（C✗）。'},
+  {n:91, no:41, subj:'呼吸系統', q:'高小姐的動脈血液氣體分析結果為pH 7.48、PaCO2 48mmHg、HCO3 30mmHg、PaO2 92mmHg，根據以上數值，判讀結果下列何者正確？', opts:['A.未代償性呼吸性酸中毒', 'B.完全代償性代謝性酸中毒', 'C.部分代償性代謝性鹼中毒', 'D.未代償性呼吸性鹼中毒'], ans:[2], expl:'判讀動脈血液氣體分析：pH 7.48（鹼血症，大於7.45）；HCO3 30 mEq/L上升，為原發性代謝性鹼中毒（因pH與HCO3變化方向一致）；PaCO2 48 mmHg上升，是呼吸系統代償性地滯留CO2以嘗試降低pH。由於pH仍超出正常範圍（7.35～7.45）未完全回到正常，屬「部分代償」而非完全代償，判讀為部分代償性代謝性鹼中毒（C✓，本題答案）。記憶：先看pH定酸鹼、再看HCO3與PaCO2何者與pH同方向變化以定原發問題、最後看pH是否回到正常範圍以定代償程度。'},
+  {n:92, no:42, subj:'內分泌系統', q:'有關腦下垂體前葉分泌的激素，下列何者正確？①生長素（growth hormone） ②促乳素（prolactin） ③催產素（oxytocin） ④抗利尿素（ADH）', opts:['A.①②', 'B.①④', 'C.②③', 'D.③④'], ans:[0], expl:'腦下垂體前葉分泌：生長素（GH）、促乳素（Prolactin）、促腎上腺皮質素（ACTH）、促甲狀腺素（TSH）、促性腺激素（FSH、LH）等（①②✓）。催產素（Oxytocin）與抗利尿素（ADH）是下視丘製造、經神經軸突運送並儲存於腦下垂體「後葉」釋放，並非前葉分泌（③④✗）。答案①②＝A。記憶：前葉分泌種類多（多為營養、促激素），後葉僅釋放2種（ADH、催產素），實際由下視丘製造。'},
+  {n:93, no:43, subj:'神經系統', q:'陳太太，58歲，近期被診斷罹患阿茲海默症，目前出現情緒不穩、易怒，上街買東西會忘了付錢，常常忘記檢查瓦斯直接上床睡覺，也經常懷疑兒子在家偷錢，根據狀況，目前其處在阿茲海默症那一期？', opts:['A.健忘期早期', 'B.健忘期晚期', 'C.混亂期', 'D.失智期'], ans:[2], expl:'阿茲海默症病程可概分為健忘期（早期記憶減退，尚可代償）、混亂期（工具性日常活動能力IADLs開始退化，如忘記付款、忘記關瓦斯，並出現情緒不穩、猜疑等精神行為症狀）、失智期（基本日常生活能力喪失，需完全依賴他人照顧）。本題病人出現IADL障礙（買東西忘付錢、忘記檢查瓦斯）合併情緒不穩、易怒及被害妄想（懷疑兒子偷錢），符合「混亂期」之表現（C✓，本題答案）。'},
+  {n:94, no:44, subj:'內分泌系統', q:'有關尿崩症病人之臨床表徵，下列何者錯誤？', opts:['A.黏膜乾燥', 'B.眼眶凹陷', 'C.心搏下降', 'D.脈搏呈絲脈'], ans:[2], expl:'尿崩症因大量稀釋性多尿導致嚴重脫水與血容積不足，身體會代償性地「心跳加快（心搏上升）」以維持心輸出量與組織灌流，而非心搏下降，C敘述方向相反，是本題答案（錯誤敘述）。脫水徵象如黏膜乾燥、眼眶凹陷、脈搏呈絲脈（微弱且快速）皆為正確的臨床表徵（A、B、D✓）。'},
+  {n:95, no:45, subj:'內分泌系統', q:'有關糖尿病足部之身體評估可能結果，下列何者錯誤？', opts:['A.足部的外形改變', 'B.皮膚乾燥造成裂隙', 'C.腳趾的震動覺消失', 'D.跟腱肌腱反射+++'], ans:[3], expl:'糖尿病周邊神經病變會導致深腱反射「減弱或消失」，包括跟腱反射，而非反射亢進（+++），D敘述與實際病理生理相反，是本題答案（錯誤敘述）。糖尿病足部常見評估異常包括：足部外形改變（如Charcot關節病變）、自主神經病變導致排汗功能異常使皮膚乾燥產生裂隙（易成為感染入口）、感覺神經病變使震動覺等保護性感覺喪失，皆為正確之糖尿病足部評估異常表現（A、B、C✓）。'},
+  {n:96, no:46, subj:'內分泌系統', q:'有關副甲狀腺機能亢進造成的影響，下列何者錯誤？', opts:['A.促進腸道對鈣質的吸收', 'B.促進維生素D活化', 'C.促進腎小管對鈣的再吸收', 'D.促進骨鈣形成'], ans:[3], expl:'副甲狀腺素（PTH）主要生理作用為調節血鈣：促進腸道對鈣質的吸收（需活化維生素D協同）（A✓）、促進維生素D活化（B✓）、促進腎小管對鈣的再吸收、抑制磷再吸收（C✓）。然而PTH是促進「骨骼中鈣質的釋出（骨質再吸收，bone resorption）」以提高血鈣，而非促進骨鈣形成，方向恰好相反，故D為錯誤敘述，是本題答案（依據Lewis\'s Medical-Surgical Nursing教科書：PTH stimulates bone resorption of calcium, renal tubular reabsorption of calcium, and activation of vitamin D）。副甲狀腺機能亢進長期會導致骨質流失、病理性骨折風險增加。'},
+  {n:97, no:47, subj:'其他', q:'由119救護車送來一位因車禍OHCA（out of hospital cardiac arrest）的病人到急診，下列敘述何者正確？', opts:['A.OHCA指病人到院前宣布死亡', 'B.急診檢傷分類為黑色視為死亡最後處理', 'C.應立即從頭到腳快速評估', 'D.病人應立即復甦急救'], ans:[3], expl:'OHCA病人送達急診應立即給予復甦急救（持續CPR、依ACLS流程處置），把握黃金急救時間，D為正確處置，是本題答案。OHCA是指在醫療院所外（到院前）發生心跳停止，病人送達時通常仍在進行心肺復甦術，並非等同已宣布死亡，A敘述錯誤。黑色檢傷分類屬於大量傷病患檢傷分類（disaster triage）中用於資源有限情境下判定放棄急救的類別，並非常規急診檢傷分類方式，也不適用於此情境，B錯誤。心跳停止病人的處置應立即啟動急救，而非先進行從頭到腳的身體評估，後者屬於病人恢復生命徵象、情況穩定後的次級評估（secondary survey），C敘述順序錯誤。'},
+  {n:98, no:48, subj:'其他', q:'下列何者不是腸病毒71型病人併發重症的前兆？', opts:['A.持續體溫38°C', 'B.持續昏睡', 'C.持續嘔吐', 'D.持續肌躍型抽搐'], ans:[0], expl:'腸病毒71型重症前兆（即所謂腸病毒五大重症前兆）包括：嗜睡、持續嘔吐、肌躍型抽搐（睡眠中或剛入睡時肢體不自主抽動）、呼吸急促或心跳加快、持續高燒不退（通常強調高燒，多在39°C以上）等。單純「持續體溫38°C」屬於較輕度的發燒，未達重症前兆所強調的持續高燒程度，故A不屬於典型重症前兆，是本題答案（不是前兆）。持續昏睡、持續嘔吐、持續肌躍型抽搐皆為明確的腸病毒重症警訊，須立即就醫（B、C、D皆為前兆）。'},
+  {n:99, no:49, subj:'其他', q:'有關成人高品質胸部按壓之敘述，下列何者正確？', opts:['A.施救者雙手交疊，置於病人胸骨上1/3部位', 'B.按壓速率維持在140次/分鐘以上', 'C.垂直用力按壓深度3公分', 'D.每次按壓後等胸部完全回彈才可再按壓'], ans:[3], expl:'高品質CPR胸部按壓原則：成人按壓深度至少5公分（但不超過6公分），並非3公分（C✗）；按壓速率為每分鐘100～120次，並非140次以上（B✗，過快會影響按壓深度與胸部回彈品質）；按壓部位為胸骨「下半部」（約兩乳頭連線中點），並非胸骨上1/3（A✗）；每次按壓後應讓胸廓「完全回彈」，以利心臟充盈、增加下次按壓的心輸出量，才可進行下一次按壓，D為正確敘述，是本題答案。'},
+  {n:100, no:50, subj:'消化系統', q:'有關困難梭狀桿菌相關腹瀉（Clostridium difficile associated diarrhea）之敘述，下列何者錯誤？', opts:['A.困難梭狀桿菌為厭氧性革蘭陽性桿菌，容易在醫療環境中形成孢子體', 'B.易感染年長者或住院病人在長期使用抗生素者', 'C.首選治療藥物為靜脈注射Vancomycin', 'D.腹瀉期間採接觸隔離'], ans:[2], expl:'困難梭狀桿菌相關腹瀉（CDAD）之治療首選藥物為口服Metronidazole（Flagyl），效果不佳或復發時才考慮口服Vancomycin；且Vancomycin治療腸道困難梭狀桿菌感染時必須採「口服」途徑，才能在腸腔內達到足夠濃度發揮局部殺菌作用，靜脈注射Vancomycin無法有效到達腸道，臨床上是用於治療MRSA等全身性感染，並非治療CDAD的給藥方式，故C「首選治療藥物為靜脈注射Vancomycin」在藥物選擇順序與給藥途徑兩方面皆錯誤，是本題答案（依據Lewis\'s Medical-Surgical Nursing教科書：Metronidazole為首選一線治療，其後才考慮Vancomycin）。困難梭狀桿菌為厭氧性革蘭陽性桿菌、會形成孢子體，一般酒精性乾洗手不易將其消滅，需以肥皂勤洗手（A✓）；好發於年長、住院、長期使用廣效抗生素導致腸道菌叢失衡的病人（B✓）；腹瀉期間應採接觸隔離並勤洗手，避免孢子傳播（D✓）。'},
 ];
+
+QS.forEach(q => { q.exam = q.n <= 50 ? '115-1' : '114-2'; });
 
 const SUBJ_ALL = ['神經系統','消化系統','心臟血管','呼吸系統','泌尿系統','內分泌系統','腫瘤血液','骨骼肌肉','感官系統','其他'];
 const ADMIN_PW = 'rexnursing2024';
@@ -2094,10 +2170,12 @@ let answered = {};
 let cntOk = 0, cntBad = 0;
 let selectedSubjs = new Set();
 let currentSubjFilter = 'all';
+let currentExamFilter = '115-1';
 let wrongQs = []; // store wrong questions for retry
 
-function startExam() {
-  qList = [...QS];
+function startExam(examKey) {
+  currentExamFilter = examKey || '115-1';
+  qList = QS.filter(q => q.exam === currentExamFilter);
   currentSubjFilter = 'all';
   // Show quiz area directly
   document.getElementById('quiz-select').style.display = 'none';
@@ -2118,7 +2196,8 @@ function filterSubj(btn, subj) {
   document.querySelectorAll('.sf-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   currentSubjFilter = subj;
-  qList = subj === 'all' ? [...QS] : QS.filter(q => q.subj === subj);
+  const base = QS.filter(q => q.exam === currentExamFilter);
+  qList = subj === 'all' ? base : base.filter(q => q.subj === subj);
   qIdx = 0; answered = {}; cntOk = 0; cntBad = 0;
   document.getElementById('cnt-ok').textContent = 0;
   document.getElementById('cnt-bad').textContent = 0;
@@ -2165,7 +2244,7 @@ function renderQ() {
   const n = qList.length;
   document.getElementById('q-cur').textContent = qIdx+1;
   document.getElementById('prog-bar').style.width = ((qIdx/n)*100)+'%';
-  document.getElementById('q-tag').textContent = q.subj+' · 第'+q.n+'題';
+  document.getElementById('q-tag').textContent = q.subj+' · 第'+(q.no||q.n)+'題';
   document.getElementById('q-text').textContent = q.q;
   document.getElementById('q-feedback').style.display = 'none';
   // dots
@@ -2286,7 +2365,7 @@ function showResult() {
     const q = qList[i];
     if (!q.ans.includes(chosen)) {
       wrongHtml += `<div style="margin-bottom:14px;padding:14px 16px;background:#FAECE7;border-radius:var(--rs)">
-        <div style="font-size:12.5px;font-weight:500;color:#993C1D;margin-bottom:5px">第${q.n}題（${q.subj}）</div>
+        <div style="font-size:12.5px;font-weight:500;color:#993C1D;margin-bottom:5px">第${q.no||q.n}題（${q.subj}）</div>
         <div style="font-size:13px;line-height:1.7;margin-bottom:6px">${q.q}</div>
         <div style="font-size:12px;color:#7f2b10">你的答案：${labels[chosen]}　正確答案：${q.ans.map(x=>labels[x]).join(' 或 ')}</div>
         <div style="font-size:12px;color:#7c3a1e;margin-top:6px;line-height:1.75">${getExpl(q.n)}</div>
@@ -2303,7 +2382,7 @@ function restartQuiz() {
   document.getElementById('cnt-bad').textContent=0;
   document.getElementById('quiz-result').style.display='none';
   document.getElementById('quiz-area').style.display='block';
-  qList = currentSubjFilter==='all' ? [...QS] : QS.filter(q=>q.subj===currentSubjFilter);
+  qList = currentSubjFilter==='all' ? QS.filter(q=>q.exam===currentExamFilter) : QS.filter(q=>q.exam===currentExamFilter && q.subj===currentSubjFilter);
   document.getElementById('q-tot').textContent=qList.length;
   buildDots(); renderQ();
 }
@@ -2347,7 +2426,7 @@ function renderAdminList(mode) {
   c.innerHTML = list.map(q => {
     const cur = getExpl(q.n);
     return `<div class="admin-q-row">
-      <div class="admin-q-num">第 ${q.n} 題｜${q.subj}</div>
+      <div class="admin-q-num">[${q.exam}] 第 ${q.no||q.n} 題｜${q.subj}（n=${q.n}）</div>
       <div class="admin-q-text">${q.q}</div>
       <textarea class="admin-textarea" id="expl-${q.n}" rows="3">${cur}</textarea>
       <div style="display:flex;align-items:center">
@@ -2406,7 +2485,5 @@ function importJSON(event) {
 }
 </script>
 
-<script src="breath-sounds/assets/js/nav-guard.js" defer></script>
-<script src="ekg/assets/js/nav-guard.js" defer></script>
 </body>
 </html>
