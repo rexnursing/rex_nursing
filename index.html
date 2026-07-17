@@ -2461,7 +2461,7 @@ function buildDots() {
   qList.forEach((_, i) => {
     const d = document.createElement('div');
     d.className = 'qdot'; d.id = 'dot'+i; d.textContent = i+1;
-    d.onclick = () => { if(answered[i]!==undefined){qIdx=i;renderQ();} };
+    d.onclick = () => { qIdx=i; renderQ(); };
     c.appendChild(d);
   });
 }
@@ -2477,7 +2477,7 @@ function renderQ() {
   if (!q) return;
   const n = qList.length;
   document.getElementById('q-cur').textContent = qIdx+1;
-  document.getElementById('prog-bar').style.width = ((qIdx/n)*100)+'%';
+  document.getElementById('prog-bar').style.width = ((Object.keys(answered).length/n)*100)+'%';
   document.getElementById('q-tag').textContent = q.subj+' · 第'+(q.no||q.n)+'題';
   document.getElementById('q-text').textContent = q.q;
   document.getElementById('q-feedback').style.display = 'none';
@@ -2513,6 +2513,7 @@ function selectOpt(optIdx) {
   if (answered[qIdx]!==undefined) return;
   const q = qList[qIdx];
   answered[qIdx] = optIdx;
+  document.getElementById('prog-bar').style.width = ((Object.keys(answered).length/qList.length)*100)+'%';
   const isOk = q.ans.includes(optIdx);
   if (isOk) cntOk++; else cntBad++;
   document.getElementById('cnt-ok').textContent = cntOk;
@@ -2552,13 +2553,19 @@ function showFeedback(chosen, counts) {
       <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${pct}%;background:${col}"></div></div>
     </div>`;
   }).join('');
-  const isLast = qIdx===qList.length-1;
-  document.getElementById('next-btn').textContent = isLast ? '查看成績 →' : '下一題 →';
+  const allDone = Object.keys(answered).length >= qList.length;
+  document.getElementById('next-btn').textContent = allDone ? '查看成績 →' : '下一題 →';
   document.getElementById('q-feedback').style.display = 'block';
 }
 function nextQ() {
-  if (qIdx >= qList.length-1) { showResult(); return; }
-  qIdx++;
+  const allDone = Object.keys(answered).length >= qList.length;
+  if (allDone) { showResult(); return; }
+  let next = -1;
+  for (let i = qIdx + 1; i < qList.length; i++) { if (answered[i] === undefined) { next = i; break; } }
+  if (next === -1) {
+    for (let i = 0; i < qList.length; i++) { if (answered[i] === undefined) { next = i; break; } }
+  }
+  qIdx = next !== -1 ? next : Math.min(qIdx + 1, qList.length - 1);
   renderQ();
 }
 function retryWrong() {
