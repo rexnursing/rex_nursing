@@ -3,3 +3,4 @@ Allow: /
 
 Sitemap: https://rexnursing.github.io/rex_nursing/sitemap.xml
 Sitemap: https://rexnursing.github.io/rex_nursing/breath-sounds/sitemap.xml
+Sitemap: https://rexnursing.github.io/rex_nursing/ekg/sitemap.xml
