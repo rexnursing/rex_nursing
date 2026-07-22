@@ -69,66 +69,34 @@
   <p>後面每一種心律不整，都是拿「正常竇性心律」當作對照組去比較哪裡不一樣，所以先看一次基準線：</p>
 
   <div class="figure">
-    <svg viewBox="0 0 600 560" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <path id="beat" d="M0,0 L8,0 Q13,-8 18,0 L28,0 L30,4 L34,-32 L38,16 L42,0 L52,0 Q59,-11 66,0 L76,0"/>
-      </defs>
-
-      <text x="10" y="30" font-size="13" font-weight="700" fill="#085041">① 正常竇性心律</text>
-      <line x1="105" y1="70" x2="590" y2="70" stroke="#eee"/>
-      <use href="#beat" x="115" y="70" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <use href="#beat" x="255" y="70" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <use href="#beat" x="395" y="70" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <text x="115" y="95" font-size="10.5" fill="#6b7280">P-QRS-T 規則出現，間距一致</text>
-
-      <text x="10" y="140" font-size="13" font-weight="700" fill="#085041">② 心房早期收縮 PAC</text>
-      <line x1="105" y1="180" x2="590" y2="180" stroke="#eee"/>
-      <use href="#beat" x="115" y="180" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <use href="#beat" x="255" y="180" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <use href="#beat" x="350" y="180" stroke="#C63C3C" stroke-width="2.2" fill="none" transform="scale(0.85,1)" transform-origin="350 180"/>
-      <use href="#beat" x="480" y="180" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <text x="115" y="205" font-size="10.5" fill="#6b7280">第3拍提早出現、P波形狀不同（紅色），之後有代償性停頓</text>
-
-      <text x="10" y="250" font-size="13" font-weight="700" fill="#085041">③ 心房顫動 AFib</text>
-      <line x1="105" y1="290" x2="590" y2="290" stroke="#eee"/>
-      <path d="M105,290 q6,-5 12,0 t12,0 t12,3 t12,-4 t12,2 t12,-3 t12,0 t12,4 t12,-2" stroke="#C63C3C" stroke-width="1.2" fill="none" opacity="0.7"/>
-      <path d="M234,290 L236,258 L240,300 L244,290" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <path d="M105,290 q6,-5 12,0 t12,0" stroke="#C63C3C" stroke-width="1.2" fill="none" opacity="0.7" transform="translate(280,0)"/>
-      <path d="M300,290 L302,258 L306,300 L310,290" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <path d="M370,290 L372,255 L376,300 L380,290" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <path d="M470,290 L472,260 L476,298 L480,290" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <path d="M540,290 L542,257 L546,300 L550,290" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <path d="M105,290 q4,-4 8,0 4,4 8,0 4,-3 8,0 4,4 8,0 4,-4 8,0 4,3 8,0 4,-4 8,0 4,4 8,0 4,-3 8,0 4,4 8,0 4,-4 8,0 4,3 8,0 4,-4 8,0 4,4 8,0 4,-3 8,0 4,4 8,0 4,-4 8,0 4,3 8,0 4,-4 8,0" stroke="#C63C3C" stroke-width="1" fill="none" opacity="0.55"/>
-      <text x="115" y="315" font-size="10.5" fill="#6b7280">看不到清楚P波，基線細微顫動，QRS間距完全不規則</text>
-
-      <text x="10" y="360" font-size="13" font-weight="700" fill="#085041">④ 心房撲動 AFlutter（2:1傳導）</text>
-      <line x1="105" y1="400" x2="590" y2="400" stroke="#eee"/>
-      <path d="M105,400 L117,380 L129,400 L141,380 L153,400 L165,380 L177,400 L189,380 L201,400 L213,380 L225,400 L237,380 L249,400 L261,380 L273,400 L285,380 L297,400 L309,380 L321,400 L333,380 L345,400 L357,380 L369,400 L381,380 L393,400 L405,380 L417,400 L429,380 L441,400 L453,380 L465,400 L477,380 L489,400 L501,380 L513,400 L525,380 L537,400 L549,380 L561,400 L573,380 L585,400" stroke="#8f2b2b" stroke-width="1.3" fill="none" opacity="0.65"/>
-      <path d="M129,400 L131,365 L135,412 L139,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <path d="M153,400 L155,365 L159,412 L163,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <path d="M249,400 L251,365 L255,412 L259,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <path d="M273,400 L275,365 L279,412 L283,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <path d="M369,400 L371,365 L375,412 L379,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <path d="M393,400 L395,365 L399,412 L403,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <path d="M489,400 L491,365 L495,412 L499,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <path d="M513,400 L515,365 L519,412 L523,400" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <text x="115" y="425" font-size="10.5" fill="#6b7280">規則鋸齒狀撲動波（無等電位基線），每2個撲動波下傳1次QRS</text>
-
-      <text x="10" y="470" font-size="13" font-weight="700" fill="#085041">⑤ SVT（陣發性室上頻脈）</text>
-      <line x1="105" y1="510" x2="590" y2="510" stroke="#eee"/>
-      <use href="#beat" x="115" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="115 510"/>
-      <use href="#beat" x="160" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="160 510"/>
-      <use href="#beat" x="205" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="205 510"/>
-      <use href="#beat" x="250" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="250 510"/>
-      <use href="#beat" x="295" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="295 510"/>
-      <use href="#beat" x="340" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="340 510"/>
-      <use href="#beat" x="385" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="385 510"/>
-      <use href="#beat" x="430" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="430 510"/>
-      <use href="#beat" x="475" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="475 510"/>
-      <use href="#beat" x="520" y="510" stroke="#1D9E75" stroke-width="2.2" fill="none" transform="scale(0.55,1)" transform-origin="520 510"/>
-      <text x="115" y="535" font-size="10.5" fill="#6b7280">窄QRS、規則、速率快（150-220次/分），P波常埋在前一拍T波裡看不到</text>
-    </svg>
-    <div class="figure-cap">圖1：5種心房性節律的示意波形比較（原創繪製，示意形態非真實病人描記）</div>
+    <div class="strip-row">
+      <div class="strip-label">① 正常竇性心律<span class="en">Normal Sinus Rhythm</span></div>
+      <div class="strip-img-wrap"><img src="assets/img/ch4/normal-sinus-rhythm.svg" alt="正常竇性心律"></div>
+      <div class="strip-note">P-QRS-T 規則出現，間距一致，做為後面4種節律的對照基準。</div>
+    </div>
+    <div class="strip-row">
+      <div class="strip-label">② 心房早期收縮<span class="en">PAC</span></div>
+      <div class="strip-img-wrap"><img src="assets/img/ch4/pac.svg" alt="心房早期收縮 PAC"></div>
+      <div class="strip-note">提早出現的心搏、P波形狀與正常不同，之後常有代償性停頓。</div>
+    </div>
+    <div class="strip-row">
+      <div class="strip-label">③ 心房顫動<span class="en">Atrial Fibrillation</span></div>
+      <div class="strip-img-wrap"><img src="assets/img/ch4/afib.svg" alt="心房顫動 AFib"></div>
+      <div class="strip-note">看不到清楚P波，基線細碎顫動，QRS間距完全不規則。</div>
+    </div>
+    <div class="strip-row">
+      <div class="strip-label">④ 心房撲動<span class="en">Atrial Flutter</span></div>
+      <div class="strip-img-wrap"><img src="assets/img/ch4/aflutter.svg" alt="心房撲動 AFlutter"></div>
+      <div class="strip-note">規則鋸齒狀撲動波（無等電位基線），依固定比例下傳心室。</div>
+    </div>
+    <div class="strip-row">
+      <div class="strip-label">⑤ 室上頻脈<span class="en">SVT</span></div>
+      <div class="strip-img-wrap"><img src="assets/img/ch4/svt.svg" alt="陣發性室上頻脈 SVT"></div>
+      <div class="strip-note">窄QRS、規則、速率快，P波常埋在前一拍T波裡看不到。</div>
+    </div>
+    <div class="figure-cap">圖1：5種心房性節律的真實心電圖對照（3秒節律帶）。
+      <span class="fig-credit">Rocuronium Bromide, CC0 1.0, via Wikimedia Commons</span>
+    </div>
   </div>
 
   <h2><span class="num">2</span>竇性心律不整（Sinus Arrhythmias）</h2>

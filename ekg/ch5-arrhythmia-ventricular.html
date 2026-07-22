@@ -69,34 +69,29 @@
   <p>正常訊號會沿著希氏束、左右束支、浦金氏纖維這條「高速公路」傳遞，讓兩側心室幾乎同步去極化，所以QRS又窄又快。但心室性心律不整的訊號起源於心室肌肉本身（不是經由正常傳導系統），電流只能靠心肌細胞一個接一個緩慢傳遞，兩側心室無法同步收縮，因此QRS會<strong>寬大（&gt;0.12秒）且形狀怪異</strong>——這是辨識心室性心律不整最重要的第一眼線索。</p>
 
   <div class="figure">
-    <svg viewBox="0 0 600 460" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <path id="nbeat" d="M0,0 L8,0 Q13,-8 18,0 L28,0 L30,4 L34,-32 L38,16 L42,0 L52,0 Q59,-11 66,0 L76,0"/>
-      </defs>
-
-      <text x="10" y="30" font-size="13" font-weight="700" fill="#085041">① 心室早期收縮 PVC</text>
-      <line x1="105" y1="70" x2="590" y2="70" stroke="#eee"/>
-      <use href="#nbeat" x="115" y="70" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <use href="#nbeat" x="255" y="70" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <path d="M350,70 L360,70 L368,15 L380,110 L392,70 L410,70" stroke="#C63C3C" stroke-width="2.5" fill="none"/>
-      <use href="#nbeat" x="490" y="70" stroke="#1D9E75" stroke-width="2.2" fill="none"/>
-      <text x="115" y="95" font-size="10.5" fill="#6b7280">提早出現、無前置P波、QRS寬大變形，之後有代償性停頓</text>
-
-      <text x="10" y="140" font-size="13" font-weight="700" fill="#085041">② 心室頻脈 VT（單型性）</text>
-      <line x1="105" y1="180" x2="590" y2="180" stroke="#eee"/>
-      <path d="M105,180 L115,180 L123,120 L135,225 L147,180 L165,180 L173,120 L185,225 L197,180 L215,180 L223,120 L235,225 L247,180 L265,180 L273,120 L285,225 L297,180 L315,180 L323,120 L335,225 L347,180 L365,180 L373,120 L385,225 L397,180 L415,180 L423,120 L435,225 L447,180 L465,180 L473,120 L485,225 L497,180 L515,180 L523,120 L535,225 L547,180 L565,180 L573,120 L585,225" stroke="#C63C3C" stroke-width="2.2" fill="none"/>
-      <text x="115" y="245" font-size="10.5" fill="#6b7280">連續3個以上寬QRS、規則、快速（常見150-250次/分），每個QRS形狀相同（單型性）</text>
-
-      <text x="10" y="290" font-size="13" font-weight="700" fill="#085041">③ 心室顫動 VF</text>
-      <line x1="105" y1="330" x2="590" y2="330" stroke="#eee"/>
-      <path d="M105,330 q7,-25 14,-5 t14,-30 t14,20 t14,-15 t14,35 t14,-25 t14,10 t14,-30 t14,15 t14,-10 t14,25 t14,-20 t14,10 t14,-30 t14,20 t14,-15 t14,30 t14,-25 t14,10 t14,-20 t14,15 t14,-10 t14,25 t14,-15 t14,10" stroke="#8f2b2b" stroke-width="2" fill="none"/>
-      <text x="115" y="365" font-size="10.5" fill="#6b7280">完全沒有可辨識的P、QRS、T，振幅與間距混亂無組織——沒有有效心輸出，是CPR/電擊去顫的適應症</text>
-
-      <text x="10" y="410" font-size="13" font-weight="700" fill="#085041">④ 心臟停止 Asystole</text>
-      <line x1="105" y1="440" x2="590" y2="440" stroke="#333" stroke-width="1.8"/>
-      <text x="115" y="425" font-size="10.5" fill="#6b7280">完全平坦的一直線，沒有任何電氣活動——立即CPR，不予電擊</text>
-    </svg>
-    <div class="figure-cap">圖1：4種心室性節律／終末節律的示意波形（原創繪製，示意形態非真實病人描記）</div>
+    <div class="strip-row">
+      <div class="strip-label">① 心室早期收縮<span class="en">PVC</span></div>
+      <div class="strip-img-wrap"><img src="assets/img/ch5/pvc.svg" alt="心室早期收縮 PVC"></div>
+      <div class="strip-note">提早出現、無前置P波、QRS寬大變形，之後常有代償性停頓。</div>
+    </div>
+    <div class="strip-row">
+      <div class="strip-label">② 心室頻脈<span class="en">Ventricular Tachycardia</span></div>
+      <div class="strip-img-wrap"><img src="assets/img/ch5/vt.svg" alt="心室頻脈 VT"></div>
+      <div class="strip-note">連續3個以上寬QRS、規則、快速（常見150-250次/分），單型性。</div>
+    </div>
+    <div class="strip-row">
+      <div class="strip-label">③ 心室顫動<span class="en">Ventricular Fibrillation</span></div>
+      <div class="strip-img-wrap"><img src="assets/img/ch5/vf.svg" alt="心室顫動 VF"></div>
+      <div class="strip-note">完全無可辨識的P、QRS、T，混亂無組織——CPR＋電擊去顫的適應症。</div>
+    </div>
+    <div class="strip-row">
+      <div class="strip-label">④ 心臟停止<span class="en">Asystole</span></div>
+      <div class="strip-img-wrap"><img src="assets/img/ch5/asystole.svg" alt="心臟停止 Asystole"></div>
+      <div class="strip-note">完全平坦的一直線，沒有任何電氣活動——立即CPR，不予電擊。</div>
+    </div>
+    <div class="figure-cap">圖1：4種心室性節律／終末節律對照（3秒節律帶）。
+      <span class="fig-credit">Rocuronium Bromide, CC0 1.0, via Wikimedia Commons</span>
+    </div>
   </div>
 
   <h2><span class="num">2</span>心室早期收縮（PVC）</h2>
