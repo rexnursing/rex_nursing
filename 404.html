@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>找不到這個頁面｜Rex Nursing</title>
+<meta name="robots" content="noindex, follow">
+<link rel="icon" type="image/jpeg" href="images/rex-avatar.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal: #1D9E75;
+    --teal-l: #E1F5EE;
+    --teal-d: #085041;
+    --cream: #FAFAF8;
+    --text: #1a1a1a;
+    --muted: #6b7280;
+    --bd: rgba(0,0,0,0.09);
+  }
+  body {
+    font-family: 'Noto Sans TC', system-ui, sans-serif;
+    background: var(--cream); color: var(--text);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 32px 20px;
+  }
+  .wrap { max-width: 480px; text-align: center; }
+  .code {
+    font-family: 'Noto Serif TC', serif; font-weight: 700;
+    font-size: 64px; color: var(--teal); line-height: 1; margin-bottom: 8px;
+  }
+  h1 { font-family: 'Noto Serif TC', serif; font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+  p { color: var(--muted); font-size: 14.5px; line-height: 1.8; margin-bottom: 28px; }
+  .avatar {
+    width: 64px; height: 64px; border-radius: 50%; object-fit: cover;
+    object-position: top center; border: 2px solid var(--teal-l); margin-bottom: 18px;
+  }
+  .links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  .links a {
+    display: block; text-decoration: none; font-size: 14px; font-weight: 500;
+    color: var(--teal-d); background: #fff; border: 1px solid var(--bd);
+    border-radius: 12px; padding: 14px 10px; transition: border-color .15s, background .15s;
+  }
+  .links a:hover { border-color: var(--teal); background: var(--teal-l); }
+  .home-btn {
+    display: inline-block; background: var(--teal); color: #fff; text-decoration: none;
+    padding: 11px 26px; border-radius: 50px; font-size: 14px; font-weight: 500;
+  }
+  .home-btn:hover { background: var(--teal-d); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <img class="avatar" src="images/rex-avatar.jpg" alt="Rex Nursing">
+    <div class="code">404</div>
+    <h1>這個網址不存在，或已經搬家了</h1>
+    <p>可能是連結打錯了，或內容已經更新過。你可以直接回首頁，或從下面找找看要的內容：</p>
+    <div class="links">
+      <a href="health.html">🩺 健康衛教</a>
+      <a href="breath-sounds/index.html">🫁 呼吸音教學</a>
+      <a href="ekg/index.html">❤️ 心電圖教學</a>
+      <a href="exam-countdown.html">⏰ 考試倒數</a>
+      <a href="study-plan.html">📅 讀書計畫</a>
+      <a href="index.html">📋 護理國考影片</a>
+    </div>
+    <a class="home-btn" href="index.html">回首頁</a>
+  </div>
+</body>
+</html>
