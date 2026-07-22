@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="114.18mm" height="72.232mm" version="1.1" viewBox="0 0 114.18 72.232" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <use transform="translate(55.547 -.00072355)" width="100%" height="100%" xlink:href="#m"/>
+ <use transform="translate(55.547)" width="100%" height="100%" xlink:href="#s"/>
+ <rect id="m" x="3.3339" y="3.3963" width="51.909" height="65.427" fill="#fff" stroke-width="2.1436" style="paint-order:markers fill stroke"/>
+ <g id="s" transform="matrix(2.1436 0 0 2.1436 .28358 .28358)">
+  <use transform="matrix(0,-1.2625,1,0,-5.393,33.821)" width="100%" height="100%" xlink:href="#a"/>
+  <g id="r">
+   <g id="q">
+    <use transform="matrix(0,-1.2625,1,0,-22.345,33.821)" width="100%" height="100%" xlink:href="#l"/>
+    <g id="p">
+     <use transform="matrix(0,-1.2625,1,0,-29.609,33.821)" width="100%" height="100%" xlink:href="#a"/>
+     <use transform="matrix(0,-1.2625,1,0,-28.398,33.821)" width="100%" height="100%" xlink:href="#a"/>
+    </g>
+    <use transform="translate(2.422)" width="100%" height="100%" xlink:href="#p"/>
+   </g>
+   <use transform="translate(6.054)" width="100%" height="100%" xlink:href="#q"/>
+  </g>
+  <use transform="translate(12.108)" width="100%" height="100%" xlink:href="#r"/>
+  <g id="o">
+   <g id="n">
+    <path id="l" d="m25.639 28.611h-24.176" fill="none" stroke="#e6e6e6" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="4.3" stroke-width=".11774" style="paint-order:markers fill stroke"/>
+    <use transform="translate(0,-3.632)" width="100%" height="100%" xlink:href="#k"/>
+    <use transform="translate(0,-6.053)" width="100%" height="100%" xlink:href="#k"/>
+   </g>
+   <use transform="translate(0,-6.054)" width="100%" height="100%" xlink:href="#n"/>
+  </g>
+  <use transform="translate(-.04 -12.101)" width="100%" height="100%" xlink:href="#o"/>
+  <use transform="translate(0,-29.059)" width="100%" height="100%" xlink:href="#a"/>
+  <use transform="translate(0,-24.216)" width="100%" height="100%" xlink:href="#l"/>
+  <use transform="translate(-.001 -27.848)" width="100%" height="100%" xlink:href="#a"/>
+  <g id="k">
+   <path id="a" d="m25.639 31.032h-24.176" fill="none" stroke="#e6e6e6" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="4.3" stroke-width=".047095" style="paint-order:markers fill stroke"/>
+   <use transform="translate(0,-1.211)" width="100%" height="100%" xlink:href="#a"/>
+  </g>
+ </g>
+ <g fill="#000000" font-family="sans-serif" font-size="5.0371px" letter-spacing="0px" stroke-width=".12593" word-spacing="0px">
+  <text x="24.081507" y="61.279305" style="line-height:1.25" xml:space="preserve"><tspan x="24.081507" y="61.279305" font-family="sans-serif" font-weight="bold" stroke-width=".12593">rS</tspan></text>
+  <text x="81.184837" y="49.009335" style="line-height:1.25" xml:space="preserve"><tspan x="81.184837" y="49.009335" font-family="sans-serif" font-weight="bold" stroke-width=".12593">R</tspan></text>
+  <text x="6.1850424" y="9.9061489" style="line-height:1.25" xml:space="preserve"><tspan x="6.1850424" y="9.9061489" font-family="sans-serif" font-weight="bold" stroke-width=".12593">V1</tspan></text>
+  <text x="62.325634" y="9.8315859" style="line-height:1.25" xml:space="preserve"><tspan x="62.325634" y="9.8315859" font-family="sans-serif" font-weight="bold" stroke-width=".12593">V6</tspan></text>
+ </g>
+ <path d="m3.3339 35.674h5.6608c1.4236 0 2.1512 0 3.0785 0.49611 0.9272 0.49611 2.0528 1.4874 3.0039 1.4871 0.95123-3.18e-4 1.728-0.99318 2.4623-1.4882 0.73433-0.49501 1.4288-0.49501 2.1971-0.49501 0.76841 0 1.608 0 2.1254-0.23558 0.51734-0.2356 0.71015-0.70504 0.86963-0.52104 0.15948 0.18392 0.2855 1.0212 1.1241 5.5645 0.83863 4.5433 2.39 12.794 3.5242 14.208s1.8517-4.008 2.3637-8.316c0.51198-4.3079 0.81878-7.505 1.2684-9.1024 0.44962-1.5972 1.0416-1.5972 1.4376-1.5972 0.39597 0 0.59399 0 1.4798-0.57542 0.88579-0.57542 2.456-1.7239 4.3076-3.2106 1.8515-1.4866 3.9814-3.309 5.6797-3.3328 1.6983-0.02379 2.9611 1.7501 3.9475 3.237 0.98649 1.4868 1.6947 2.6835 2.1081 3.2827 0.41336 0.59913 0.54214 0.59913 1.289 0.59913h3.9895" fill="none" stroke="#00f" stroke-linejoin="round" stroke-miterlimit="4.3" stroke-width=".56714" style="paint-order:markers fill stroke"/>
+ <path d="m58.894 35.674h6.5892c1.5054 0 1.9746 0 2.6256-0.48249 0.65088-0.4825 1.4835-1.4469 2.3956-1.4466 0.91222 2.91e-4 1.9045 0.96462 2.6243 1.4468 0.71986 0.48222 1.1668 0.48222 1.8064 0.48215 0.63962-6.4e-5 1.4736-2.14e-4 2.1532-2.14e-4 0.6795 0 1.203 1.5e-4 1.6666-1.131 0.46366-1.1312 0.86738-3.3924 1.1482-5.6161 0.28084-2.2237 0.43867-4.4082 0.58452-5.6243 0.14576-1.2162 0.2793-1.4634 0.40723-1.4912 0.12797-0.02787 0.25038 0.16334 0.39743 0.40389 0.14705 0.24055 0.31818 0.52972 0.49136 0.77919 0.1732 0.24947 0.34815 0.45876 0.4857 0.44751 0.13761-0.01072 0.23802-0.24282 0.39629-0.60226 0.15819-0.35945 0.3748-0.84791 0.52988-1.1977 0.15519-0.34983 0.24833-0.56018 0.3578-0.59175 0.10954-0.03151 0.23521 0.11532 0.472 1.4591 0.2368 1.3439 0.58454 3.8848 0.92253 6.2785 0.33797 2.3937 0.66623 4.6404 1.185 5.7634 0.51871 1.123 1.2278 1.123 1.8439 1.123 0.61609 0 1.1393 0 1.945 0.75419 0.80566 0.75417 1.8943 2.2625 3.3778 3.7902 1.4835 1.5277 3.3613 3.0745 5.0169 3.2021 1.6556 0.12754 3.0897-1.1649 3.8348-2.3324 0.74524-1.1675 0.80505-2.2137 1.1294-3.0966 0.32434-0.88289 0.91125-1.5998 1.467-1.9587 0.5558-0.35883 1.0788-0.35883 2.0824-0.35883h3.9711" fill="none" stroke="#00f" stroke-linejoin="round" stroke-miterlimit="4.3" stroke-width=".56804" style="paint-order:markers fill stroke"/>
+</svg>
