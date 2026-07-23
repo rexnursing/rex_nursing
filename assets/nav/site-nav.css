@@ -35,7 +35,7 @@
    使用 :has() 屬於漸進增強，不支援的瀏覽器只是不會顯示這個提示色，
    不影響任何功能。 */
 .nav-group:has(a.active) > .nav-group-toggle {
-  color: var(--teal);
+  color: var(--teal) !important;
 }
 
 .nav-caret {
