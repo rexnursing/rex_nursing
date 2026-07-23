@@ -140,3 +140,51 @@ textarea,
   -ms-user-select: text !important;
   user-select: text !important;
 }
+
+/* ---- 通用手機版漢堡收合（給 assets/nav/site-nav-collapse.js 使用）----
+   給沒有分組需求、只是連結數不固定的扁平 <nav>（健康衛教類頁面、
+   breath-sounds 子站）用。不影響桌面版外觀；顏色用 var(...) 的 fallback
+   鏈，讓藍色系（健康衛教/breath-sounds）跟主站的青色系都能合理顯示。 */
+.simple-nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--blue, var(--teal, #333));
+  padding: 4px 8px;
+}
+
+@media (max-width: 640px) {
+  nav:not(.nav-r) {
+    position: relative;
+  }
+
+  .simple-nav-toggle {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .simple-nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    background: var(--white, #fff);
+    border: 1px solid var(--bd, rgba(0, 0, 0, .1));
+    border-radius: var(--rs, 8px);
+    padding: 10px 14px;
+    margin-top: 8px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .12);
+    z-index: 200;
+  }
+
+  .simple-nav-links.open {
+    display: flex;
+  }
+}
