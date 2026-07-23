@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>第7章：心肌缺血與心肌梗塞｜EKG 教學專區</title>
-<meta name="description" content="STEMI/NSTEMI判斷、ST段演變、梗塞部位定位、對應性改變。中英對照＋自我測驗。">
+<meta name="description" content="STEMI診斷標準、臨床症狀、ST段演變、T波鑑別、梗塞部位定位、對應性改變、右側心電圖。中英對照＋自我測驗。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -13,11 +13,11 @@
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "心肌缺血與心肌梗塞",
-  "description": "STEMI/NSTEMI判斷、ST段演變、梗塞部位定位、對應性改變。中英對照＋自我測驗。",
+  "description": "STEMI診斷標準、臨床症狀、ST段演變、T波鑑別、梗塞部位定位、對應性改變、右側心電圖。中英對照＋自我測驗。",
   "author": {"@type": "Organization", "name": "Rex Nursing"},
   "publisher": {"@type": "Organization", "name": "Rex Nursing"},
   "datePublished": "2026-07-13",
-  "dateModified": "2026-07-17",
+  "dateModified": "2026-07-23",
   "inLanguage": "zh-TW",
   "isAccessibleForFree": true,
   "isPartOf": {"@type": "Course", "name": "心電圖從零到會判讀 EKG/ECG Interpretation", "url": "https://rexnursing.github.io/rex_nursing/ekg/index.html"},
@@ -50,10 +50,10 @@
     <h1 class="page-title">心肌缺血與心肌梗塞
       <span class="en">Ischemia &amp; Myocardial Infarction</span>
     </h1>
-    <p class="page-desc">心肌梗塞是心電圖臨床應用中最攸關生死的判讀項目。這一章教你ST-T波隨時間演變的規律，以及怎麼從導程組合反推梗塞發生在心臟的哪個部位。</p>
+    <p class="page-desc">心肌梗塞是心電圖臨床應用中最攸關生死的判讀項目。這一章教你STEMI的診斷標準與臨床症狀、ST-T波隨時間演變的規律、怎麼從導程組合反推梗塞部位，以及右側心電圖的判讀時機。</p>
     <div class="meta-row">
-      <span>⏱ 閱讀時間 15 分鐘</span>
-      <span>📝 章節測驗 7 題</span>
+      <span>⏱ 閱讀時間 22 分鐘</span>
+      <span>📝 章節測驗 10 題</span>
       <span>🎯 建議先讀過第 1-3 章</span>
     </div>
   </div>
@@ -65,10 +65,49 @@
 
 <div class="wrap page-pad content">
 
-  <h2><span class="num">1</span>心絞痛 vs 心肌梗塞：可逆 vs 不可逆</h2>
+  <h2><span class="num">1</span>STEMI是什麼：定義與診斷標準</h2>
+  <p>ST段上升心肌梗塞（ST-elevation myocardial infarction, <strong>STEMI</strong>）是心肌梗塞中心電圖表現最典型、也最需要立即辨識並啟動治療的類型。根據「心肌梗塞第四版全球通用定義（Fourth Universal Definition of Myocardial Infarction, 2018）」，符合以下任一條件即可診斷：</p>
+
+  <ul>
+    <li><strong>兩個以上連續（解剖位置相鄰）的導程</strong>，ST段從<strong>J point</strong>量起出現病理性上升：一般導程門檻是<strong>≥1mm</strong>；<strong>V2、V3例外</strong>，因為這兩個導程本身的正常基準就受胸壁解剖影響而較高，門檻依性別與年齡分層——40歲以下男性≥2.5mm、40歲以上男性≥2mm、女性（不分年齡）≥1.5mm。</li>
+    <li>心電圖出現<strong>新發生的左束支傳導阻滯（LBBB）</strong>圖形，且病史與身體檢查表現與心肌梗塞相符（第6章學過LBBB本身就會讓QRS與ST-T改變，這也是為什麼「新發生」是判讀關鍵）。</li>
+  </ul>
+
+  <p><strong>J point</strong>是QRS波結束、ST段開始的交接點，也是量測ST段上升幅度的起始基準線：</p>
+
+  <div class="figure">
+    <svg viewBox="0 0 340 170" xmlns="http://www.w3.org/2000/svg">
+      <g font-family="'Noto Sans TC',sans-serif">
+        <line x1="10" y1="120" x2="330" y2="120" stroke="#ddd" stroke-dasharray="3 3"/>
+        <path d="M10,120 L60,120 L68,112 L76,120 L88,120 L92,140 L98,60 L104,120 L118,110 Q145,102 172,106 Q200,112 215,88 Q230,64 245,90 Q258,112 270,120 L330,120"
+          fill="none" stroke="#C63C3C" stroke-width="2.3"/>
+        <circle cx="118" cy="110" r="3.5" fill="#8f2b2b"/>
+        <line x1="118" y1="120" x2="118" y2="110" stroke="#8f2b2b" stroke-width="1.5"/>
+        <text x="118" y="145" text-anchor="middle" font-size="11" font-weight="700" fill="#8f2b2b">J point</text>
+        <text x="245" y="35" text-anchor="middle" font-size="10.5" fill="#6b7280">ST段從此處</text>
+        <text x="245" y="47" text-anchor="middle" font-size="10.5" fill="#6b7280">量起是否≥1mm</text>
+      </g>
+    </svg>
+    <div class="figure-cap">圖1：J point位置示意（原創繪製）。QRS波結束、ST段開始的交接點，是量測ST段上升幅度的起始基準線。</div>
+  </div>
+
+  <div class="pearl">
+    <div class="pearl-label">💡 臨床小提醒</div>
+    <p>「兩個連續導程」的「連續」是指解剖位置相鄰，不是心電圖紙上排列順序相鄰——例如V3和aVL在紙上位置相鄰，但不屬於彼此的「連續導程」。哪些導程算彼此連續，要對照第5節「定位梗塞部位」的分組（下壁、前壁／前中隔、側壁）來看。</p>
+  </div>
+
+  <h2><span class="num">2</span>臨床症狀：什麼樣的胸痛要提高警覺</h2>
+  <p>心肌梗塞最具代表性的症狀是<strong>胸痛（chest pain）</strong>：範圍通常涵蓋一個拳頭大小或更大（如果病人只指著單一手指頭大小的定點喊痛，較不像典型心肌梗塞的表現），性質常被形容為<strong>胸口有重物壓迫感</strong>，可能<strong>輻射到左肩、左下巴或頸部</strong>。合併症狀可能包括噁心嘔吐、呼吸喘、焦慮不安、頭暈、全身倦怠，但這些屬於較不具特異性的伴隨症狀，仍須以胸痛表現為判讀核心。</p>
+
+  <div class="trap">
+    <div class="trap-label">⚠️ 容易被低估的族群</div>
+    <p>文獻顯示，<strong>糖尿病病人、老年人、女性</strong>發生心肌梗塞時，相對較常<strong>缺乏典型的胸痛表現</strong>（可能僅表現為呼吸喘、極度疲累、噁心、上腹不適等不典型症狀），推測與糖尿病自主神經病變影響痛覺傳導、以及年齡與性別相關的症狀感知差異有關。臨床上遇到這些族群出現不明原因的呼吸喘、意識改變或非典型不適時，需要主動考慮心肌梗塞的可能性，不能只靠「有沒有典型胸痛」來排除診斷。</p>
+  </div>
+
+  <h2><span class="num">3</span>心絞痛 vs 心肌梗塞：可逆 vs 不可逆</h2>
   <p><strong>心絞痛（angina）</strong>是心肌血流暫時性不足，症狀緩解後心肌細胞沒有真正壞死，屬於<strong>可逆</strong>；<strong>心肌梗塞（myocardial infarction, MI）</strong>則是血流中斷到心肌細胞真正壞死，屬於<strong>不可逆</strong>。心電圖上的表現也對應這個邏輯：暫時性缺血可能只看到暫時性的ST-T改變，梗塞則會留下較持久、甚至永久的痕跡（例如病理性Q波）。</p>
 
-  <h2><span class="num">2</span>心肌梗塞的心電圖演變：一個時間軸</h2>
+  <h2><span class="num">4</span>心肌梗塞的心電圖演變：一個時間軸</h2>
   <p>心肌梗塞不是瞬間定格的畫面，而是隨時間演進的一個過程，經典的演變順序是：</p>
 
   <div class="figure">
@@ -103,7 +142,7 @@
         <text x="60" y="168" text-anchor="middle" font-size="9.5" fill="#6b7280">演變期（數天後）＋Q波持續存在</text>
       </g>
     </svg>
-    <div class="figure-cap">圖1：心肌梗塞心電圖隨時間演變的經典順序（原創繪製示意，時間為概略教學參考值，實際個案差異大）</div>
+    <div class="figure-cap">圖2：心肌梗塞心電圖隨時間演變的經典順序（原創繪製示意，時間為概略教學參考值，實際個案差異大）</div>
   </div>
 
   <table class="term-table">
@@ -115,14 +154,14 @@
 
   <div class="figure">
     <img src="assets/img/ch7/mi-pattern.svg" alt="心肌梗塞典型心電圖圖形" class="fig-img" style="max-width:480px">
-    <div class="figure-cap">圖1b：心肌梗塞典型心電圖圖形（多導程）。
+    <div class="figure-cap">圖2b：心肌梗塞典型心電圖圖形（多導程）。
       <span class="fig-credit">Madhero88, CC BY-SA 3.0, via Wikimedia Commons</span>
     </div>
   </div>
 
   <div class="figure">
     <img src="assets/img/ch7/mi-real-case-posterior.jpg" alt="真實個案：後壁心肌梗塞超急性期12導程心電圖" class="fig-img">
-    <div class="figure-cap">圖1c：真實病例 — 60歲女性，胸痛3小時，後壁心肌梗塞超急性期（V1-V3可見對應性改變的鏡像高R波、高聳T波）。
+    <div class="figure-cap">圖2c：真實病例 — 60歲女性，胸痛3小時，後壁心肌梗塞超急性期（V1-V3可見對應性改變的鏡像高R波、高聳T波）。
       <span class="fig-credit">Michael Rosengarten, CardioNetworks ECGpedia, CC BY-SA 3.0, via Wikimedia Commons</span>
     </div>
   </div>
@@ -132,7 +171,29 @@
     <p>「時間就是心肌（Time is muscle）」——ST段上升的階段是搶救心肌、避免壞死擴大的黃金時間，這也是為什麼STEMI病人需要立即啟動心導管或溶栓治療的原因。反過來說，如果心電圖只看到病理性Q波、沒有ST上升，通常代表已經是<strong>陳舊性（過去發生過)</strong>的心肌梗塞，處置的急迫性和方向會不同。</p>
   </div>
 
-  <h2><span class="num">3</span>定位梗塞部位：導程組合反推血管</h2>
+  <h3>超急性T波 vs 高血鉀高尖T波：形狀怎麼分</h3>
+  <p>上面圖2②的超急性T波，跟第8章會學到的高血鉀高尖T波，兩者都可能表現為明顯高聳的T波，臨床上容易搞混，但形狀邏輯不同：<strong>缺血性超急性T波底部較寬、形狀對稱圓鈍；高血鉀的T波底部較窄、尖銳，呈現「帳篷狀（tented）」</strong>。</p>
+
+  <div class="figure">
+    <img src="assets/img/ch7/hyperacute-t-dewinter.svg" alt="De Winter's T wave pattern：上斜型ST壓低合併高聳對稱T波" class="fig-img" style="max-width:280px">
+    <div class="figure-cap">圖2d：De Winter's T wave pattern——前胸導程出現上斜型ST壓低（upsloping ST depression）合併高聳、對稱、寬基的T波，是一種被視為STEMI等位圖形（STEMI-equivalent）的特殊型態，常提示左前降支（LAD）近端阻塞，需要跟STEMI一樣立即處置。這張圖的T波形狀（寬基、對稱）可以拿來跟下方高血鉀的窄基尖銳T波做對照。
+      <span class="fig-credit">Bron766, CC BY-SA 3.0, via Wikimedia Commons</span>
+    </div>
+  </div>
+
+  <table class="term-table">
+    <tr><th>特徵</th><th>缺血性超急性T波</th><th>高血鉀高尖T波（第8章）</th></tr>
+    <tr><td>底部寬度</td><td>較寬</td><td>較窄</td></tr>
+    <tr><td>形狀</td><td>對稱、圓鈍，不呈尖銳帳篷狀</td><td>對稱、尖銳，呈「帳篷狀（tented）」</td></tr>
+    <tr><td>常伴隨的其他變化</td><td>隨時間演變出現ST上升（STEMI）；De Winter's pattern則同時合併上斜型ST壓低</td><td>P波變平、QRS增寬，嚴重時出現正弦波型態</td></tr>
+  </table>
+
+  <div class="pearl">
+    <div class="pearl-label">💡 臨床小提醒</div>
+    <p>把這裡的缺血性超急性T波（寬基、圓鈍）跟第8章高血鉀真實心電圖（窄基、尖銳帳篷狀）放在一起比較，是很好的複習練習——兩者都會讓T波「變高」，但形狀邏輯不同，鑑別關鍵在「底部寬窄」與「尖不尖」，不是單純「高不高」。De Winter's pattern則是額外一個重點：<strong>它本身沒有ST上升，臨床上卻等同於STEMI需要立即處置</strong>，是心電圖判讀上一個重要的陷阱。</p>
+  </div>
+
+  <h2><span class="num">5</span>定位梗塞部位：導程組合反推血管</h2>
   <p>不同導程對應心臟不同的解剖區域，出現ST上升的導程組合，可以反推是哪一條冠狀動脈阻塞：</p>
 
   <table class="term-table">
@@ -142,10 +203,29 @@
     <tr><td>側壁 Lateral</td><td>I、aVL、V5、V6</td><td>左迴旋支（LCx）</td></tr>
   </table>
 
-  <h2><span class="num">4</span>對應性改變（Reciprocal Changes）：反方向的線索</h2>
+  <h2><span class="num">6</span>對應性改變（Reciprocal Changes）：反方向的線索</h2>
   <p>當某個區域出現ST上升，<strong>電氣方向相反的導程</strong>常會同時出現<strong>ST下降</strong>，這稱為對應性改變。例如下壁梗塞（II、III、aVF ST上升）時，常在 aVL 看到對應性ST下降。這不是另一個獨立的問題，而是同一個電氣事件從相反角度看的鏡像結果——出現對應性改變，反而是<strong>支持真正心肌梗塞診斷</strong>的有力證據（相對於其他會造成ST上升的良性原因）。</p>
 
-  <h2><span class="num">5</span>NSTEMI：沒有ST上升，不代表沒事</h2>
+  <p>後壁心肌梗塞（posterior MI）是對應性改變概念的一個經典應用：後壁沒有直接對應的標準12導程，但前胸導程V1-V3的電氣方向剛好與後壁相反，所以後壁梗塞的ST上升，會在V1-V3以「鏡像」方式表現成<strong>ST下降合併R波變高、T波直立高聳</strong>（本章圖2c的真實個案就是這個表現）。如果想要直接看到後壁的「正面」訊號、而不是鏡像，可以加做<strong>後壁導程V7-V9</strong>（貼在背部對應後壁的位置），直接觀察是否有ST上升，是確認後壁梗塞的方法之一。</p>
+
+  <h2><span class="num">7</span>右側心電圖：懷疑右心室波及時</h2>
+  <p>下壁梗塞（II、III、aVF ST上升）大多由右冠狀動脈（RCA）阻塞造成，而RCA同時供應右心室——所以看到下壁梗塞，臨床上要進一步想到：<strong>右心室是不是也被波及了？</strong>這時候需要加做<strong>右側心電圖（right-sided ECG）</strong>。</p>
+
+  <p>貼法：把胸導程電極以胸骨為中線、鏡像貼到右側胸壁（V1、V2位置習慣上不變，V3-V6改貼到右側對應位置；臨床上也常簡化為只加貼<strong>V4R</strong>一個導程，因為判讀重點主要看右側V4-V6這幾個導程有沒有ST上升）。</p>
+
+  <div class="figure">
+    <img src="assets/img/ch7/right-sided-ecg-real.jpg" alt="真實心電圖記錄：右側心電圖用於評估右心室波及" class="fig-img">
+    <div class="figure-cap">圖3：真實心電圖記錄範例——同一份記錄含兩組12導程波形，分別為標準左側12導程、與電極鏡像貼到右側胸壁後記錄的12導程。這類右側記錄可用於評估下壁梗塞是否合併右心室波及。
+      <span class="fig-credit">Michael Rosengarten / CardioNetworks ECGpedia, CC BY-SA 3.0, via Wikimedia Commons</span>
+    </div>
+  </div>
+
+  <div class="trap">
+    <div class="trap-label">⚠️ 容易搞混的地方</div>
+    <p>右側心電圖的判讀重點是<strong>右側導程（尤其V4R）有沒有出現ST上升</strong>，不是看標準左側12導程哪裡有變化。另外要注意：多數心電圖機沒有「右側模式」，貼右側電極後機器畫面仍會顯示成標準的V1-V6標籤，判讀時要自己記得這其實對應V1R-V6R，不是真正的左側V1-V6。</p>
+  </div>
+
+  <h2><span class="num">8</span>NSTEMI：沒有ST上升，不代表沒事</h2>
   <p><strong>非ST段上升心肌梗塞（NSTEMI）</strong>心電圖上可能只看到ST下降或T波倒置，沒有達到STEMI的ST上升標準，但透過血液中的心肌損傷指標（如troponin）仍可確診真正發生了心肌壞死。臨床處置的急迫程度雖與STEMI不同，但<strong>NSTEMI依然是需要積極處理的心肌梗塞，不是「比較不嚴重可以放著」的意思</strong>，只是心電圖表現不同，需要搭配抽血數據綜合判斷。</p>
 
   <div class="trap">
@@ -156,10 +236,13 @@
   <div class="summary-box">
     <h3>📌 本章重點回顧</h3>
     <ul>
+      <li>STEMI診斷：兩個以上連續導程ST上升≥1mm（V2/V3依性別年齡分層2.5/2/1.5mm），或新發生LBBB＋相符病史。</li>
+      <li>典型胸痛：拳頭大小範圍、壓迫感、可輻射左肩／下巴；糖尿病、老年人、女性較常表現不典型，需提高警覺。</li>
       <li>心絞痛可逆，心肌梗塞不可逆；心電圖表現也對應這個時間演變過程。</li>
-      <li>經典演變順序：超急性T波高聳 → ST段上升 → Q波形成 → T波倒置。</li>
+      <li>經典演變順序：超急性T波高聳 → ST段上升 → Q波形成 → T波倒置；超急性T波（寬基圓鈍）與高血鉀T波（窄基尖銳）形狀邏輯不同。</li>
       <li>下壁看II/III/aVF、前壁看V1-V4、側壁看I/aVL/V5-V6，可反推阻塞血管。</li>
-      <li>對應性ST下降是支持真正心肌梗塞診斷的重要證據。</li>
+      <li>對應性ST下降是支持真正心肌梗塞診斷的重要證據；後壁梗塞可加做V7-V9確認。</li>
+      <li>下壁梗塞要考慮加做右側心電圖（尤其V4R），評估是否合併右心室波及。</li>
       <li>NSTEMI沒有ST上升，但仍是需要積極處理的心肌梗塞，需搭配抽血數據判斷。</li>
       <li>Strain pattern與LBBB都會增加心肌梗塞心電圖判讀的難度。</li>
     </ul>
@@ -170,6 +253,8 @@
     <ol>
       <li>Thaler MS. <em>The Only EKG Book You'll Ever Need</em>, 10th ed. Wolters Kluwer; 2023. Chapter 6: Myocardial Ischemia and Infarction.</li>
       <li>Meloni S, Mastenbjörk M. <em>EKG/ECG Interpretation</em>, 2nd ed. Medical Creations; 2021. Chapter 5: ECG Diagnosis (Anterior/Lateral/Posterior STEMI, Sgarbossa Criteria entries).</li>
+      <li>Thygesen K, Alpert JS, Jaffe AS, et al. Fourth Universal Definition of Myocardial Infarction (2018). <em>Circulation</em>. 2018;138(20):e618-e651.</li>
+      <li>Khan IA, Karim HMR, Panda CK, Ahmed G, Nayak S. Atypical Presentations of Myocardial Infarction: A Systematic Review of Case Reports. <em>Cureus</em>. 2023;15(2):e35492.</li>
     </ol>
   </div>
 
@@ -300,6 +385,54 @@ const QUESTIONS = [
       1: "跟P波無關，兩者的鑑別重點在ST-T波與QRS電壓。",
       2: "Strain pattern是心室肥厚的次發性改變，發生在心室，確實容易與心室缺血變化混淆，這是需要注意的鑑別重點。",
       3: "Strain pattern常伴隨明顯的肥厚電壓標準（如Sokolow-Lyon），這本身就是重要的鑑別線索之一，並非無法用電壓區分。"
+    }
+  },
+  {
+    q: "【多部位判讀練習】一位病人心電圖顯示：II、III、aVF無明顯異常；I、aVL、V5、V6有輕微ST上升；V1-V4有明顯ST上升。最可能的判讀是？",
+    opts: [
+      "下壁心肌梗塞合併右心室波及",
+      "前壁（前中隔）心肌梗塞，可能合併輕微側壁波及",
+      "單純側壁心肌梗塞",
+      "此心電圖完全正常，無需處理"
+    ],
+    correct: 1,
+    exp: {
+      0: "下壁導程（II、III、aVF）並無明顯異常，不支持下壁梗塞的判讀。",
+      1: "正解。V1-V4明顯ST上升是前壁／前中隔梗塞（LAD阻塞）的典型表現；側壁導程（I、aVL、V5、V6）只有輕微上升，提示可能有輕微的側壁波及，但主要病灶仍在前壁。",
+      2: "側壁導程只是輕微變化，真正明顯的ST上升在V1-V4（前壁），不是以側壁為主。",
+      3: "V1-V4的明顯ST上升是重要的異常表現，不能判讀為正常心電圖。"
+    }
+  },
+  {
+    q: "【多部位判讀練習】一位病人心電圖顯示：II、III、aVF ST上升；I、aVL、V5、V6也有ST上升；V1-V4則出現ST下降。這個組合最可能代表？",
+    opts: [
+      "下壁與側壁心肌梗塞，合併後壁波及（V1-V4的ST下降是對應性改變／後壁鏡像表現）",
+      "前壁心肌梗塞合併正常對應性下壁變化",
+      "V1-V4的ST下降代表這個區域完全沒有缺血",
+      "這是心電圖電極貼片脫落造成的假影，沒有臨床意義"
+    ],
+    correct: 0,
+    exp: {
+      0: "正解。下壁（II、III、aVF）與側壁（I、aVL、V5、V6）同時ST上升，代表下壁＋側壁梗塞；V1-V4的ST下降在這個情境下要考慮是後壁梗塞的對應性（鏡像）表現，建議加做V7-V9確認。",
+      1: "前壁梗塞的典型表現是V1-V4「ST上升」，這裡V1-V4是ST下降，不符合前壁梗塞的模式。",
+      2: "V1-V4的ST下降在下壁＋側壁上升的背景下，反而要優先考慮是後壁梗塞的對應性改變，不能解讀為「沒有缺血」。",
+      3: "多導程一致出現、且符合已知解剖學邏輯（下壁＋側壁＋後壁鏡像）的ST變化型態，不是單純的貼片假影。"
+    }
+  },
+  {
+    q: "【多部位判讀練習】心電圖顯示單純II、III、aVF ST上升，其餘導程無明顯異常。除了確認下壁心肌梗塞之外，臨床上還應該做什麼？",
+    opts: [
+      "不需要其他檢查，下壁梗塞的判讀已經完成",
+      "加做右側心電圖，評估是否合併右心室波及",
+      "改成只看aVR導程就好",
+      "認定病人不可能有心肌梗塞"
+    ],
+    correct: 1,
+    exp: {
+      0: "下壁梗塞多由右冠狀動脈（RCA）阻塞造成，而RCA同時供應右心室，臨床上應進一步評估是否合併右心室波及，不是判讀完成就結束。",
+      1: "正解。下壁梗塞時，因為RCA同時供應右心室，需要加做右側心電圖（尤其觀察V4R）評估是否合併右心室梗塞，這會影響後續處置考量。",
+      2: "aVR單獨上升有其特殊意義（如提示左主幹病變），但不能取代下壁梗塞後評估右心室波及的右側心電圖檢查。",
+      3: "II、III、aVF明顯的ST上升就是心肌梗塞的診斷依據，不能認定病人沒有心肌梗塞。"
     }
   }
 ];
