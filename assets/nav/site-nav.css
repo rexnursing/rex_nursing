@@ -1,0 +1,142 @@
+/* assets/nav/site-nav.css
+   全站共用導覽列（分組下拉選單）樣式，搭配 assets/nav/site-core.js 動態產生的
+   DOM 結構使用。變數（--teal / --teal-l / --teal-d / --muted / --bd / --white /
+   --rs）沿用 index.html 既有 :root 定義，故此檔案不重複定義這些變數。
+   如需調整分組內容，請改 site-core.js 的 GROUPS 設定，不要在這裡硬改文字。
+*/
+
+.nav-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.nav-group-toggle {
+  font-family: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 15px;
+  white-space: nowrap;
+  padding: 4px 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color .2s;
+}
+
+.nav-group-toggle:hover,
+.nav-group.open .nav-group-toggle {
+  color: var(--teal);
+}
+
+/* 目前分組內有連結被標記為使用中頁面時，群組標題也一併提示顏色。
+   使用 :has() 屬於漸進增強，不支援的瀏覽器只是不會顯示這個提示色，
+   不影響任何功能。 */
+.nav-group:has(a.active) > .nav-group-toggle {
+  color: var(--teal);
+}
+
+.nav-caret {
+  font-size: 11px;
+  transition: transform .18s;
+  display: inline-block;
+}
+
+.nav-group.open .nav-caret {
+  transform: rotate(180deg);
+}
+
+/* 桌面版下拉面板 */
+.nav-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 168px;
+  background: var(--white);
+  border: 1px solid var(--bd);
+  border-radius: var(--rs);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .12);
+  padding: 6px;
+  margin-top: 10px;
+  z-index: 200;
+}
+
+.nav-group.open .nav-dropdown {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-dropdown a {
+  padding: 8px 12px !important;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.nav-dropdown a:hover {
+  background: var(--teal-l);
+}
+
+/* 手機版（沿用既有 640px 斷點）：下拉面板改成直向展開的區塊，
+   而不是浮動面板；點擊分組標題只展開/收合自己底下的項目。 */
+@media (max-width: 640px) {
+  .nav-group {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .nav-group-toggle {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 16px;
+    padding: 10px 4px;
+  }
+
+  .nav-dropdown {
+    position: static;
+    transform: none;
+    min-width: 0;
+    width: 100%;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    padding: 0 0 4px 14px;
+    margin-top: 0;
+  }
+
+  .nav-group.open .nav-dropdown {
+    display: flex;
+  }
+
+  .nav-dropdown a {
+    font-size: 15px !important;
+    padding: 8px 4px !important;
+    color: var(--muted);
+  }
+}
+
+/* ---- 基本防複製 ----
+   停用文字選取（表單欄位與可編輯區塊例外，避免影響任何未來可能的輸入功能）。
+   右鍵選單停用由 site-core.js 的 contextmenu 事件處理。
+   提醒：這只是基本防護，無法阻擋開發者工具（F12）、檢視原始碼、或瀏覽器
+   的「閱讀模式」，只能提高一般使用者隨手複製貼上的難度。 */
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+input,
+textarea,
+[contenteditable="true"],
+[contenteditable=""] {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
