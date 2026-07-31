@@ -4271,3 +4271,20 @@ QS.push.apply(QS, QS_BASICMED_114_3);
 if(typeof EXAM_COURSE!=="undefined"){EXAM_COURSE["basicmed-114-3"]="basicmed";}window.EXAM_SESSIONS=window.EXAM_SESSIONS||{};
 window.EXAM_SESSIONS.basicmed=window.EXAM_SESSIONS.basicmed||[];
 EXAM_SESSIONS.basicmed.push({code:"basicmed-114-3",title:"114年第三次",subtitle:"基礎醫學（解剖生理病理藥理微生物免疫）",date:"2025年11月",qcount:50,isNewest:false,tags:[{emoji:"🦠",label:"微生物免疫"},{emoji:"⚡",label:"生理學"},{emoji:"💊",label:"藥理學"},{emoji:"🔬",label:"病理學"}],overflow:1});
+
+(function(){
+  function sortKey(code){
+    var m = /-(\d+)-(\d+)$/.exec(code);
+    if(!m) return [0,0];
+    return [parseInt(m[1],10), parseInt(m[2],10)];
+  }
+  ["medsurg","psych","basic","basicmed","obpeds"].forEach(function(c){
+    if(window.EXAM_SESSIONS && EXAM_SESSIONS[c]){
+      EXAM_SESSIONS[c].sort(function(a,b){
+        var ka = sortKey(a.code), kb = sortKey(b.code);
+        if(ka[0] !== kb[0]) return kb[0]-ka[0];
+        return kb[1]-ka[1];
+      });
+    }
+  });
+})();
