@@ -392,8 +392,15 @@ function scrollCurrentDotIntoView() {
   if (!qdots) return;
   const cur =
     qdots.querySelector(".qdot.cur") || qdots.children[window.qIdx || 0];
-  if (cur && cur.scrollIntoView) {
-    cur.scrollIntoView({ inline: "center", block: "nearest" });
+  if (!cur) return;
+  // 用 offsetLeft 自己算出「讓目前題號置中」需要的捲動位置，
+  // 不用 scrollIntoView——它在某些瀏覽器/情境下對巢狀捲動容器的支援不一致。
+  const target = cur.offsetLeft - qdots.clientWidth / 2 + cur.offsetWidth / 2;
+  const left = Math.max(0, target);
+  if (qdots.scrollTo) {
+    qdots.scrollTo({ left: left, behavior: "smooth" });
+  } else {
+    qdots.scrollLeft = left;
   }
 }
 
