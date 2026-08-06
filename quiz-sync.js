@@ -384,7 +384,13 @@ function enhanceQDots() {
   qdots.style.overflowY = "hidden";
   qdots.style.webkitOverflowScrolling = "touch";
   qdots.style.paddingBottom = "6px";
-  qdots.style.scrollBehavior = "smooth";
+  // 注意：這裡故意不設成 "smooth"。scrollCurrentDotIntoView() 是用直接指定
+  // scrollLeft 的方式做「立即定位」，但瀏覽器對 scrollLeft/scrollTop 的
+  // setter 也會套用 CSS scroll-behavior:smooth（不是只有 scrollTo() 才會），
+  // 如果這裡設成 smooth，會讓原本想要「立即生效」的定位變成一段動畫，
+  // 動畫還沒跑完就被下一次 renderQ() 蓋掉，導致目前題號其實沒有真的捲到
+  // 看得見的位置。明確設成 "auto" 確保是立即捲動。
+  qdots.style.scrollBehavior = "auto";
 }
 
 function scrollCurrentDotIntoView() {
