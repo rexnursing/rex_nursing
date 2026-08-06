@@ -170,9 +170,56 @@ function recordAnswer(n, idx) {
   if (currentUser) pushToCloud();
 }
 
+function toggleFlag(n) {
+  if (n === undefined || n === null) return;
+  if (myFlagged[n]) {
+    delete myFlagged[n];
+  } else {
+    myFlagged[n] = true;
+  }
+  saveLocal();
+  if (currentUser) pushToCloud();
+}
+
+// ---------------------------------------------------------------------------
+// ⭐ 疑難標記按鈕：注入到題目標籤（q-tag）旁邊，狀態跟著目前題目走。
+// q-tag 這個節點本身是既有程式碼重複使用、只改 textContent，不會被整個換掉，
+// 所以標記按鈕只要注入一次，之後每次 renderQ() 只需要更新它的顯示狀態即可。
+// ---------------------------------------------------------------------------
+
+function ensureFlagButton() {
+  let btn = document.getElementById("flag-btn");
+  if (btn) return btn;
+  const tagEl = document.getElementById("q-tag");
+  if (!tagEl || !tagEl.parentElement) return null;
+  btn = document.createElement("button");
+  btn.id = "flag-btn";
+  btn.type = "button";
+  btn.style.cssText =
+    "margin-left:8px;border:none;background:none;cursor:pointer;font-size:16px;vertical-align:middle;line-height:1;padding:0";
+  btn.onclick = function () {
+    const q = window.qList && window.qList[window.qIdx];
+    if (!q) return;
+    toggleFlag(q.n);
+    updateFlagButton();
+  };
+  tagEl.parentElement.insertBefore(btn, tagEl.nextSibling);
+  return btn;
+}
+
+function updateFlagButton() {
+  const btn = ensureFlagButton();
+  if (!btn) return;
+  const q = window.qList && window.qList[window.qIdx];
+  const flagged = !!(q && myFlagged[q.n]);
+  btn.textContent = flagged ? "⭐" : "☆";
+  btn.title = flagged ? "取消疑難標記" : "標記為疑難題目，方便之後複習";
+}
+
 // ---------------------------------------------------------------------------
 // 掛勾層：在不改動 index.html 既有函式本體的前提下，
-// 把「記錄作答」「還原進度」接到既有的 selectOpt / startExam / filterSubj / beginQuiz 上。
+// 把「記錄作答」「還原進度」「疑難標記」接到既有的
+// selectOpt / startExam / filterSubj / beginQuiz / renderQ 上。
 // ---------------------------------------------------------------------------
 
 let hooksInstalled = false;
@@ -215,6 +262,12 @@ function initQuizHooks() {
   window.beginQuiz = function () {
     origBeginQuiz();
     afterQuizListLoaded();
+  };
+
+  const origRenderQ = window.renderQ;
+  window.renderQ = function () {
+    origRenderQ();
+    updateFlagButton();
   };
 }
 
