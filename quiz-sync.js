@@ -159,8 +159,10 @@ async function pullAndMergeOnLogin(user) {
     await pushToCloud();
   }
 
-  // 合併完成後，如果使用者正停留在某份考卷畫面，重新套用一次還原邏輯
+  // 合併完成後，如果使用者正停留在某份考卷畫面，重新套用一次還原邏輯；
+  // 錯題本／疑難標記的題數也可能因為合併雲端資料而改變，一併更新。
   afterQuizListLoaded(true);
+  updateReviewBarCounts();
 }
 
 function recordAnswer(n, idx) {
@@ -168,6 +170,7 @@ function recordAnswer(n, idx) {
   myAnswers[n] = idx;
   saveLocal();
   if (currentUser) pushToCloud();
+  updateReviewBarCounts();
 }
 
 function toggleFlag(n) {
@@ -179,6 +182,7 @@ function toggleFlag(n) {
   }
   saveLocal();
   if (currentUser) pushToCloud();
+  updateReviewBarCounts();
 }
 
 // ---------------------------------------------------------------------------
@@ -217,9 +221,111 @@ function updateFlagButton() {
 }
 
 // ---------------------------------------------------------------------------
+// 📕 永久錯題本 ／ ⭐ 疑難標記複習清單
+//
+// 兩份清單都是「即時從 myAnswers / myFlagged 重新篩出 window.QS」算出來的，
+// 不另外維護一份獨立資料——好處是：錯題本裡的題目只要哪天答對了，
+// myAnswers[n] 會被更新成正確選項，下次重新打開錯題本時，
+// 這一題自然就不在篩選結果裡了（等於自動移出），不用額外寫「移除」的邏輯。
+//
+// 這兩個複習清單借用既有的 beginQuiz()／renderQ()／selectOpt()／nextQ()／
+// showResult() 等函式來呈現（qList 換成這裡組出來的題目陣列即可），
+// 但 beginQuiz() 原本假設是從「已選好考卷」畫面（quiz-select）進來，
+// 不會主動隱藏最上層的科目選擇畫面（course-select），也不會處理
+// 科目篩選列（subj-filter-bar）——這兩件事情原本的程式碼裡沒有對應
+// 「跨考卷複習清單」的情境，所以由這裡自己補上，避免畫面同時疊在一起、
+// 或是「換考卷」「再做一次」等按鈕跑回去用舊的單一考卷邏輯覆蓋掉複習清單。
+// ---------------------------------------------------------------------------
+
+function getWrongQuestions() {
+  if (!window.QS) return [];
+  return window.QS.filter(function (q) {
+    const a = myAnswers[q.n];
+    return a !== undefined && !q.ans.includes(a);
+  });
+}
+
+function getFlaggedQuestions() {
+  if (!window.QS) return [];
+  return window.QS.filter(function (q) {
+    return !!myFlagged[q.n];
+  });
+}
+
+let inReviewMode = false;
+let currentReviewGetter = null;
+
+function startReviewList(getter, emptyMsg, title) {
+  const questions = getter();
+  if (!questions.length) {
+    alert(emptyMsg);
+    return;
+  }
+  inReviewMode = true;
+  currentReviewGetter = getter;
+  window.qList = questions;
+  document.getElementById("course-select").style.display = "none";
+  document.getElementById("quiz-select").style.display = "none";
+  document.getElementById("subj-filter-bar").innerHTML =
+    '<div style="font-size:13.5px;font-weight:500">' +
+    title +
+    ' <span style="font-weight:400;color:var(--muted)">共 ' +
+    questions.length +
+    ' 題</span></div>' +
+    '<button onclick="window.quizSync.exitReview()" style="margin-left:auto;padding:5px 12px;border-radius:20px;border:1px solid var(--bd);background:0 0;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit">← 返回</button>';
+  suppressResumeCheck = true;
+  window.beginQuiz();
+}
+
+function exitReview() {
+  inReviewMode = false;
+  currentReviewGetter = null;
+  document.getElementById("quiz-result").style.display = "none";
+  document.getElementById("quiz-area").style.display = "none";
+  document.getElementById("quiz-select").style.display = "none";
+  document.getElementById("course-select").style.display = "block";
+  updateReviewBarCounts();
+}
+
+function ensureReviewBar() {
+  if (document.getElementById("review-bar")) return;
+  const container = document.getElementById("course-select");
+  if (!container) {
+    setTimeout(ensureReviewBar, 300);
+    return;
+  }
+  const bar = document.createElement("div");
+  bar.id = "review-bar";
+  bar.style.cssText = "display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap";
+  bar.innerHTML =
+    '<button id="review-wrong-btn" style="display:inline-flex;align-items:center;gap:7px;background:var(--white);border:1.5px solid var(--bd);border-radius:50px;padding:9px 18px;font-size:13.5px;font-weight:500;cursor:pointer;font-family:inherit;color:var(--text)">📕 錯題本 <span id="review-wrong-count" style="background:#faece7;color:#993c1d;border-radius:20px;padding:1px 9px;font-size:12px;font-weight:600">0</span></button>' +
+    '<button id="review-flagged-btn" style="display:inline-flex;align-items:center;gap:7px;background:var(--white);border:1.5px solid var(--bd);border-radius:50px;padding:9px 18px;font-size:13.5px;font-weight:500;cursor:pointer;font-family:inherit;color:var(--text)">⭐ 疑難標記 <span id="review-flagged-count" style="background:var(--teal-l);color:var(--teal-d);border-radius:20px;padding:1px 9px;font-size:12px;font-weight:600">0</span></button>';
+  container.insertBefore(bar, container.firstChild);
+  document.getElementById("review-wrong-btn").onclick = function () {
+    startReviewList(getWrongQuestions, "目前沒有錯題，繼續保持！", "📕 錯題本複習");
+  };
+  document.getElementById("review-flagged-btn").onclick = function () {
+    startReviewList(
+      getFlaggedQuestions,
+      "目前沒有標記疑難題目。",
+      "⭐ 疑難標記複習"
+    );
+  };
+  updateReviewBarCounts();
+}
+
+function updateReviewBarCounts() {
+  const wrongEl = document.getElementById("review-wrong-count");
+  const flaggedEl = document.getElementById("review-flagged-count");
+  if (wrongEl) wrongEl.textContent = getWrongQuestions().length;
+  if (flaggedEl) flaggedEl.textContent = getFlaggedQuestions().length;
+}
+
+// ---------------------------------------------------------------------------
 // 掛勾層：在不改動 index.html 既有函式本體的前提下，
-// 把「記錄作答」「還原進度」「疑難標記」接到既有的
-// selectOpt / startExam / filterSubj / beginQuiz / renderQ 上。
+// 把「記錄作答」「還原進度」「疑難標記」「錯題本／疑難標記複習」接到既有的
+// selectOpt / startExam / filterSubj / beginQuiz / renderQ /
+// restartQuiz / backToSelect 上。
 // ---------------------------------------------------------------------------
 
 let hooksInstalled = false;
@@ -232,7 +338,9 @@ function initQuizHooks() {
     typeof window.filterSubj !== "function" ||
     typeof window.beginQuiz !== "function" ||
     typeof window.renderQ !== "function" ||
-    typeof window.updateDot !== "function"
+    typeof window.updateDot !== "function" ||
+    typeof window.restartQuiz !== "function" ||
+    typeof window.backToSelect !== "function"
   ) {
     setTimeout(initQuizHooks, 200);
     return;
@@ -269,9 +377,49 @@ function initQuizHooks() {
     origRenderQ();
     updateFlagButton();
   };
+
+  // restartQuiz()（結果頁「再做一次」）原本會照 currentExamFilter／
+  // currentSubjFilter 重新用 QS 篩一份單一考卷的 qList，這樣會把複習清單
+  // 整個換掉；複習模式下改成用同一個 getter 重新篩一次（順便讓剛剛答對、
+  // 已經不算錯題/標記的題目自然消失），維持在複習清單裡重來一次。
+  const origRestartQuiz = window.restartQuiz;
+  window.restartQuiz = function () {
+    if (inReviewMode && currentReviewGetter) {
+      const questions = currentReviewGetter();
+      if (!questions.length) {
+        alert("這份複習清單已經清空囉！");
+        exitReview();
+        return;
+      }
+      window.qList = questions;
+      suppressResumeCheck = true;
+      window.beginQuiz();
+      return;
+    }
+    origRestartQuiz();
+  };
+
+  // backToSelect()（「換考卷」）原本只會回到 quiz-select（考卷列表）畫面；
+  // 複習模式下沒有對應的考卷列表可回，改成回到最上層的科目選擇畫面。
+  const origBackToSelect = window.backToSelect;
+  window.backToSelect = function () {
+    if (inReviewMode) {
+      exitReview();
+      return;
+    }
+    origBackToSelect();
+  };
 }
 
+// 從外部（例如「開始複習」流程）呼叫 beginQuiz() 時，代表 qList 是刻意重新組出來的
+// 複習清單，不需要再跳「要不要繼續上次進度」的提示，所以用這個旗標跳過一次。
+let suppressResumeCheck = false;
+
 function afterQuizListLoaded(silentMergeCall) {
+  if (suppressResumeCheck) {
+    suppressResumeCheck = false;
+    return;
+  }
   const qList = window.qList;
   if (!qList || !qList.length) return;
   // quiz-area 沒有顯示中，代表使用者不在作答畫面（例如剛登入合併資料時人還在選科目頁），不用彈提示
@@ -344,10 +492,12 @@ onAuthStateChanged(auth, (user) => {
 });
 
 initQuizHooks();
+ensureReviewBar();
 
 // 暴露給 index.html 現有（非 module）inline script 使用的介面。
 window.quizSync = {
   login,
   logout,
   getUser: () => currentUser,
+  exitReview,
 };
