@@ -156,6 +156,18 @@ textarea,
   padding: 4px 8px;
 }
 
+/* 桌面版預設樣式：site-nav-collapse.js 一律會把連結包進
+   .simple-nav-links，這裡沒有明確指定 display，先前只有下面手機版的
+   媒體查詢裡有設定，導致桌面寬度退回瀏覽器預設的 display:block，
+   加上重組時 <a> 之間的空白字元也被拿掉，連結因此整個黏在一起、
+   沒有間距。這裡補上桌面版預設的橫向排列＋間距，數值跟原本
+   header.site nav{gap:18px} 一致，維持外觀不變。 */
+.simple-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
 @media (max-width: 640px) {
   nav:not(.nav-r) {
     position: relative;
