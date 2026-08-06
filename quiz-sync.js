@@ -397,11 +397,11 @@ function scrollCurrentDotIntoView() {
   // 不用 scrollIntoView——它在某些瀏覽器/情境下對巢狀捲動容器的支援不一致。
   const target = cur.offsetLeft - qdots.clientWidth / 2 + cur.offsetWidth / 2;
   const left = Math.max(0, target);
-  if (qdots.scrollTo) {
-    qdots.scrollTo({ left: left, behavior: "smooth" });
-  } else {
-    qdots.scrollLeft = left;
-  }
+  // 直接設定 scrollLeft（而非 smooth 動畫）：實測發現部分瀏覽器/情境下
+  // smooth 捲動動畫不會確實完成，導致目前題號沒有真的捲到看得見的位置；
+  // 這裡改成立即定位＋強制觸發一次 reflow，確保每次都會確實生效。
+  qdots.scrollLeft = left;
+  void qdots.offsetHeight;
 }
 
 // ---------------------------------------------------------------------------
