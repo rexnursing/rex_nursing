@@ -254,8 +254,13 @@ function getFlaggedQuestions() {
 
 let inReviewMode = false;
 let currentReviewGetter = null;
+// 複習/練習結束後要回到哪裡：預設回最上層科目選擇（course-select）；
+// 依標籤跨考卷練習則是從 quiz-select（已選好科目）進來，結束後應該回到
+// 同一個科目的考卷列表，而不是整個退回最上層。
+let reviewReturnTo = "course-select";
+let reviewReturnCourse = null;
 
-function startReviewList(getter, emptyMsg, title) {
+function startReviewList(getter, emptyMsg, title, returnTo, returnCourse) {
   const questions = getter();
   if (!questions.length) {
     alert(emptyMsg);
@@ -263,6 +268,8 @@ function startReviewList(getter, emptyMsg, title) {
   }
   inReviewMode = true;
   currentReviewGetter = getter;
+  reviewReturnTo = returnTo || "course-select";
+  reviewReturnCourse = returnCourse || null;
   window.qList = questions;
   document.getElementById("course-select").style.display = "none";
   document.getElementById("quiz-select").style.display = "none";
@@ -282,10 +289,24 @@ function exitReview() {
   currentReviewGetter = null;
   document.getElementById("quiz-result").style.display = "none";
   document.getElementById("quiz-area").style.display = "none";
-  document.getElementById("quiz-select").style.display = "none";
-  document.getElementById("course-select").style.display = "block";
   updateReviewBarCounts();
   hideStickyProgressBar();
+  const returnTo = reviewReturnTo;
+  const returnCourse = reviewReturnCourse;
+  reviewReturnTo = "course-select";
+  reviewReturnCourse = null;
+  if (
+    returnTo === "quiz-select" &&
+    returnCourse &&
+    typeof window.selectCourse === "function"
+  ) {
+    // 依標籤跨考卷練習是從「已選好科目」的畫面進來的，退出時回到同一個
+    // 科目的考卷列表，而不是整個退回最上層科目選擇。
+    window.selectCourse(returnCourse);
+  } else {
+    document.getElementById("quiz-select").style.display = "none";
+    document.getElementById("course-select").style.display = "block";
+  }
 }
 
 function ensureReviewBar() {
@@ -320,6 +341,117 @@ function updateReviewBarCounts() {
   const flaggedEl = document.getElementById("review-flagged-count");
   if (wrongEl) wrongEl.textContent = getWrongQuestions().length;
   if (flaggedEl) flaggedEl.textContent = getFlaggedQuestions().length;
+}
+
+// ---------------------------------------------------------------------------
+// 🔀 依標籤跨考卷練習
+//
+// 沿用既有的科目標籤（跟每份考卷內「科目篩選列」用的是同一套資料）：
+// medsurg 這個科目的標籤是寫死在 index.html 的 #subj-filter-bar 原始 HTML
+// 裡（這裡列的 MEDSURG_DEFAULT_TAGS 是照那份原始清單抄一份，兩邊要對得
+// 起來才不會篩不到題目）；其他科目則是 exam-data.js 裡 SUBJ_FILTER_TAGS
+// 這個物件已經有的資料，直接沿用、不重複定義。
+//
+// 範圍固定在「同一科目」：因為每個科目的標籤定義彼此不通用（例如婦兒科
+// 沒有「骨骼肌肉」這個標籤），跨科目合併會出現「這個標籤在另一科目裡
+// 根本不存在」的情況，所以只在使用者已經選定的科目內、跨該科目全部
+// 考卷抽題。
+//
+// 題數固定隨機抽 20 題（不足 20 題就有多少出多少）：抽題邏輯本身沒有
+// 額外保存「這次抽到哪幾題」，每次呼叫都是重新隨機抽一次——這樣「再做
+// 一次」時會自然換一批題目，不用額外處理「重新抽題」的邏輯。
+// ---------------------------------------------------------------------------
+
+const MEDSURG_DEFAULT_TAGS = [
+  { emoji: "🧠", label: "神經", value: "神經系統" },
+  { emoji: "🫃", label: "消化", value: "消化系統" },
+  { emoji: "🫀", label: "心臟", value: "心臟血管" },
+  { emoji: "🫁", label: "呼吸", value: "呼吸系統" },
+  { emoji: "🔬", label: "泌尿", value: "泌尿系統" },
+  { emoji: "🧬", label: "內分泌", value: "內分泌系統" },
+  { emoji: "💉", label: "腫瘤", value: "腫瘤血液" },
+  { emoji: "🦴", label: "骨骼", value: "骨骼肌肉" },
+  { emoji: "👁", label: "感官", value: "感官系統" },
+  { emoji: "📌", label: "其他", value: "其他" },
+];
+
+const TAG_PRACTICE_COUNT = 20;
+
+function getTagsForCourse(course) {
+  if (window.SUBJ_FILTER_TAGS && window.SUBJ_FILTER_TAGS[course]) {
+    return window.SUBJ_FILTER_TAGS[course];
+  }
+  return MEDSURG_DEFAULT_TAGS;
+}
+
+function getTagPracticeQuestions(course, tagValue) {
+  if (!window.QS) return [];
+  const pool = window.QS.filter(function (q) {
+    return q.course === course && q.subj === tagValue;
+  });
+  // Fisher-Yates 洗牌，抽前 TAG_PRACTICE_COUNT 題
+  const arr = pool.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+  }
+  return arr.slice(0, TAG_PRACTICE_COUNT);
+}
+
+let tagPracticeBarCourse = null;
+
+function ensureTagPracticeBar() {
+  const container = document.getElementById("quiz-select");
+  if (!container) return;
+  const course = window.currentCourse;
+  if (course === tagPracticeBarCourse) return; // 同一科目不用重建
+  const old = document.getElementById("tag-practice-bar");
+  if (old) old.remove();
+  tagPracticeBarCourse = course;
+  if (!course) return;
+
+  const tags = getTagsForCourse(course);
+  const bar = document.createElement("div");
+  bar.id = "tag-practice-bar";
+  bar.style.cssText =
+    "display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;padding:14px;background:var(--teal-l);border-radius:var(--r)";
+
+  const heading = document.createElement("div");
+  heading.style.cssText =
+    "width:100%;font-size:13px;font-weight:600;color:var(--teal-d);margin-bottom:2px";
+  heading.textContent =
+    "🔀 依標籤跨考卷練習（隨機抽 " + TAG_PRACTICE_COUNT + " 題）";
+  bar.appendChild(heading);
+
+  tags.forEach(function (t) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.style.cssText =
+      "background:var(--white);border:1.5px solid var(--bd);border-radius:50px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text)";
+    btn.textContent = t.emoji + " " + t.label;
+    btn.onclick = function () {
+      startReviewList(
+        function () {
+          return getTagPracticeQuestions(course, t.value);
+        },
+        "這個標籤目前沒有題目。",
+        "🔀 " + t.emoji + " " + t.label + " 標籤練習",
+        "quiz-select",
+        course
+      );
+    };
+    bar.appendChild(btn);
+  });
+
+  // 插在「選擇考卷」標題列之後、考卷卡片列表之前（quiz-select 的第一個
+  // 子節點是標題列，這裡插在它後面，不動標題列本身）。
+  if (container.children.length > 1) {
+    container.insertBefore(bar, container.children[1]);
+  } else {
+    container.appendChild(bar);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -479,12 +611,19 @@ function initQuizHooks() {
     typeof window.renderQ !== "function" ||
     typeof window.updateDot !== "function" ||
     typeof window.restartQuiz !== "function" ||
-    typeof window.backToSelect !== "function"
+    typeof window.backToSelect !== "function" ||
+    typeof window.selectCourse !== "function"
   ) {
     setTimeout(initQuizHooks, 200);
     return;
   }
   hooksInstalled = true;
+
+  const origSelectCourse = window.selectCourse;
+  window.selectCourse = function (n) {
+    origSelectCourse(n);
+    ensureTagPracticeBar();
+  };
 
   const origSelectOpt = window.selectOpt;
   window.selectOpt = function (n) {
