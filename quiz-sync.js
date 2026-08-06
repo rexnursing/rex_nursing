@@ -285,6 +285,7 @@ function exitReview() {
   document.getElementById("quiz-select").style.display = "none";
   document.getElementById("course-select").style.display = "block";
   updateReviewBarCounts();
+  hideStickyProgressBar();
 }
 
 function ensureReviewBar() {
@@ -322,6 +323,131 @@ function updateReviewBarCounts() {
 }
 
 // ---------------------------------------------------------------------------
+// 📊 固定式進度條：題目或解析內容較長、捲動離開畫面最上方的原本進度條之後，
+// 畫面頂端會浮現一條細進度條（跟 #prog-bar 的寬度同步），不用滑回頂端
+// 也能看到目前作答進度。只在 quiz-area 顯示中才會出現。
+// ---------------------------------------------------------------------------
+
+let stickyBarInited = false;
+
+function ensureStickyProgressBar() {
+  if (stickyBarInited) return;
+  stickyBarInited = true;
+  const track = document.createElement("div");
+  track.id = "sticky-progress-track";
+  track.style.cssText =
+    "position:fixed;top:0;left:0;right:0;height:4px;background:var(--teal-l);z-index:9999;display:none";
+  const fill = document.createElement("div");
+  fill.id = "sticky-progress-fill";
+  fill.style.cssText =
+    "height:100%;background:var(--teal);width:0%;transition:width .3s";
+  track.appendChild(fill);
+  document.body.appendChild(track);
+  window.addEventListener("scroll", updateStickyProgressBar, {
+    passive: true,
+  });
+}
+
+function updateStickyProgressBar() {
+  const track = document.getElementById("sticky-progress-track");
+  const fill = document.getElementById("sticky-progress-fill");
+  const srcBar = document.getElementById("prog-bar");
+  const quizAreaEl = document.getElementById("quiz-area");
+  if (!track || !fill || !srcBar || !quizAreaEl) return;
+  if (quizAreaEl.style.display === "none") {
+    track.style.display = "none";
+    return;
+  }
+  const srcRect = srcBar.getBoundingClientRect();
+  track.style.display = srcRect.top < 0 ? "block" : "none";
+  fill.style.width = srcBar.style.width || "0%";
+}
+
+function hideStickyProgressBar() {
+  const track = document.getElementById("sticky-progress-track");
+  if (track) track.style.display = "none";
+}
+
+// ---------------------------------------------------------------------------
+// 📱 題目圓點導覽（#qdots）題數多（50～80題）時原本會換行變好幾排，把題目
+// 卡往下推很遠。這裡只改既有元素的 style（不動 index.html 的 buildDots()/
+// CSS），讓它變成單排、可橫向滑動，並在每次切換題目時把目前題號捲到看得見
+// 的位置。
+// ---------------------------------------------------------------------------
+
+function enhanceQDots() {
+  const qdots = document.getElementById("qdots");
+  if (!qdots || qdots.dataset.enhanced) return;
+  qdots.dataset.enhanced = "1";
+  qdots.style.flexWrap = "nowrap";
+  qdots.style.overflowX = "auto";
+  qdots.style.overflowY = "hidden";
+  qdots.style.webkitOverflowScrolling = "touch";
+  qdots.style.paddingBottom = "6px";
+  qdots.style.scrollBehavior = "smooth";
+}
+
+function scrollCurrentDotIntoView() {
+  const qdots = document.getElementById("qdots");
+  if (!qdots) return;
+  const cur =
+    qdots.querySelector(".qdot.cur") || qdots.children[window.qIdx || 0];
+  if (cur && cur.scrollIntoView) {
+    cur.scrollIntoView({ inline: "center", block: "nearest" });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 👆 左右滑動切換題目（僅題目卡 #q-card 範圍內偵測，避免和一般垂直捲動、
+// 點選項按鈕互相干擾）：
+//   向左滑＝下一題，沿用原本「答完才會出現下一題」的規則，不會讓人滑過去
+//   跳過作答；向右滑＝回上一題，跟點圓點導覽一樣隨時可以回去看。
+// ---------------------------------------------------------------------------
+
+let swipeInited = false;
+let touchStartX = 0;
+let touchStartY = 0;
+
+function ensureSwipeGesture() {
+  if (swipeInited) return;
+  const qCard = document.getElementById("q-card");
+  if (!qCard) {
+    setTimeout(ensureSwipeGesture, 300);
+    return;
+  }
+  swipeInited = true;
+  qCard.addEventListener(
+    "touchstart",
+    function (e) {
+      if (!e.touches || !e.touches.length) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    },
+    { passive: true }
+  );
+  qCard.addEventListener(
+    "touchend",
+    function (e) {
+      if (!e.changedTouches || !e.changedTouches.length) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      const qList = window.qList;
+      if (!qList || !qList.length) return;
+      if (dx < 0) {
+        if (window.answered && window.answered[window.qIdx] !== undefined) {
+          window.nextQ();
+        }
+      } else if (window.qIdx > 0) {
+        window.qIdx -= 1;
+        window.renderQ();
+      }
+    },
+    { passive: true }
+  );
+}
+
+// ---------------------------------------------------------------------------
 // 掛勾層：在不改動 index.html 既有函式本體的前提下，
 // 把「記錄作答」「還原進度」「疑難標記」「錯題本／疑難標記複習」接到既有的
 // selectOpt / startExam / filterSubj / beginQuiz / renderQ /
@@ -352,6 +478,7 @@ function initQuizHooks() {
     const q = window.qList && window.qList[window.qIdx];
     origSelectOpt(n);
     if (q) recordAnswer(q.n, n);
+    updateStickyProgressBar();
   };
 
   const origStartExam = window.startExam;
@@ -376,6 +503,9 @@ function initQuizHooks() {
   window.renderQ = function () {
     origRenderQ();
     updateFlagButton();
+    enhanceQDots();
+    scrollCurrentDotIntoView();
+    updateStickyProgressBar();
   };
 
   // restartQuiz()（結果頁「再做一次」）原本會照 currentExamFilter／
@@ -408,6 +538,7 @@ function initQuizHooks() {
       return;
     }
     origBackToSelect();
+    hideStickyProgressBar();
   };
 }
 
@@ -493,6 +624,8 @@ onAuthStateChanged(auth, (user) => {
 
 initQuizHooks();
 ensureReviewBar();
+ensureStickyProgressBar();
+ensureSwipeGesture();
 
 // 暴露給 index.html 現有（非 module）inline script 使用的介面。
 window.quizSync = {
