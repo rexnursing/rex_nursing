@@ -266,6 +266,7 @@ function startReviewList(getter, emptyMsg, title, returnTo, returnCourse) {
     alert(emptyMsg);
     return;
   }
+  stopTimer(); // 複習／標籤練習不計時，不論從哪個入口進來都先停止碼表
   inReviewMode = true;
   currentReviewGetter = getter;
   reviewReturnTo = returnTo || "course-select";
@@ -593,6 +594,73 @@ function ensureSwipeGesture() {
 }
 
 // ---------------------------------------------------------------------------
+// ⏱ 正向碼表：只在「一般整份考卷」作答時顯示（錯題本／疑難標記複習、
+// 依標籤跨考卷練習不算，那些是複習/練習性質，不計時——由 startReviewList()
+// 一律呼叫 stopTimer() 來保證，不管從哪個入口進複習模式都會停止/隱藏）。
+// 從進入考卷那一刻從 0 開始正向累計（MM:SS），純參考用途：不會限制作答、
+// 不會強制交卷、也不會跳出任何提示視窗；累計超過參考時長（60分鐘）後
+// 只是文字變色提醒，之後仍會繼續正常累加。
+// ---------------------------------------------------------------------------
+
+const TIMER_REFERENCE_SECONDS = 60 * 60; // 參考時長 60 分鐘
+let timerIntervalId = null;
+let timerStartedAt = null;
+
+function formatElapsed(totalSec) {
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+}
+
+function ensureTimerDisplay() {
+  let el = document.getElementById("quiz-timer");
+  if (el) return el;
+  // 插在「✓ /✗」計數徽章那個小容器的最前面（跟現有的作答統計並排）。
+  const cntOkEl = document.getElementById("cnt-ok");
+  const badgeRow = cntOkEl && cntOkEl.closest("div");
+  if (!badgeRow) return null;
+  el = document.createElement("span");
+  el.id = "quiz-timer";
+  el.style.cssText =
+    "font-size:13px;color:var(--teal-d);background:var(--teal-l);padding:3px 12px;border-radius:20px;font-variant-numeric:tabular-nums";
+  el.textContent = "⏱ 00:00";
+  badgeRow.insertBefore(el, badgeRow.firstChild);
+  return el;
+}
+
+function tickTimer() {
+  const el = document.getElementById("quiz-timer");
+  if (!el || !timerStartedAt) return;
+  const elapsed = Math.floor((Date.now() - timerStartedAt) / 1000);
+  el.textContent = "⏱ " + formatElapsed(elapsed);
+  const overTime = elapsed >= TIMER_REFERENCE_SECONDS;
+  el.style.color = overTime ? "#993c1d" : "var(--teal-d)";
+  el.style.background = overTime ? "#faece7" : "var(--teal-l)";
+}
+
+function startTimer() {
+  if (inReviewMode) return; // 複習／標籤練習不計時
+  const el = ensureTimerDisplay();
+  if (!el) return;
+  timerStartedAt = Date.now();
+  el.textContent = "⏱ 00:00";
+  el.style.color = "var(--teal-d)";
+  el.style.background = "var(--teal-l)";
+  if (timerIntervalId) clearInterval(timerIntervalId);
+  timerIntervalId = setInterval(tickTimer, 1000);
+}
+
+function stopTimer() {
+  if (timerIntervalId) {
+    clearInterval(timerIntervalId);
+    timerIntervalId = null;
+  }
+  timerStartedAt = null;
+  const el = document.getElementById("quiz-timer");
+  if (el) el.remove();
+}
+
+// ---------------------------------------------------------------------------
 // 掛勾層：在不改動 index.html 既有函式本體的前提下，
 // 把「記錄作答」「還原進度」「疑難標記」「錯題本／疑難標記複習」接到既有的
 // selectOpt / startExam / filterSubj / beginQuiz / renderQ /
@@ -637,6 +705,7 @@ function initQuizHooks() {
   window.startExam = function (examCode) {
     origStartExam(examCode);
     afterQuizListLoaded();
+    startTimer();
   };
 
   const origFilterSubj = window.filterSubj;
@@ -679,6 +748,7 @@ function initQuizHooks() {
       return;
     }
     origRestartQuiz();
+    startTimer();
   };
 
   // backToSelect()（「換考卷」）原本只會回到 quiz-select（考卷列表）畫面；
@@ -691,6 +761,7 @@ function initQuizHooks() {
     }
     origBackToSelect();
     hideStickyProgressBar();
+    stopTimer();
   };
 }
 
