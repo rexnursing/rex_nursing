@@ -839,6 +839,282 @@ function afterQuizListLoaded(silentMergeCall) {
   window.renderQ();
 }
 
+// ============ 全站搜尋（考題全文 + 教學影片） ============
+// 影片目錄是獨立的靜態 JSON（video-catalog.json），跟 exam-data.js／quiz-sync.js
+// 完全分開，不需要動到 index.html。每筆影片盡量從標題解析出對應的題號（n）跟
+// 考試場次提示（examHint，例如 "114-3"），讓搜尋結果可以直接連到「練習這一題」。
+let VIDEO_CATALOG = null;
+function loadVideoCatalog() {
+  if (VIDEO_CATALOG !== null) return Promise.resolve(VIDEO_CATALOG);
+  return fetch("video-catalog.json")
+    .then((r) => (r.ok ? r.json() : []))
+    .then((data) => {
+      VIDEO_CATALOG = data;
+      return data;
+    })
+    .catch(() => {
+      VIDEO_CATALOG = [];
+      return [];
+    });
+}
+
+const SEARCH_Q_LIMIT = 25;
+const SEARCH_V_LIMIT = 10;
+
+function searchQuestions(query) {
+  if (!window.QS || !query) return [];
+  const results = [];
+  for (let i = 0; i < window.QS.length && results.length < SEARCH_Q_LIMIT; i++) {
+    const item = window.QS[i];
+    if ((item.q && item.q.indexOf(query) !== -1) || (item.subj && item.subj.indexOf(query) !== -1)) {
+      results.push(item);
+    }
+  }
+  return results;
+}
+
+// 影片目錄裡，凡是能對應到題目（有 n）的影片就不重複存標題文字——搜尋比對
+// 直接用 QS 裡對應題目的題幹／科目，顯示時也是秀那一題的內容，影片本身只是
+// 「這題的講解影片」。只有真的對不到題目的極少數影片（約 1.8%）才保留自己
+// 的標題（entry.t）另外比對。
+function matchVideoEntry(v, query) {
+  if (v.n !== undefined) {
+    const q = window.QS && window.QS.find((x) => x.n === v.n);
+    if (!q) return null;
+    if ((q.q && q.q.indexOf(query) !== -1) || (q.subj && q.subj.indexOf(query) !== -1)) {
+      return { id: v.i, n: v.n, displayText: q.q, linkedQ: q };
+    }
+    return null;
+  }
+  if (v.t && v.t.indexOf(query) !== -1) {
+    return { id: v.i, n: undefined, displayText: v.t, linkedQ: null };
+  }
+  return null;
+}
+
+function searchVideos(query) {
+  if (!VIDEO_CATALOG || !query) return [];
+  const results = [];
+  for (let i = 0; i < VIDEO_CATALOG.length && results.length < SEARCH_V_LIMIT; i++) {
+    const m = matchVideoEntry(VIDEO_CATALOG[i], query);
+    if (m) results.push(m);
+  }
+  return results;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+
+function highlightMatch(text, query) {
+  const escaped = escapeHtml(text);
+  if (!query) return escaped;
+  const idx = text.indexOf(query);
+  if (idx === -1) return escaped;
+  const before = escapeHtml(text.slice(0, idx));
+  const mid = escapeHtml(text.slice(idx, idx + query.length));
+  const after = escapeHtml(text.slice(idx + query.length));
+  return before + '<mark style="background:#fde68a;border-radius:2px">' + mid + "</mark>" + after;
+}
+
+const SEARCH_COURSE_LABELS = { medsurg: "內外科", psych: "精神科", basic: "基本護理", basicmed: "基礎醫學", obpeds: "婦兒科" };
+
+function ensureSearchUI() {
+  if (document.getElementById("gsearch-btn")) return;
+  const nav = document.querySelector("nav");
+  if (!nav) return;
+
+  const btn = document.createElement("button");
+  btn.id = "gsearch-btn";
+  btn.type = "button";
+  btn.setAttribute("aria-label", "搜尋");
+  btn.style.cssText = "background:none;border:none;cursor:pointer;font-size:18px;padding:6px 8px;color:var(--muted);flex-shrink:0";
+  btn.textContent = "🔍";
+  btn.onclick = openSearchPanel;
+  nav.appendChild(btn);
+
+  const overlay = document.createElement("div");
+  overlay.id = "gsearch-overlay";
+  overlay.style.cssText = "display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:300";
+  overlay.onclick = function (e) {
+    if (e.target === overlay) closeSearchPanel();
+  };
+
+  const panel = document.createElement("div");
+  panel.id = "gsearch-panel";
+  panel.style.cssText = "background:var(--white);max-width:640px;margin:8vh auto 0;border-radius:var(--r);max-height:80vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25)";
+
+  const inputRow = document.createElement("div");
+  inputRow.style.cssText = "padding:16px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0";
+  const input = document.createElement("input");
+  input.id = "gsearch-input";
+  input.type = "text";
+  input.placeholder = "搜尋疾病、症狀、關鍵字（例如：高血鉀、庫欣氏症候群）...";
+  input.style.cssText = "flex:1;border:none;outline:none;font-size:16px;font-family:inherit;background:transparent;color:var(--text)";
+  const closeBtn = document.createElement("button");
+  closeBtn.type = "button";
+  closeBtn.textContent = "✕";
+  closeBtn.setAttribute("aria-label", "關閉搜尋");
+  closeBtn.style.cssText = "background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted)";
+  closeBtn.onclick = closeSearchPanel;
+  inputRow.appendChild(input);
+  inputRow.appendChild(closeBtn);
+
+  const resultsBox = document.createElement("div");
+  resultsBox.id = "gsearch-results";
+  resultsBox.style.cssText = "overflow-y:auto;padding:8px 0";
+
+  panel.appendChild(inputRow);
+  panel.appendChild(resultsBox);
+  overlay.appendChild(panel);
+  document.body.appendChild(overlay);
+
+  let debounceTimer = null;
+  input.addEventListener("input", function () {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function () {
+      renderSearchResults(input.value.trim());
+    }, 150);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && overlay.style.display !== "none") closeSearchPanel();
+  });
+}
+
+function openSearchPanel() {
+  const overlay = document.getElementById("gsearch-overlay");
+  if (!overlay) return;
+  overlay.style.display = "block";
+  loadVideoCatalog();
+  const input = document.getElementById("gsearch-input");
+  input.value = "";
+  document.getElementById("gsearch-results").innerHTML = '<div style="padding:32px 20px;text-align:center;color:var(--muted);font-size:14px">輸入關鍵字，搜尋考題與教學影片</div>';
+  setTimeout(function () {
+    input.focus();
+  }, 50);
+}
+
+function closeSearchPanel() {
+  const overlay = document.getElementById("gsearch-overlay");
+  if (overlay) overlay.style.display = "none";
+}
+
+function renderSearchResults(q) {
+  const box = document.getElementById("gsearch-results");
+  if (!box) return;
+  if (!q) {
+    box.innerHTML = '<div style="padding:32px 20px;text-align:center;color:var(--muted);font-size:14px">輸入關鍵字，搜尋考題與教學影片</div>';
+    return;
+  }
+
+  const qResults = searchQuestions(q);
+  const vResults = searchVideos(q);
+
+  if (qResults.length === 0 && vResults.length === 0) {
+    box.innerHTML = '<div style="padding:32px 20px;text-align:center;color:var(--muted);font-size:14px">沒有找到符合「' + escapeHtml(q) + '」的考題或影片</div>';
+    return;
+  }
+
+  let html = "";
+
+  if (vResults.length > 0) {
+    html += '<div style="padding:10px 18px 4px;font-size:12.5px;font-weight:600;color:var(--teal-d)">🎬 相關教學影片</div>';
+    vResults.forEach(function (v) {
+      html +=
+        '<div style="display:flex;align-items:center;gap:10px;padding:8px 18px" class="gsearch-video-row" data-vid="' +
+        escapeHtml(v.id) +
+        '"' +
+        (v.n !== undefined ? ' data-n="' + v.n + '"' : "") +
+        '><img src="https://img.youtube.com/vi/' +
+        escapeHtml(v.id) +
+        '/default.jpg" style="width:64px;height:36px;object-fit:cover;border-radius:6px;flex-shrink:0;cursor:pointer" class="gsearch-video-thumb"><div style="flex:1;min-width:0">' +
+        '<div style="font-size:13.5px;line-height:1.4;cursor:pointer" class="gsearch-video-title">' +
+        highlightMatch(v.displayText, q) +
+        "</div>" +
+        (v.n !== undefined ? '<button type="button" class="gsearch-practice-btn" style="margin-top:3px;font-size:11.5px;background:var(--teal-l);color:var(--teal-d);border:none;border-radius:20px;padding:2px 10px;cursor:pointer">練習這一題</button>' : "") +
+        "</div></div>";
+    });
+  }
+
+  if (qResults.length > 0) {
+    html +=
+      '<div style="padding:10px 18px 4px;font-size:12.5px;font-weight:600;color:var(--teal-d)">📝 相關考題（' +
+      qResults.length +
+      (qResults.length >= SEARCH_Q_LIMIT ? "+" : "") +
+      "）</div>";
+    qResults.forEach(function (item) {
+      html +=
+        '<div style="padding:8px 18px;cursor:pointer" class="gsearch-q-row" data-n="' +
+        item.n +
+        '"><div style="font-size:13.5px;line-height:1.5">' +
+        highlightMatch(item.q, q) +
+        '</div><div style="margin-top:3px;font-size:11.5px;color:var(--muted)">' +
+        (SEARCH_COURSE_LABELS[item.course] || item.course) +
+        " · " +
+        escapeHtml(item.subj) +
+        "</div></div>";
+    });
+    html +=
+      '<div style="padding:6px 18px 12px"><button type="button" id="gsearch-practice-all" style="width:100%;background:var(--teal);color:#fff;border:none;border-radius:var(--rs);padding:9px;font-size:13.5px;cursor:pointer;font-family:inherit">練習全部 ' +
+      qResults.length +
+      " 題相關考題</button></div>";
+  }
+
+  box.innerHTML = html;
+
+  box.querySelectorAll(".gsearch-video-row").forEach(function (row) {
+    const vid = row.getAttribute("data-vid");
+    const openVideo = function () {
+      window.open("https://www.youtube.com/watch?v=" + vid, "_blank");
+    };
+    row.querySelector(".gsearch-video-thumb").onclick = openVideo;
+    row.querySelector(".gsearch-video-title").onclick = openVideo;
+    const practiceBtn = row.querySelector(".gsearch-practice-btn");
+    if (practiceBtn) {
+      practiceBtn.onclick = function (e) {
+        e.stopPropagation();
+        const n = parseInt(row.getAttribute("data-n"), 10);
+        const item = window.QS.find(function (x) {
+          return x.n === n;
+        });
+        if (item) startSearchPractice([item], "🔍 練習這一題");
+      };
+    }
+  });
+
+  box.querySelectorAll(".gsearch-q-row").forEach(function (row) {
+    row.onclick = function () {
+      const n = parseInt(row.getAttribute("data-n"), 10);
+      const item = window.QS.find(function (x) {
+        return x.n === n;
+      });
+      if (item) startSearchPractice([item], "🔍 搜尋「" + q + "」");
+    };
+  });
+
+  const practiceAllBtn = document.getElementById("gsearch-practice-all");
+  if (practiceAllBtn) {
+    practiceAllBtn.onclick = function () {
+      startSearchPractice(qResults, "🔍 搜尋「" + q + "」");
+    };
+  }
+}
+
+function startSearchPractice(questions, title) {
+  closeSearchPanel();
+  startReviewList(
+    function () {
+      return questions;
+    },
+    "這組搜尋結果目前沒有題目。",
+    title,
+    "course-select",
+    null
+  );
+}
+
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
   dispatchAuthChange();
@@ -849,6 +1125,7 @@ initQuizHooks();
 ensureReviewBar();
 ensureStickyProgressBar();
 ensureSwipeGesture();
+ensureSearchUI();
 
 // 暴露給 index.html 現有（非 module）inline script 使用的介面。
 window.quizSync = {
