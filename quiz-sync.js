@@ -191,17 +191,48 @@ function toggleFlag(n) {
 // 所以標記按鈕只要注入一次，之後每次 renderQ() 只需要更新它的顯示狀態即可。
 // ---------------------------------------------------------------------------
 
+function ensureFlagButtonStyle() {
+  if (document.getElementById("flagbtn-style")) return;
+  const style = document.createElement("style");
+  style.id = "flagbtn-style";
+  style.textContent =
+    "@keyframes flagBtnPulse{0%,100%{box-shadow:0 0 0 0 rgba(217,119,6,.4)}50%{box-shadow:0 0 0 6px rgba(217,119,6,0)}}" +
+    "#flag-btn.flagbtn-pulse{animation:flagBtnPulse 1.4s ease-in-out 3}";
+  document.head.appendChild(style);
+}
+
 function ensureFlagButton() {
   let btn = document.getElementById("flag-btn");
   if (btn) return btn;
   const tagEl = document.getElementById("q-tag");
   if (!tagEl || !tagEl.parentElement) return null;
+  ensureFlagButtonStyle();
+
+  // 第一次看到這顆按鈕時加脈動動畫提醒，點過一次（或用 localStorage 記錄過）
+  // 之後就不再顯示——跟搜尋圖示用的是同一套邏輯。
+  const FLAG_SEEN_KEY = "rex_flagbtn_seen_v1";
+  let isFirstTimeSeeing = true;
+  try {
+    isFirstTimeSeeing = !localStorage.getItem(FLAG_SEEN_KEY);
+  } catch (e) {
+    isFirstTimeSeeing = false;
+  }
+
   btn = document.createElement("button");
   btn.id = "flag-btn";
   btn.type = "button";
   btn.style.cssText =
-    "margin-left:8px;border:none;background:none;cursor:pointer;font-size:16px;vertical-align:middle;line-height:1;padding:0";
+    "margin-left:8px;display:inline-flex;align-items:center;gap:4px;border:1.5px solid var(--bd);" +
+    "background:var(--white);border-radius:50px;padding:4px 12px;font-size:11.5px;font-weight:500;" +
+    "color:var(--text);cursor:pointer;font-family:inherit;vertical-align:middle;line-height:1.4";
+  if (isFirstTimeSeeing) {
+    btn.classList.add("flagbtn-pulse");
+  }
   btn.onclick = function () {
+    try {
+      localStorage.setItem(FLAG_SEEN_KEY, "1");
+    } catch (e) {}
+    btn.classList.remove("flagbtn-pulse");
     const q = window.qList && window.qList[window.qIdx];
     if (!q) return;
     toggleFlag(q.n);
@@ -216,7 +247,12 @@ function updateFlagButton() {
   if (!btn) return;
   const q = window.qList && window.qList[window.qIdx];
   const flagged = !!(q && myFlagged[q.n]);
-  btn.textContent = flagged ? "⭐" : "☆";
+  btn.innerHTML = flagged
+    ? "<span>⭐</span><span>已標記</span>"
+    : "<span>☆</span><span>標記</span>";
+  btn.style.background = flagged ? "#fef3c7" : "var(--white)";
+  btn.style.borderColor = flagged ? "#f2c94c" : "var(--bd)";
+  btn.style.color = flagged ? "#92400e" : "var(--text)";
   btn.title = flagged ? "取消疑難標記" : "標記為疑難題目，方便之後複習";
 }
 
@@ -259,6 +295,11 @@ let currentReviewGetter = null;
 // 同一個科目的考卷列表，而不是整個退回最上層。
 let reviewReturnTo = "course-select";
 let reviewReturnCourse = null;
+// 複習清單裡，只有「模擬國考」這個入口需要倒數計時；其他（標籤練習、
+// 搜尋結果、錯題本、疑難標記）都不需要。這裡另外用一個旗標區分，
+// startReviewList() 每次進來預設重置為 false，模擬國考自己的啟動函式
+// 呼叫完 startReviewList() 之後才把它改回 true。
+let reviewIsMockExam = false;
 
 function startReviewList(getter, emptyMsg, title, returnTo, returnCourse) {
   const questions = getter();
@@ -267,6 +308,8 @@ function startReviewList(getter, emptyMsg, title, returnTo, returnCourse) {
     return;
   }
   stopTimer(); // 複習／標籤練習不計時，不論從哪個入口進來都先停止碼表
+  stopMockExamTimer(); // 換一份複習清單／重新開始模擬考，先清掉舊的倒數計時
+  reviewIsMockExam = false;
   inReviewMode = true;
   currentReviewGetter = getter;
   reviewReturnTo = returnTo || "course-select";
@@ -286,6 +329,8 @@ function startReviewList(getter, emptyMsg, title, returnTo, returnCourse) {
 }
 
 function exitReview() {
+  stopMockExamTimer();
+  reviewIsMockExam = false;
   inReviewMode = false;
   currentReviewGetter = null;
   document.getElementById("quiz-result").style.display = "none";
@@ -307,6 +352,7 @@ function exitReview() {
   } else {
     document.getElementById("quiz-select").style.display = "none";
     document.getElementById("course-select").style.display = "block";
+    quizHistoryPushed = false; // 已經人工回到最上層科目選擇，上一頁補丁狀態可以重置
   }
 }
 
@@ -452,6 +498,165 @@ function ensureTagPracticeBar() {
     container.insertBefore(bar, container.children[1]);
   } else {
     container.appendChild(bar);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 🎯 模擬國考：從目前科目的全部歷屆題目中隨機抽 50 題、限時 60 分鐘，
+// 時間到自動送出計分（未作答視為答錯）。UI 上刻意做成一個獨立的顯眼色塊，
+// 插在「依標籤跨考卷練習」之前（selectCourse 裡先插練習列、再插這塊，
+// 兩塊都用「插在第一個子節點之後」的邏輯，所以後插的會排在前面）。
+// ---------------------------------------------------------------------------
+
+const MOCK_EXAM_QUESTION_COUNT = 50;
+const MOCK_EXAM_DURATION_SEC = 60 * 60;
+
+let mockExamBannerCourse = null;
+let mockExamDeadline = null;
+let mockExamIntervalId = null;
+
+function getMockExamQuestions(course) {
+  if (!window.QS) return [];
+  const pool = window.QS.filter(function (q) {
+    return q.course === course;
+  });
+  // Fisher-Yates 洗牌，抽前 MOCK_EXAM_QUESTION_COUNT 題（跟標籤練習用同一招）
+  const arr = pool.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+  }
+  return arr.slice(0, MOCK_EXAM_QUESTION_COUNT);
+}
+
+function formatCountdown(totalSec) {
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+}
+
+function stopMockExamTimer() {
+  if (mockExamIntervalId) {
+    clearInterval(mockExamIntervalId);
+    mockExamIntervalId = null;
+  }
+  mockExamDeadline = null;
+}
+
+function autoSubmitMockExam() {
+  if (typeof window.showResult !== "function") return;
+  window.showResult();
+  const subEl = document.getElementById("res-sub");
+  if (subEl) {
+    subEl.textContent =
+      "⏰ 60 分鐘時間到，已自動送出計分（未作答視為答錯）。" +
+      (subEl.textContent ? " " + subEl.textContent : "");
+  }
+}
+
+function tickMockExamTimer() {
+  const el = document.getElementById("quiz-timer");
+  const quizAreaEl = document.getElementById("quiz-area");
+  if (
+    !el ||
+    !mockExamDeadline ||
+    !quizAreaEl ||
+    quizAreaEl.style.display === "none"
+  ) {
+    // 已經離開作答畫面（正常寫完自動看結果、或使用者手動離開），
+    // 倒數計時沒有必要再繼續跑，順便清掉自己。
+    stopMockExamTimer();
+    return;
+  }
+  const remain = Math.max(
+    0,
+    Math.round((mockExamDeadline - Date.now()) / 1000)
+  );
+  el.textContent = "⏱ " + formatCountdown(remain);
+  const urgent = remain <= 5 * 60;
+  el.style.color = urgent ? "#993c1d" : "var(--teal-d)";
+  el.style.background = urgent ? "#faece7" : "var(--teal-l)";
+  if (remain <= 0) {
+    stopMockExamTimer();
+    autoSubmitMockExam();
+  }
+}
+
+function startMockExamTimer() {
+  mockExamDeadline = Date.now() + MOCK_EXAM_DURATION_SEC * 1000;
+  const el = ensureTimerDisplay();
+  if (!el) return;
+  tickMockExamTimer();
+  if (mockExamIntervalId) clearInterval(mockExamIntervalId);
+  mockExamIntervalId = setInterval(tickMockExamTimer, 1000);
+}
+
+function startMockExam(course) {
+  if (!course) return;
+  const preview = getMockExamQuestions(course);
+  if (!preview.length) {
+    alert("目前題庫還沒有這個科目的題目，請稍後再試。");
+    return;
+  }
+  const ok = confirm(
+    "🎯 模擬國考模式\n\n隨機抽取 " +
+      MOCK_EXAM_QUESTION_COUNT +
+      " 題，限時 60 分鐘，時間到會自動送出計分（未作答視為答錯）。\n\n確定要開始嗎？"
+  );
+  if (!ok) return;
+  startReviewList(
+    function () {
+      return getMockExamQuestions(course);
+    },
+    "目前題庫還沒有這個科目的題目，請稍後再試。",
+    "🎯 模擬國考（限時 60 分鐘）",
+    "quiz-select",
+    course
+  );
+  reviewIsMockExam = true;
+  startMockExamTimer();
+}
+
+function ensureMockExamBanner() {
+  const container = document.getElementById("quiz-select");
+  if (!container) return;
+  const course = window.currentCourse;
+  if (course === mockExamBannerCourse) return; // 同一科目不用重建
+  const old = document.getElementById("mock-exam-banner");
+  if (old) old.remove();
+  mockExamBannerCourse = course;
+  if (!course) return;
+
+  const banner = document.createElement("div");
+  banner.id = "mock-exam-banner";
+  banner.style.cssText =
+    "display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;" +
+    "background:linear-gradient(135deg,#1d9e75,#085041);color:#fff;border-radius:var(--r);" +
+    "padding:18px 22px;margin-bottom:16px;box-shadow:0 8px 20px rgba(8,80,65,.18)";
+  banner.innerHTML =
+    '<div><div style="font-size:15.5px;font-weight:700;margin-bottom:3px">🎯 模擬國考</div>' +
+    '<div style="font-size:12.5px;opacity:.85">隨機抽取 ' +
+    MOCK_EXAM_QUESTION_COUNT +
+    ' 題．限時 60 分鐘．時間到自動送出，最貼近真實考試節奏</div></div>' +
+    '<button type="button" id="mock-exam-start-btn" style="flex-shrink:0;background:#fff;color:var(--teal-d);' +
+    'border:none;border-radius:50px;padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer;' +
+    'font-family:inherit;white-space:nowrap">開始模擬考 →</button>';
+
+  // 跟 ensureTagPracticeBar() 用同一招插在「標題列之後」；因為這個函式
+  // 是在 selectCourse 裡排在練習列「之後」呼叫，所以會插到練習列前面，
+  // 排出「標題 → 模擬國考 → 標籤練習 → 考卷列表」的順序。
+  if (container.children.length > 1) {
+    container.insertBefore(banner, container.children[1]);
+  } else {
+    container.appendChild(banner);
+  }
+  const startBtn = document.getElementById("mock-exam-start-btn");
+  if (startBtn) {
+    startBtn.onclick = function () {
+      startMockExam(course);
+    };
   }
 }
 
@@ -680,6 +885,7 @@ function initQuizHooks() {
     typeof window.updateDot !== "function" ||
     typeof window.restartQuiz !== "function" ||
     typeof window.backToSelect !== "function" ||
+    typeof window.backToCourseSelect !== "function" ||
     typeof window.selectCourse !== "function"
   ) {
     setTimeout(initQuizHooks, 200);
@@ -691,6 +897,16 @@ function initQuizHooks() {
   window.selectCourse = function (n) {
     origSelectCourse(n);
     ensureTagPracticeBar();
+    ensureMockExamBanner();
+    pushQuizSubStateIfNeeded();
+  };
+
+  // backToCourseSelect()（「← 換科目」）是使用者自己主動退回科目選擇畫面，
+  // 這裡把「瀏覽器上一頁」補丁用的旗標一併重置，避免下次選科目時漏補歷史紀錄。
+  const origBackToCourseSelect = window.backToCourseSelect;
+  window.backToCourseSelect = function () {
+    origBackToCourseSelect();
+    quizHistoryPushed = false;
   };
 
   const origSelectOpt = window.selectOpt;
@@ -745,6 +961,7 @@ function initQuizHooks() {
       window.qList = questions;
       suppressResumeCheck = true;
       window.beginQuiz();
+      if (reviewIsMockExam) startMockExamTimer(); // 模擬國考「再做一次」要重新倒數 60 分鐘
       return;
     }
     origRestartQuiz();
@@ -1169,6 +1386,58 @@ onAuthStateChanged(auth, (user) => {
   currentUser = user;
   dispatchAuthChange();
   if (user) pullAndMergeOnLogin(user);
+});
+
+// ---------------------------------------------------------------------------
+// ⬅️ 瀏覽器「上一頁」修正：index.html 的路由只認 location.hash（首頁／考題／
+// 筆記…這種最上層分頁切換），選科目→選考卷→作答這三層都沒有各自的網址
+// 狀態，所以原本從作答畫面按上一頁會直接跳回進分頁前的上一個 hash（通常是
+// 首頁），而不是退一層回到科目選擇。
+// 修法完全不動 index.html（那個檔案由 Rex 另一個衛教工具定期整份重新產生，
+// 改了也可能被蓋掉），改成在這裡用 history.pushState 補一筆「虛擬」的瀏覽
+// 記錄：只要離開科目選擇畫面就補一筆（網址本身不變，所以不會觸發既有的
+// hashchange 路由邏輯），使用者按一次上一頁時瀏覽器會把這筆記錄彈掉、
+// 觸發 popstate，這裡攔截下來強制顯示科目選擇畫面即可。
+// ---------------------------------------------------------------------------
+let quizHistoryPushed = false;
+
+function pushQuizSubStateIfNeeded() {
+  if (quizHistoryPushed) return; // 同一次「進入某科目」只補一筆，不用每個子畫面都補
+  quizHistoryPushed = true;
+  try {
+    history.pushState({ __quizSub: true }, "", location.href);
+  } catch (e) {}
+}
+
+function forceBackToCourseSelect() {
+  const quizAreaEl = document.getElementById("quiz-area");
+  const quizResultEl = document.getElementById("quiz-result");
+  if (quizAreaEl) quizAreaEl.style.display = "none";
+  if (quizResultEl) quizResultEl.style.display = "none";
+  stopTimer();
+  stopMockExamTimer();
+  if (inReviewMode) {
+    inReviewMode = false;
+    currentReviewGetter = null;
+    reviewIsMockExam = false;
+    hideStickyProgressBar();
+  }
+  if (typeof window.backToCourseSelect === "function") {
+    window.backToCourseSelect();
+  }
+  quizHistoryPushed = false;
+}
+
+window.addEventListener("popstate", function () {
+  const pageQuizEl = document.getElementById("page-quiz");
+  const onQuizPage = !!(pageQuizEl && pageQuizEl.classList.contains("active"));
+  const courseSelectEl = document.getElementById("course-select");
+  const alreadyOnCourseSelect = !!(
+    courseSelectEl && courseSelectEl.style.display !== "none"
+  );
+  if (onQuizPage && !alreadyOnCourseSelect) {
+    forceBackToCourseSelect();
+  }
 });
 
 initQuizHooks();
