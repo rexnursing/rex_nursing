@@ -295,13 +295,16 @@ let currentReviewGetter = null;
 // 同一個科目的考卷列表，而不是整個退回最上層。
 let reviewReturnTo = "course-select";
 let reviewReturnCourse = null;
-// 複習清單裡，只有「模擬國考」這個入口需要倒數計時；其他（標籤練習、
-// 搜尋結果、錯題本、疑難標記）都不需要。這裡另外用一個旗標區分，
-// startReviewList() 每次進來預設重置為 false，模擬國考自己的啟動函式
-// 呼叫完 startReviewList() 之後才把它改回 true。
+// 複習清單裡，只有「模擬國考」這個入口需要倒數計時、也只有它需要在題目
+// 標籤顯示「OO年第X次．第Y題」的考卷來源。這裡用一個旗標區分。
+// 旗標必須在 startReviewList() 內部、呼叫 window.beginQuiz()（會觸發第一次
+// renderQ()）之前就設定正確，不能等 startReviewList() 呼叫完才由外部改——
+// 否則模擬國考「第一題」render 當下旗標還是 false，標籤會來不及套用新格式
+// （這是實際部署後在瀏覽器直接測試才抓到的 timing bug，第 2 題以後都正常，
+// 只有第 1 題會誤植，故改成用參數傳入，由 startReviewList() 自己同步設定）。
 let reviewIsMockExam = false;
 
-function startReviewList(getter, emptyMsg, title, returnTo, returnCourse) {
+function startReviewList(getter, emptyMsg, title, returnTo, returnCourse, isMockExam) {
   const questions = getter();
   if (!questions.length) {
     alert(emptyMsg);
@@ -309,7 +312,7 @@ function startReviewList(getter, emptyMsg, title, returnTo, returnCourse) {
   }
   stopTimer(); // 複習／標籤練習不計時，不論從哪個入口進來都先停止碼表
   stopMockExamTimer(); // 換一份複習清單／重新開始模擬考，先清掉舊的倒數計時
-  reviewIsMockExam = false;
+  reviewIsMockExam = !!isMockExam;
   inReviewMode = true;
   currentReviewGetter = getter;
   reviewReturnTo = returnTo || "course-select";
@@ -666,9 +669,9 @@ function startMockExam(course) {
     "目前題庫還沒有這個科目的題目，請稍後再試。",
     "🎯 模擬國考（限時 60 分鐘）",
     "quiz-select",
-    course
+    course,
+    true // isMockExam
   );
-  reviewIsMockExam = true;
   startMockExamTimer();
 }
 
