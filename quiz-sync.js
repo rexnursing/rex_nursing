@@ -926,13 +926,47 @@ function ensureSearchUI() {
   const nav = document.querySelector("nav");
   if (!nav) return;
 
+  if (!document.getElementById("gsearch-style")) {
+    const style = document.createElement("style");
+    style.id = "gsearch-style";
+    style.textContent =
+      "@keyframes gsearchPulse{0%,100%{box-shadow:0 0 0 0 rgba(29,158,117,.35)}50%{box-shadow:0 0 0 6px rgba(29,158,117,0)}}" +
+      "#gsearch-btn.gsearch-pulse{animation:gsearchPulse 1.4s ease-in-out 3}" +
+      "@media (max-width:480px){#gsearch-btn .gsearch-btn-label{display:none}#gsearch-btn{padding:7px 10px}}";
+    document.head.appendChild(style);
+  }
+
+  const SEARCH_SEEN_KEY = "rex_gsearch_seen_v1";
+  let isFirstTimeSeeing = true;
+  try {
+    isFirstTimeSeeing = !localStorage.getItem(SEARCH_SEEN_KEY);
+  } catch (e) {
+    isFirstTimeSeeing = false;
+  }
+
   const btn = document.createElement("button");
   btn.id = "gsearch-btn";
   btn.type = "button";
-  btn.setAttribute("aria-label", "搜尋");
-  btn.style.cssText = "background:none;border:none;cursor:pointer;font-size:18px;padding:6px 8px;color:var(--muted);flex-shrink:0";
-  btn.textContent = "🔍";
-  btn.onclick = openSearchPanel;
+  btn.setAttribute("aria-label", "搜尋考題與教學影片");
+  btn.title = "搜尋考題與教學影片";
+  btn.style.cssText = "position:relative;display:inline-flex;align-items:center;gap:5px;background:var(--teal-l);border:none;border-radius:20px;cursor:pointer;font-size:15px;font-weight:600;padding:7px 14px;color:var(--teal-d);flex-shrink:0;font-family:inherit";
+  btn.innerHTML = '<span>🔍</span><span class="gsearch-btn-label">搜尋</span>';
+  if (isFirstTimeSeeing) {
+    btn.classList.add("gsearch-pulse");
+    const badge = document.createElement("span");
+    badge.setAttribute("data-gsearch-badge", "1");
+    badge.style.cssText = "position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:#ef4444;border:1.5px solid var(--white)";
+    btn.appendChild(badge);
+  }
+  btn.onclick = function () {
+    try {
+      localStorage.setItem(SEARCH_SEEN_KEY, "1");
+    } catch (e) {}
+    btn.classList.remove("gsearch-pulse");
+    const badgeEl = btn.querySelector("[data-gsearch-badge]");
+    if (badgeEl) badgeEl.remove();
+    openSearchPanel();
+  };
   nav.appendChild(btn);
 
   const overlay = document.createElement("div");
@@ -951,7 +985,7 @@ function ensureSearchUI() {
   const input = document.createElement("input");
   input.id = "gsearch-input";
   input.type = "text";
-  input.placeholder = "搜尋疾病、症狀、關鍵字（例如：高血鉀、庫欣氏症候群）...";
+  input.placeholder = "搜尋考題與影片關鍵字（例如：高血鉀、庫欣氏症候群）...";
   input.style.cssText = "flex:1;border:none;outline:none;font-size:16px;font-family:inherit;background:transparent;color:var(--text)";
   const closeBtn = document.createElement("button");
   closeBtn.type = "button";
@@ -1104,15 +1138,31 @@ function renderSearchResults(q) {
 
 function startSearchPractice(questions, title) {
   closeSearchPanel();
-  startReviewList(
-    function () {
-      return questions;
-    },
-    "這組搜尋結果目前沒有題目。",
-    title,
-    "course-select",
-    null
-  );
+  const pageQuizEl = document.getElementById("page-quiz");
+  const alreadyOnQuizPage =
+    pageQuizEl && pageQuizEl.classList.contains("active");
+  const doStart = function () {
+    startReviewList(
+      function () {
+        return questions;
+      },
+      "這組搜尋結果目前沒有題目。",
+      title,
+      "course-select",
+      null
+    );
+  };
+  if (!alreadyOnQuizPage && typeof window.goPage === "function") {
+    // goPage("quiz") 才會把外層 #page-quiz 分頁切換成顯示狀態（首頁／其他分頁
+    // 用 .page/.active 這組 class 控制可見度），只改 course-select/quiz-area
+    // 的 display 只有在「原本就在考題分頁」時才看得到效果，這是先前搜尋結果
+    // 點了沒反應的原因。goPage 內部有一個 10ms 延遲的重置動作（會把畫面重置
+    // 回科目選擇頁），這裡等它跑完再塞入搜尋到的題目，避免兩邊互相蓋掉。
+    window.goPage("quiz");
+    setTimeout(doStart, 50);
+  } else {
+    doStart();
+  }
 }
 
 onAuthStateChanged(auth, (user) => {
