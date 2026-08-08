@@ -531,6 +531,59 @@ function getMockExamQuestions(course) {
   return arr.slice(0, MOCK_EXAM_QUESTION_COUNT);
 }
 
+// ---------------------------------------------------------------------------
+// 🏷️ 模擬國考題目標籤：標出題目來源「OO年第X次・第Y題」。
+// 資料面：exam-data.js 每一題都有 .exam（來源考卷代碼，如 "115-1"／"psych-108-1"），
+// 但原始題號 .no 不是每科都有——內外科完全沒有，其他科少數梯次也缺。
+// ensureNoForExam() 用「同一份考卷的題目依內部序號 n 排序、算出第幾題」這個通用
+// 邏輯即時補齊，不管哪一科都能得到正確題號，且完全不改動 exam-data.js 本身。
+// ---------------------------------------------------------------------------
+
+const _noFilledExams = {};
+function ensureNoForExam(examCode) {
+  if (!examCode || _noFilledExams[examCode]) return;
+  _noFilledExams[examCode] = true;
+  if (!window.QS) return;
+  const group = window.QS.filter(function (q) {
+    return q.exam === examCode;
+  }).sort(function (a, b) {
+    return a.n - b.n;
+  });
+  group.forEach(function (q, idx) {
+    if (q.no === undefined || q.no === null) q.no = idx + 1;
+  });
+}
+
+const SESSION_CN = { 1: "一", 2: "二", 3: "三", 4: "四", 5: "五" };
+function getExamOriginLabel(q) {
+  if (!q || !q.exam) return "";
+  const sessions = window.EXAM_SESSIONS && window.EXAM_SESSIONS[q.course];
+  if (sessions) {
+    const found = sessions.find(function (s) {
+      return s.code === q.exam;
+    });
+    if (found && found.title) return found.title;
+  }
+  // 沒有 EXAM_SESSIONS 條目（目前是內外科的情況）：直接從 exam code 解析，
+  // 格式如 "115-1" → "115年第一次"。
+  const m = /(\d+)-(\d+)$/.exec(q.exam);
+  if (!m) return q.exam;
+  const year = m[1];
+  const session = m[2];
+  return year + "年第" + (SESSION_CN[session] || session) + "次";
+}
+
+function applyMockExamTag() {
+  if (!reviewIsMockExam) return;
+  const q = window.qList && window.qList[window.qIdx];
+  const tagEl = document.getElementById("q-tag");
+  if (!q || !tagEl) return;
+  ensureNoForExam(q.exam);
+  const label = getExamOriginLabel(q);
+  const no = q.no || q.n;
+  tagEl.textContent = (label ? label + " · " : "") + "第" + no + "題";
+}
+
 function formatCountdown(totalSec) {
   const m = Math.floor(totalSec / 60);
   const s = totalSec % 60;
@@ -940,6 +993,7 @@ function initQuizHooks() {
   window.renderQ = function () {
     origRenderQ();
     updateFlagButton();
+    applyMockExamTag();
     enhanceQDots();
     scrollCurrentDotIntoView();
     updateStickyProgressBar();
