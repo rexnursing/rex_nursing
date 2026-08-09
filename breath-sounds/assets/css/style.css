@@ -1,17 +1,17 @@
 /* ==========================================================================
    呼吸音圖解系列 Breath Sounds — 共用樣式
-   品牌色：主色藍 #1a73e8 ／ 背景 #f0f4f9 ／ 正常=綠 ／ 異常=紅 ／ 特殊=琥珀
+   品牌色：主色Teal #4BA6A1 ／ 背景 #F7F2E9 ／ 正常=綠 ／ 異常=紅 ／ 特殊=琥珀
    ========================================================================== */
 
 :root {
-  --blue: #1a73e8;
-  --blue-dark: #0c4aa0;
-  --blue-pale: #e8f0fe;
-  --bg: #f0f4f9;
+  --blue: #4BA6A1;
+  --blue-dark: #1F3B5C;
+  --blue-pale: #E3F1F0;
+  --bg: #F7F2E9;
   --white: #ffffff;
-  --ink: #1e293b;
-  --subink: #64748b;
-  --border: #dfe6f0;
+  --ink: #1C2733;
+  --subink: #64748B;
+  --border: #E4E7EB;
 
   --green: #1e8e3e;
   --green-bg: #dff4e3;
@@ -22,8 +22,8 @@
 
   --radius: 16px;
   --radius-sm: 10px;
-  --shadow: 0 2px 14px rgba(20, 40, 80, 0.07);
-  --shadow-md: 0 6px 24px rgba(20, 40, 80, 0.10);
+  --shadow: 0 2px 14px rgba(31, 59, 92, 0.07);
+  --shadow-md: 0 6px 24px rgba(31, 59, 92, 0.10);
   --maxw: 980px;
 }
 
