@@ -1,6 +1,6 @@
 /* ============================================================
    EKG 教學專區 — 共用設計系統
-   延續 Rex Nursing 主站品牌（墨綠 #1D9E75／Noto Serif TC）
+   延續 Rex Nursing 主站品牌（Teal #4BA6A1／Noto Serif TC）
    加入 ECG 心電圖紙紅色網格作為子識別
    ============================================================ */
 
@@ -8,13 +8,13 @@
 
 :root {
   /* 主站品牌色（與 rexnursing.github.io 一致） */
-  --teal: #1D9E75;
-  --teal-l: #E1F5EE;
-  --teal-d: #085041;
-  --cream: #FAFAF8;
-  --text: #1a1a1a;
-  --muted: #6b7280;
-  --bd: rgba(0,0,0,0.09);
+  --teal: #4BA6A1;
+  --teal-l: #E3F1F0;
+  --teal-d: #1F3B5C;
+  --cream: #F7F2E9;
+  --text: #1C2733;
+  --muted: #64748B;
+  --bd: rgba(31,59,92,.12);
   --white: #fff;
   --r: 14px;
   --rs: 8px;
@@ -48,7 +48,7 @@ img, svg { max-width: 100%; }
 /* ---------------- NAV ---------------- */
 .ekg-nav {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(250,250,248,0.95);
+  background: rgba(247,242,233,0.95);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--bd);
   padding: 0 24px;
