@@ -87,19 +87,27 @@ const LOCAL_KEY = "rex_quiz_myprogress_v1";
 function loadLocal() {
   try {
     const raw = JSON.parse(localStorage.getItem(LOCAL_KEY) || "{}");
-    return { answers: raw.answers || {}, flagged: raw.flagged || {} };
+    return {
+      answers: raw.answers || {},
+      flagged: raw.flagged || {},
+      mockHistory: raw.mockHistory || [],
+    };
   } catch (e) {
-    return { answers: {}, flagged: {} };
+    return { answers: {}, flagged: {}, mockHistory: [] };
   }
 }
 
-let { answers: myAnswers, flagged: myFlagged } = loadLocal();
+let { answers: myAnswers, flagged: myFlagged, mockHistory: myMockHistory } = loadLocal();
 
 function saveLocal() {
   try {
     localStorage.setItem(
       LOCAL_KEY,
-      JSON.stringify({ answers: myAnswers, flagged: myFlagged })
+      JSON.stringify({
+        answers: myAnswers,
+        flagged: myFlagged,
+        mockHistory: myMockHistory,
+      })
     );
   } catch (e) {
     console.error("[quiz-sync] 本機儲存失敗", e);
@@ -112,6 +120,7 @@ async function pushToCloud() {
     await setDoc(doc(db, "users", currentUser.uid), {
       answers: myAnswers,
       flagged: myFlagged,
+      mockHistory: myMockHistory,
       updatedAt: serverTimestamp(),
     });
   } catch (err) {
@@ -123,12 +132,14 @@ async function pullAndMergeOnLogin(user) {
   const ref = doc(db, "users", user.uid);
   let cloudAnswers = {};
   let cloudFlagged = {};
+  let cloudMockHistory = [];
   try {
     const snap = await getDoc(ref);
     if (snap.exists()) {
       const d = snap.data();
       cloudAnswers = d.answers || {};
       cloudFlagged = d.flagged || {};
+      cloudMockHistory = d.mockHistory || [];
     }
   } catch (err) {
     console.error("[quiz-sync] 讀取雲端資料失敗，暫時只用本機資料", err);
@@ -151,11 +162,30 @@ async function pullAndMergeOnLogin(user) {
     }
   }
 
+  // mockHistory 是純紀錄（無法像 answers/flagged 用「key 是否存在」判斷重複），
+  // 用 date+course 當作簡易去重鍵，雲端與本機各自獨有的紀錄都保留、依日期新到舊排序。
+  const mergedMockHistory = cloudMockHistory.slice();
+  const seenKeys = new Set(
+    cloudMockHistory.map((h) => h.date + "|" + h.course)
+  );
+  let hasLocalOnlyHistory = false;
+  myMockHistory.forEach((h) => {
+    const key = h.date + "|" + h.course;
+    if (!seenKeys.has(key)) {
+      mergedMockHistory.push(h);
+      seenKeys.add(key);
+      hasLocalOnlyHistory = true;
+    }
+  });
+  mergedMockHistory.sort((a, b) => (a.date < b.date ? 1 : -1));
+  if (mergedMockHistory.length > 30) mergedMockHistory.length = 30;
+
   myAnswers = cloudAnswers;
   myFlagged = cloudFlagged;
+  myMockHistory = mergedMockHistory;
   saveLocal();
 
-  if (hasLocalOnly) {
+  if (hasLocalOnly || hasLocalOnlyHistory) {
     await pushToCloud();
   }
 
@@ -518,20 +548,64 @@ let mockExamBannerCourse = null;
 let mockExamDeadline = null;
 let mockExamIntervalId = null;
 
+function shuffleArr(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = a[i];
+    a[i] = a[j];
+    a[j] = tmp;
+  }
+  return a;
+}
+
+// exam-data.js 裡基礎醫學科目有個歷史遺留的標籤打字不一致：多數題目標成
+// 「微生物學與免疫」，少數（26題）多打一個「學」字標成「微生物學與免疫學」，
+// 實際上是同一章節。章節出題熱度頁那邊已經在顯示層合併過一次，這裡抽題
+// 用的是原始 q.subj，必須同樣正規化，否則會被誤判成 6 個章節、多切出一份
+// 配額，導致這個章節整體被分配到的題數變少。未來如果 exam-data.js 本身把
+// 標籤統一了，這裡留著也不影響結果（找不到別名就是原字串本身）。
+var CHAPTER_ALIAS = { "微生物學與免疫學": "微生物學與免疫" };
+function normChapter(subj) {
+  return CHAPTER_ALIAS[subj] || subj;
+}
+
+// 依章節（subj）平均分配抽題，而不是整科純隨機——避免題數多的章節（例如內外科
+// 的腫瘤血液）在 50 題裡被過度抽到，題數少的章節（例如感官系統）幾乎抽不到。
+// 「其他」是未分類題目的暫存分類、不是正式命題大綱章節，抽題平均分配時不計入，
+// 但仍保留在整科題庫中，當某章節題數不足配額時可以當備援池用。
 function getMockExamQuestions(course) {
   if (!window.QS) return [];
   const pool = window.QS.filter(function (q) {
     return q.course === course;
   });
-  // Fisher-Yates 洗牌，抽前 MOCK_EXAM_QUESTION_COUNT 題（跟標籤練習用同一招）
-  const arr = pool.slice();
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const tmp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = tmp;
+  const byChapter = {};
+  pool.forEach(function (q) {
+    if (q.subj === "其他") return;
+    const key = normChapter(q.subj);
+    if (!byChapter[key]) byChapter[key] = [];
+    byChapter[key].push(q);
+  });
+  const chapters = shuffleArr(Object.keys(byChapter));
+  if (!chapters.length) {
+    return shuffleArr(pool.slice()).slice(0, MOCK_EXAM_QUESTION_COUNT);
   }
-  return arr.slice(0, MOCK_EXAM_QUESTION_COUNT);
+  const base = Math.floor(MOCK_EXAM_QUESTION_COUNT / chapters.length);
+  const remainder = MOCK_EXAM_QUESTION_COUNT % chapters.length;
+  let picked = [];
+  chapters.forEach(function (name, idx) {
+    const quota = base + (idx < remainder ? 1 : 0);
+    picked = picked.concat(shuffleArr(byChapter[name].slice()).slice(0, quota));
+  });
+  // 保險：正常情況下每章節題數都遠大於配額，這裡只是避免萬一有章節題數不足時
+  // 抽不滿 50 題——用同一科其餘題目（含「其他」）補滿。
+  if (picked.length < MOCK_EXAM_QUESTION_COUNT) {
+    const pickedSet = new Set(picked.map(function (q) { return q.n; }));
+    const rest = shuffleArr(
+      pool.filter(function (q) { return !pickedSet.has(q.n); })
+    );
+    picked = picked.concat(rest.slice(0, MOCK_EXAM_QUESTION_COUNT - picked.length));
+  }
+  return shuffleArr(picked).slice(0, MOCK_EXAM_QUESTION_COUNT);
 }
 
 // ---------------------------------------------------------------------------
@@ -599,6 +673,73 @@ function stopMockExamTimer() {
     mockExamIntervalId = null;
   }
   mockExamDeadline = null;
+}
+
+// ---------------------------------------------------------------------------
+// 模擬考歷次成績：跟 answers/flagged 存在同一份 LOCAL_KEY／同一份 Firestore
+// 文件裡（見 loadLocal/saveLocal/pushToCloud），不另外開一個 key，
+// 避免 setDoc 沒有帶 merge:true 時互相覆蓋掉對方欄位。
+// ---------------------------------------------------------------------------
+
+function recordMockResult(course, score, correct, total, passed) {
+  if (!course) return;
+  myMockHistory.unshift({
+    course: course,
+    date: new Date().toISOString(),
+    score: score,
+    correct: correct,
+    total: total,
+    passed: passed,
+  });
+  if (myMockHistory.length > 30) myMockHistory.length = 30;
+  saveLocal();
+  if (currentUser) pushToCloud();
+}
+
+function ensureMockHistoryBox() {
+  let box = document.getElementById("mock-history-box");
+  if (box) return box;
+  const wrongList = document.getElementById("wrong-list");
+  if (!wrongList || !wrongList.parentElement) return null;
+  box = document.createElement("div");
+  box.id = "mock-history-box";
+  box.style.cssText =
+    "margin-top:20px;border-top:1px solid var(--bd);padding-top:16px;text-align:left";
+  wrongList.parentElement.insertBefore(box, wrongList.nextSibling);
+  return box;
+}
+
+function renderMockHistoryInResult(course) {
+  const box = ensureMockHistoryBox();
+  if (!box) return;
+  const list = myMockHistory
+    .filter(function (h) { return h.course === course; })
+    .slice(0, 5);
+  if (!list.length) {
+    box.innerHTML = "";
+    return;
+  }
+  const rows = list
+    .map(function (h) {
+      const d = new Date(h.date);
+      const pad = function (x) { return String(x).padStart(2, "0"); };
+      const dateStr =
+        d.getFullYear() + "/" + pad(d.getMonth() + 1) + "/" + pad(d.getDate()) +
+        " " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+      const badge = h.passed
+        ? '<span style="color:#27500a;background:#eaf3de;padding:2px 10px;border-radius:20px;font-size:11.5px;font-weight:500">及格</span>'
+        : '<span style="color:#993c1d;background:#faece7;padding:2px 10px;border-radius:20px;font-size:11.5px;font-weight:500">未達60分</span>';
+      return (
+        '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--bd);font-size:13px">' +
+        '<span style="color:var(--muted)">' + dateStr + "</span>" +
+        '<span style="display:flex;align-items:center;gap:10px"><strong>' + h.score + ' 分</strong>' + badge + "</span>" +
+        "</div>"
+      );
+    })
+    .join("");
+  box.innerHTML =
+    '<div style="font-size:14px;font-weight:500;margin-bottom:8px">📊 這科的模擬考歷次成績</div>' +
+    rows;
 }
 
 function autoSubmitMockExam() {
@@ -942,7 +1083,8 @@ function initQuizHooks() {
     typeof window.restartQuiz !== "function" ||
     typeof window.backToSelect !== "function" ||
     typeof window.backToCourseSelect !== "function" ||
-    typeof window.selectCourse !== "function"
+    typeof window.selectCourse !== "function" ||
+    typeof window.showResult !== "function"
   ) {
     setTimeout(initQuizHooks, 200);
     return;
@@ -990,6 +1132,23 @@ function initQuizHooks() {
   window.beginQuiz = function () {
     origBeginQuiz();
     afterQuizListLoaded();
+  };
+
+  // 模擬國考交卷計分：不管是使用者提早全部答完（nextQ 內部直接呼叫
+  // showResult）還是 60 分鐘時間到自動送出（autoSubmitMockExam 呼叫
+  // showResult），最後都會匯流到這裡，所以只需要掛勾在 showResult 一處。
+  const origShowResult = window.showResult;
+  window.showResult = function () {
+    origShowResult();
+    if (reviewIsMockExam) {
+      const qList = window.qList || [];
+      const total = qList.length;
+      const correct = window.cntOk || 0;
+      const score = total ? Math.round((correct / total) * 100) : 0;
+      const passed = score >= 60;
+      recordMockResult(reviewReturnCourse, score, correct, total, passed);
+      renderMockHistoryInResult(reviewReturnCourse);
+    }
   };
 
   const origRenderQ = window.renderQ;
@@ -1509,4 +1668,5 @@ window.quizSync = {
   logout,
   getUser: () => currentUser,
   exitReview,
+  startMockExam,
 };
