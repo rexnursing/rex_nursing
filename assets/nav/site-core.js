@@ -1,5 +1,5 @@
 // assets/nav/site-core.js
-// 全站共用導覽列（方案A分組：首頁 / 學習資源▾ / 考試工具▾ / 更多▾ / YouTube）
+// 全站共用導覽列（v2.0 藍圖分組：首頁 / 課程影音▾ / 臨床與備考工具▾ / 刷題與講義▾ / 關於 Rex▾ / YouTube / 國考筆記）
 // + 基本防複製（右鍵選單停用；文字選取停用交由 site-nav.css 的 user-select 規則）
 //
 // 設計原則（請保留這段註解，未來維護時先看這裡）：
@@ -9,20 +9,31 @@
 //    這種後代選擇器，不受巢狀深度影響，完全不需要跟著修改。
 // 2. 找不到的連結（例如某些頁面沒有練習考題連結）直接跳過，不會報錯。
 // 3. 不在下面 GROUPS 名單內、但確實存在於 .nav-r 裡的 <a id^="nav-"> 連結
-//    （例如未來新增的分類連結），會自動歸類進「更多」，不會被吃掉、也不需要
-//    每次新增頁面連結都回來改這支程式。
+//    （例如未來新增的分類連結），會自動歸類進隱藏的「更多」安全網分組，
+//    只有在真的有東西時才會顯示，不會被吃掉、也不需要每次新增頁面連結都
+//    回來改這支程式。
 // 4. 每次頁面載入都會重新分組一次，所以就算 index.html 被其他工具重新產生、
 //    導覽列被還原成扁平清單，畫面上還是會是分組後的樣子——這是自我修復機制
 //    的核心，但前提是這支檔案本身、以及 index.html 裡載入它的那一小段
 //    <script> 標籤還在。如果那段標籤本身被清掉，就需要手動補回去，
 //    這是目前架構已知、暫不打算解決的限制。
+// 5. 2026-08 v2.0 改版：GROUPS 從「學習資源/考試工具/更多」三組改為藍圖 v2.0
+//    的四組（課程影音/臨床與備考工具/刷題與講義/關於 Rex），並新增第二個
+//    行動按鈕（🛒 國考筆記，用 .nav-shop-cta class 標記，邏輯跟原本的
+//    .nav-yt 完全對稱：獨立、不進分組、排在 YouTube 之後）。
+//    「課程影音」分組裡的六個考科分類連結（nav-cat-*）目前都指到同一個
+//    goPage("videos") 通用影片頁，還沒有真正的分類篩選深連結——影片分類
+//    篩選（filterVids）目前是完全沒有實際按鈕在呼叫的孤兒函式，屬於另一項
+//    「搜尋列：整合影片搜尋結果」任務的範圍，之後才會補上真正的深連結。
 (function () {
   'use strict';
 
   var GROUPS = [
-    { key: 'study', label: '學習資源', ids: ['nav-health', 'nav-breath', 'nav-ekg'] },
-    { key: 'exam', label: '考試工具', ids: ['nav-exam', 'nav-quiz', 'nav-countdown', 'nav-studyplan'] },
-    { key: 'more', label: '更多', ids: ['nav-playlists', 'nav-videos', 'nav-notes', 'nav-about'] }
+    { key: 'courses', label: '課程影音', ids: ['nav-videos', 'nav-playlists', 'nav-cat-surgical', 'nav-cat-fundamental', 'nav-cat-psych', 'nav-cat-obped', 'nav-cat-admin', 'nav-cat-basicmed'] },
+    { key: 'tools', label: '臨床與備考工具', ids: ['nav-health', 'nav-breath', 'nav-ekg', 'nav-countdown', 'nav-studyplan'] },
+    { key: 'practice', label: '刷題與講義', ids: ['nav-quiz', 'nav-exam', 'nav-notes'] },
+    { key: 'about', label: '關於 Rex', ids: ['nav-about', 'nav-line', 'nav-shop'] },
+    { key: 'more', label: '更多', ids: [] }
   ];
   var FALLBACK_GROUP_KEY = 'more';
   var HOME_ID = 'nav-home';
@@ -37,9 +48,11 @@
     var allLinks = Array.prototype.slice.call(navR.querySelectorAll('a'));
     var byId = {};
     var ytLink = null;
+    var shopLink = null;
     allLinks.forEach(function (a) {
       if (a.id) byId[a.id] = a;
       if (a.classList.contains('nav-yt')) ytLink = a;
+      if (a.classList.contains('nav-shop-cta')) shopLink = a;
     });
 
     var used = {};
@@ -66,7 +79,7 @@
     });
 
     // 5) 任何 id 以 nav- 開頭、但沒被上面任何分組收走的連結，自動歸類進
-    //    「更多」（例如未來新增的健康衛教子分類），確保不會消失不見。
+    //    隱藏的「更多」安全網分組（例如未來新增的分類連結），確保不會消失不見。
     allLinks.forEach(function (a) {
       if (a.id && /^nav-/.test(a.id) && !used[a.id]) {
         groupEls[FALLBACK_GROUP_KEY].dropdown.appendChild(a);
@@ -81,9 +94,12 @@
       }
     });
 
-    // 7) YouTube 連結：保持獨立、排最後
+    // 7) 行動按鈕：YouTube、國考筆記，保持獨立、依序排在最後
     if (ytLink) {
       navR.appendChild(ytLink);
+    }
+    if (shopLink) {
+      navR.appendChild(shopLink);
     }
 
     navR.setAttribute('data-grouped', '1');
