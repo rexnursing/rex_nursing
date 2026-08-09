@@ -30,13 +30,14 @@
 
   var GROUPS = [
     { key: 'courses', label: '課程影音', ids: ['nav-videos', 'nav-playlists', 'nav-cat-surgical', 'nav-cat-fundamental', 'nav-cat-psych', 'nav-cat-obped', 'nav-cat-admin', 'nav-cat-basicmed'] },
-    { key: 'tools', label: '臨床與備考工具', ids: ['nav-health', 'nav-breath', 'nav-ekg', 'nav-countdown', 'nav-studyplan'] },
+    { key: 'tools', label: '臨床與備考工具', ids: ['nav-breath', 'nav-ekg', 'nav-countdown', 'nav-studyplan'] },
     { key: 'practice', label: '刷題與講義', ids: ['nav-quiz', 'nav-exam', 'nav-notes'] },
     { key: 'about', label: '關於 Rex', ids: ['nav-about', 'nav-line', 'nav-shop'] },
     { key: 'more', label: '更多', ids: [] }
   ];
   var FALLBACK_GROUP_KEY = 'more';
   var HOME_ID = 'nav-home';
+  var HEALTH_ID = 'nav-health'; // 健康衛教內容量大，獨立成一個頂層項目，不跟其他工具分組混放
 
   function buildNav() {
     var navR = document.querySelector('.nav-r');
@@ -61,10 +62,14 @@
     // 2) 清空 .nav-r 目前的內容（節點物件仍保留在 allLinks/byId 陣列中）
     while (navR.firstChild) navR.removeChild(navR.firstChild);
 
-    // 3) 首頁：保持獨立、排最前面
+    // 3) 首頁、健康衛教：保持獨立、排最前面（健康衛教內容量大，獨立出來不跟其他工具分組混放）
     if (byId[HOME_ID]) {
       navR.appendChild(byId[HOME_ID]);
       used[HOME_ID] = true;
+    }
+    if (byId[HEALTH_ID]) {
+      navR.appendChild(byId[HEALTH_ID]);
+      used[HEALTH_ID] = true;
     }
 
     // 4) 依 GROUPS 設定建立每個分組的下拉選單
