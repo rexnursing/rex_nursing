@@ -1107,22 +1107,49 @@ function initQuizHooks() {
     quizHistoryPushed = false;
   };
 
+  // 正式模擬考的題目卡上，只標出「目前選了哪一個」（中性樣式，不透露對錯），
+  // selectOpt()／renderQ() 都要套用同一份邏輯，抽成共用函式。
+  function applyMockAnswerHighlight() {
+    const fb = document.getElementById("q-feedback");
+    if (fb) fb.style.display = "none";
+    const sel = window.answered ? window.answered[window.qIdx] : undefined;
+    document.querySelectorAll("#q-opts .opt-btn").forEach(function (btn, idx) {
+      btn.classList.remove("correct", "wrong", "show-ans");
+      btn.disabled = false; // 交卷前隨時可以改答案，不能維持 origSelectOpt() 上的 disabled
+      btn.style.borderColor = idx === sel ? "var(--teal)" : "";
+      btn.style.background = idx === sel ? "var(--teal-l)" : "";
+    });
+  }
+
   const origSelectOpt = window.selectOpt;
   window.selectOpt = function (n) {
+    const wasAnswered =
+      window.answered && window.answered[window.qIdx] !== undefined;
+
+    // 正式模擬考且這題已經答過一次：不能再呼叫 origSelectOpt()，因為它本體
+    // 一開始就寫死「已作答直接 return」，改答案永遠不會生效。這裡改成自己
+    // 直接覆蓋 answered，不去動 cntOk/cntBad 那組累加計數器——反正交卷時
+    // （見 showResult 掛勾）會重新用 qList+answered 整個算一次最終分數，
+    // 不依賴這兩個只在「第一次作答」當下才準的計數器。
+    if (reviewIsMockExam && wasAnswered) {
+      window.answered[window.qIdx] = n;
+      const q = window.qList && window.qList[window.qIdx];
+      if (q) recordAnswer(q.n, n);
+      applyMockAnswerHighlight();
+      updateStickyProgressBar();
+      return;
+    }
+
     const q = window.qList && window.qList[window.qIdx];
     origSelectOpt(n);
     if (q) recordAnswer(q.n, n);
     updateStickyProgressBar();
     // 正式模擬考：作答當下不能看到對錯，這裡沿用 selectOpt() 本體（避免另外
-    // 複製一份平行的作答流程），只在它上色／顯示解析「之後」立刻復原。
-    // 這一段跟 origSelectOpt() 都在同一次同步呼叫、畫面還沒真正畫出來，
-    // 所以使用者不會看到「先顯示對錯又馬上消失」的閃爍。
+    // 複製一份平行的作答流程），只在它上色／顯示解析／鎖定按鈕「之後」立刻
+    // 復原。這一段跟 origSelectOpt() 都在同一次同步呼叫、畫面還沒真正畫出
+    // 來，所以使用者不會看到「先顯示對錯又馬上消失」的閃爍。
     if (reviewIsMockExam) {
-      const fb = document.getElementById("q-feedback");
-      if (fb) fb.style.display = "none";
-      document.querySelectorAll("#q-opts .opt-btn").forEach(function (btn) {
-        btn.classList.remove("correct", "wrong", "show-ans");
-      });
+      applyMockAnswerHighlight();
     }
   };
 
@@ -1169,11 +1196,34 @@ function initQuizHooks() {
   window.showResult = function () {
     origShowResult();
     if (reviewIsMockExam) {
+      // 不能用 cntOk/cntBad——那是「第一次作答當下」累加的計數器，允許交卷前
+      // 改答案之後就不準了（改答案不會回頭修正之前加總的次數）。這裡直接用
+      // qList + answered 的最終狀態重新算一次，才是真正正確的最終分數。
       const qList = window.qList || [];
       const total = qList.length;
-      const correct = window.cntOk || 0;
+      let correct = 0;
+      qList.forEach(function (q, i) {
+        if (
+          window.answered &&
+          window.answered[i] !== undefined &&
+          q.ans.includes(window.answered[i])
+        ) {
+          correct++;
+        }
+      });
+      const wrong = total - correct;
       const score = total ? Math.round((correct / total) * 100) : 0;
       const passed = score >= 60;
+
+      // origShowResult() 剛剛已經用舊的 cntOk/cntBad 把畫面畫出來了，這裡
+      // 用重新算好的正確數字覆蓋回去，確保畫面跟存進歷次成績的數字一致。
+      const pctEl = document.getElementById("res-pct");
+      const okEl = document.getElementById("res-ok");
+      const badEl = document.getElementById("res-bad");
+      if (pctEl) pctEl.textContent = score + "%";
+      if (okEl) okEl.textContent = correct + "題";
+      if (badEl) badEl.textContent = wrong + "題";
+
       recordMockResult(reviewReturnCourse, score, correct, total, passed);
       renderMockHistoryInResult(reviewReturnCourse);
     }
@@ -1188,11 +1238,7 @@ function initQuizHooks() {
     scrollCurrentDotIntoView();
     updateStickyProgressBar();
     if (reviewIsMockExam) {
-      const fb = document.getElementById("q-feedback");
-      if (fb) fb.style.display = "none";
-      document.querySelectorAll("#q-opts .opt-btn").forEach(function (btn) {
-        btn.classList.remove("correct", "wrong", "show-ans");
-      });
+      applyMockAnswerHighlight();
     }
   };
 
