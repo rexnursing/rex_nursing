@@ -689,8 +689,8 @@ function ensureMockExamBanner() {
   banner.id = "mock-exam-banner";
   banner.style.cssText =
     "display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;" +
-    "background:linear-gradient(135deg,#1d9e75,#085041);color:#fff;border-radius:var(--r);" +
-    "padding:18px 22px;margin-bottom:16px;box-shadow:0 8px 20px rgba(8,80,65,.18)";
+    "background:linear-gradient(135deg,#4BA6A1,#1F3B5C);color:#fff;border-radius:var(--r);" +
+    "padding:18px 22px;margin-bottom:16px;box-shadow:0 8px 20px rgba(31,59,92,.18)";
   banner.innerHTML =
     '<div><div style="font-size:15.5px;font-weight:700;margin-bottom:3px">🎯 模擬國考</div>' +
     '<div style="font-size:12.5px;opacity:.85">隨機抽取 ' +
@@ -1204,7 +1204,7 @@ function ensureSearchUI() {
     const style = document.createElement("style");
     style.id = "gsearch-style";
     style.textContent =
-      "@keyframes gsearchPulse{0%,100%{box-shadow:0 0 0 0 rgba(29,158,117,.35)}50%{box-shadow:0 0 0 6px rgba(29,158,117,0)}}" +
+      "@keyframes gsearchPulse{0%,100%{box-shadow:0 0 0 0 rgba(75,166,161,.35)}50%{box-shadow:0 0 0 6px rgba(75,166,161,0)}}" +
       "#gsearch-btn.gsearch-pulse{animation:gsearchPulse 1.4s ease-in-out 3}" +
       "@media (max-width:480px){#gsearch-btn .gsearch-btn-label{display:none}#gsearch-btn{padding:7px 10px}}";
     document.head.appendChild(style);
