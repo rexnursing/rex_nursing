@@ -1113,6 +1113,17 @@ function initQuizHooks() {
     origSelectOpt(n);
     if (q) recordAnswer(q.n, n);
     updateStickyProgressBar();
+    // 正式模擬考：作答當下不能看到對錯，這裡沿用 selectOpt() 本體（避免另外
+    // 複製一份平行的作答流程），只在它上色／顯示解析「之後」立刻復原。
+    // 這一段跟 origSelectOpt() 都在同一次同步呼叫、畫面還沒真正畫出來，
+    // 所以使用者不會看到「先顯示對錯又馬上消失」的閃爍。
+    if (reviewIsMockExam) {
+      const fb = document.getElementById("q-feedback");
+      if (fb) fb.style.display = "none";
+      document.querySelectorAll("#q-opts .opt-btn").forEach(function (btn) {
+        btn.classList.remove("correct", "wrong", "show-ans");
+      });
+    }
   };
 
   const origStartExam = window.startExam;
@@ -1132,6 +1143,23 @@ function initQuizHooks() {
   window.beginQuiz = function () {
     origBeginQuiz();
     afterQuizListLoaded();
+  };
+
+  // 正式模擬考的答題地圖（qdots）不能用顏色透露對錯，所以這裡整個接管、
+  // 不呼叫 origUpdateDot——一般練習模式完全不受影響。
+  const origUpdateDot = window.updateDot;
+  window.updateDot = function (n, s) {
+    if (reviewIsMockExam) {
+      const el = document.getElementById("dot" + n);
+      if (el) {
+        el.classList.remove("cur", "ok", "bad");
+        el.style.background = "var(--teal-l)";
+        el.style.color = "var(--teal-d)";
+        el.style.fontWeight = "600";
+      }
+      return;
+    }
+    origUpdateDot(n, s);
   };
 
   // 模擬國考交卷計分：不管是使用者提早全部答完（nextQ 內部直接呼叫
@@ -1159,6 +1187,13 @@ function initQuizHooks() {
     enhanceQDots();
     scrollCurrentDotIntoView();
     updateStickyProgressBar();
+    if (reviewIsMockExam) {
+      const fb = document.getElementById("q-feedback");
+      if (fb) fb.style.display = "none";
+      document.querySelectorAll("#q-opts .opt-btn").forEach(function (btn) {
+        btn.classList.remove("correct", "wrong", "show-ans");
+      });
+    }
   };
 
   // restartQuiz()（結果頁「再做一次」）原本會照 currentExamFilter／
