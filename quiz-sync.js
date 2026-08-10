@@ -83,6 +83,7 @@ async function logout() {
 // ---------------------------------------------------------------------------
 
 const LOCAL_KEY = "rex_quiz_myprogress_v1";
+const PENDING_SYNC_KEY = "rex_quiz_pending_sync_v1";
 
 function loadLocal() {
   try {
@@ -114,33 +115,130 @@ function saveLocal() {
   }
 }
 
+function markPendingSync(pending) {
+  try {
+    if (pending) localStorage.setItem(PENDING_SYNC_KEY, "1");
+    else localStorage.removeItem(PENDING_SYNC_KEY);
+  } catch (e) {}
+}
+
+function hasPendingSync() {
+  try {
+    return localStorage.getItem(PENDING_SYNC_KEY) === "1";
+  } catch (e) {
+    return false;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// PWA離線支援新增：安全合併同步。
+//
+// 舊版 pushToCloud() 是「整份覆蓋」寫入雲端——手機離線刷題後、恢復連線
+// 才推送，如果同一段時間另一台裝置也同步過，整份覆蓋會讓那台裝置的
+// 紀錄憑空消失。改成「每次寫雲端前先重新讀一次雲端最新狀態、合併後才
+// 寫回」，兩個方向共用同一組合併函式，差別只在「誰蓋過誰」：
+//   - mergeKeyMap(base, overlay)：answers／flagged 這種「key -> 目前狀態」
+//     的資料，結果 = base 與 overlay 的聯集，衝突時 overlay 蓋過 base。
+//     登入合併時 overlay 傳雲端（代表其他裝置已同步過的最新狀態）；
+//     推送合併時 overlay 傳本機（本機剛做的動作要蓋過雲端上比較舊的值），
+//     但雲端獨有、本機不知道的題目一樣會保留，不會整份蓋掉。
+//   - mergeMockHistoryList()：mockHistory 是不會互相覆蓋的紀錄陣列，
+//     用 date+course 當去重鍵取聯集即可，方向不影響結果。
+// ---------------------------------------------------------------------------
+
+function mergeKeyMap(base, overlay) {
+  return Object.assign({}, base || {}, overlay || {});
+}
+
+function mergeMockHistoryList(a, b) {
+  const merged = (a || []).slice();
+  const seen = new Set(merged.map((h) => h.date + "|" + h.course));
+  (b || []).forEach((h) => {
+    const key = h.date + "|" + h.course;
+    if (!seen.has(key)) {
+      merged.push(h);
+      seen.add(key);
+    }
+  });
+  merged.sort((a, b) => (a.date < b.date ? 1 : -1));
+  if (merged.length > 30) merged.length = 30;
+  return merged;
+}
+
+async function readCloudDoc(uid) {
+  const ref = doc(db, "users", uid);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return { answers: {}, flagged: {}, mockHistory: [] };
+  const d = snap.data();
+  return {
+    answers: d.answers || {},
+    flagged: d.flagged || {},
+    mockHistory: d.mockHistory || [],
+  };
+}
+
+// pushInFlight/pushQueued：避免手機連續作答時，好幾次 pushToCloud() 同時
+// 各自跑一次 getDoc+setDoc 互相打架；正在推送時新進來的請求先排隊，
+// 等目前這次跑完再自動補推一次，不會漏掉、也不會同時交錯執行。
+let pushInFlight = false;
+let pushQueued = false;
+
 async function pushToCloud() {
   if (!currentUser) return;
+  if (pushInFlight) {
+    pushQueued = true;
+    return;
+  }
+  pushInFlight = true;
   try {
+    let cloudData;
+    try {
+      cloudData = await readCloudDoc(currentUser.uid);
+    } catch (err) {
+      // 讀不到雲端最新狀態（通常是離線中）——不能安全合併就貿然覆蓋，
+      // 先標記「還有本機變更沒同步」，本機資料維持原狀，
+      // 等恢復連線（見下方 online 事件）或下次登入合併時再補推。
+      console.warn("[quiz-sync] 離線或讀取雲端失敗，暫緩推送，等恢復連線後重試", err);
+      markPendingSync(true);
+      return;
+    }
+
+    myAnswers = mergeKeyMap(cloudData.answers, myAnswers);
+    myFlagged = mergeKeyMap(cloudData.flagged, myFlagged);
+    myMockHistory = mergeMockHistoryList(cloudData.mockHistory, myMockHistory);
+    saveLocal();
+
     await setDoc(doc(db, "users", currentUser.uid), {
       answers: myAnswers,
       flagged: myFlagged,
       mockHistory: myMockHistory,
       updatedAt: serverTimestamp(),
     });
+    markPendingSync(false);
   } catch (err) {
     console.error("[quiz-sync] 寫入雲端失敗", err);
+    markPendingSync(true);
+  } finally {
+    pushInFlight = false;
+    if (pushQueued) {
+      pushQueued = false;
+      pushToCloud();
+    }
   }
 }
 
+// 手機恢復網路連線時，如果先前離線推送失敗留下「待同步」標記，
+// 自動重試一次，不用等使用者剛好再手動作答一題才會觸發同步。
+window.addEventListener("online", () => {
+  if (currentUser && hasPendingSync()) {
+    pushToCloud();
+  }
+});
+
 async function pullAndMergeOnLogin(user) {
-  const ref = doc(db, "users", user.uid);
-  let cloudAnswers = {};
-  let cloudFlagged = {};
-  let cloudMockHistory = [];
+  let cloudData;
   try {
-    const snap = await getDoc(ref);
-    if (snap.exists()) {
-      const d = snap.data();
-      cloudAnswers = d.answers || {};
-      cloudFlagged = d.flagged || {};
-      cloudMockHistory = d.mockHistory || [];
-    }
+    cloudData = await readCloudDoc(user.uid);
   } catch (err) {
     console.error("[quiz-sync] 讀取雲端資料失敗，暫時只用本機資料", err);
     return;
@@ -148,44 +246,21 @@ async function pullAndMergeOnLogin(user) {
 
   // 合併規則：雲端資料優先（代表其他裝置已同步過的狀態），
   // 本機這台裝置獨有、雲端還沒有的題目再補進去，不會互相覆蓋掉對方獨有的紀錄。
-  let hasLocalOnly = false;
-  for (const k in myAnswers) {
-    if (!(k in cloudAnswers)) {
-      cloudAnswers[k] = myAnswers[k];
-      hasLocalOnly = true;
-    }
-  }
-  for (const k in myFlagged) {
-    if (!(k in cloudFlagged)) {
-      cloudFlagged[k] = myFlagged[k];
-      hasLocalOnly = true;
-    }
-  }
+  const mergedAnswers = mergeKeyMap(myAnswers, cloudData.answers);
+  const mergedFlagged = mergeKeyMap(myFlagged, cloudData.flagged);
+  const mergedMockHistory = mergeMockHistoryList(cloudData.mockHistory, myMockHistory);
 
-  // mockHistory 是純紀錄（無法像 answers/flagged 用「key 是否存在」判斷重複），
-  // 用 date+course 當作簡易去重鍵，雲端與本機各自獨有的紀錄都保留、依日期新到舊排序。
-  const mergedMockHistory = cloudMockHistory.slice();
-  const seenKeys = new Set(
-    cloudMockHistory.map((h) => h.date + "|" + h.course)
-  );
-  let hasLocalOnlyHistory = false;
-  myMockHistory.forEach((h) => {
-    const key = h.date + "|" + h.course;
-    if (!seenKeys.has(key)) {
-      mergedMockHistory.push(h);
-      seenKeys.add(key);
-      hasLocalOnlyHistory = true;
-    }
-  });
-  mergedMockHistory.sort((a, b) => (a.date < b.date ? 1 : -1));
-  if (mergedMockHistory.length > 30) mergedMockHistory.length = 30;
+  const changed =
+    JSON.stringify(mergedAnswers) !== JSON.stringify(cloudData.answers) ||
+    JSON.stringify(mergedFlagged) !== JSON.stringify(cloudData.flagged) ||
+    JSON.stringify(mergedMockHistory) !== JSON.stringify(cloudData.mockHistory);
 
-  myAnswers = cloudAnswers;
-  myFlagged = cloudFlagged;
+  myAnswers = mergedAnswers;
+  myFlagged = mergedFlagged;
   myMockHistory = mergedMockHistory;
   saveLocal();
 
-  if (hasLocalOnly || hasLocalOnlyHistory) {
+  if (changed || hasPendingSync()) {
     await pushToCloud();
   }
 
