@@ -406,18 +406,27 @@ EXAM_SESSIONS.psych=[
 ];
 window.SUBJ_FILTER_TAGS=window.SUBJ_FILTER_TAGS||{};
 SUBJ_FILTER_TAGS.psych=[
-{emoji:"🧩",label:"心理病理",value:"心理病理與治療理論"},
-{emoji:"💬",label:"治療溝通",value:"治療性溝通技巧"},
-{emoji:"💊",label:"生理治療",value:"生理治療與物質濫用"},
-{emoji:"🌀",label:"思覺失調",value:"思覺失調症與精神病症狀"},
-{emoji:"🌧️",label:"情緒危機",value:"情緒障礙與危機處理"},
-{emoji:"👴",label:"老年失智",value:"老年精神與失智照護"},
-{emoji:"🤝",label:"社區精神",value:"精神復健與社區精神衛生"},
-{emoji:"🏘️",label:"社區流病",value:"社區衛生與流行病學"},
-{emoji:"🛡️",label:"預防促進",value:"預防醫學與健康促進"},
-{emoji:"🤰",label:"婦幼衛生",value:"婦幼衛生"},
-{emoji:"📌",label:"其他",value:"其他"}
-];
+  {emoji:"🧩",label:"基本概念",value:"精神科護理基本概念"},
+  {emoji:"🤝",label:"臨床判斷",value:"精神疾病臨床判斷與治療性關係"},
+  {emoji:"🌀",label:"思覺失調",value:"思覺失調與情感障礙護理"},
+  {emoji:"😰",label:"焦慮人格",value:"焦慮、人格與身體疾患護理"},
+  {emoji:"🚬",label:"物質成癮",value:"物質相關及成癮障礙護理"},
+  {emoji:"👴",label:"特殊年齡層",value:"特殊年齡層疾患護理"},
+  {emoji:"🏘️",label:"社區心理",value:"社區心理衛生及護理"},
+  {emoji:"🆘",label:"特殊情境",value:"特殊情境護理"},
+  {emoji:"🏛️",label:"健康政策",value:"健康照護體系與健康政策"},
+  {emoji:"📈",label:"流行病學",value:"流行病學與生命統計"},
+  {emoji:"🏘️",label:"社區營造",value:"社區健康營造與健康評估"},
+  {emoji:"📢",label:"健康促進",value:"健康促進與衛生教育"},
+  {emoji:"🦠",label:"傳染病防治",value:"傳染病防治與護理"},
+  {emoji:"🌳",label:"環境衛生",value:"環境衛生與護理"},
+  {emoji:"🏠",label:"家庭訪視",value:"家庭訪視、家庭評估與家庭護理"},
+  {emoji:"👨‍👩‍👧",label:"婦幼衛生",value:"嬰幼兒、青少年與婦女健康照護"},
+  {emoji:"🏫",label:"學校衛生",value:"學校衛生護理"},
+  {emoji:"👷",label:"職業衛生",value:"職業衛生護理"},
+  {emoji:"🕯️",label:"長期照護",value:"長期照護、個案管理、居家護理與安寧照護"},
+  {emoji:"❤️‍🩹",label:"慢性病防治",value:"慢性病防治"}
+  ];
 const QS_PSYCH_108_2=[
 {n:1281,no:1,subj:'治療性溝通技巧',q:'在治療性人際關係建立中，下列敘述何者最適當？',opts:['A. 避免探究護理師自己的感覺，主要焦點仍在處理病人的感覺','B. 為求客觀性，護理師應壓抑自己的情緒，以避免造成情感反轉移','C. 護理師應分析自己的特性及感受如何影響關係的建立','D. 可常利用情感反轉移關係來改變病人行為'],ans:[2],expl:'治療性人際關係強調護理師的「自我覺察」（self-awareness），須主動分析自己的特質、情緒如何影響與病人的互動，而非壓抑（B）或迴避（A）自己的感受；情感反轉移屬須被檢視、處理的現象，不應被利用來操縱病人行為（D），故答案為C。'},
 {n:1282,no:2,subj:'預防醫學與健康促進',q:'對於心理衛生初段預防工作的敘述，下列何者正確？①高危險群衛生教育 ②強化個人因應能力 ③協助精神病人早日返回社區 ④倡導正當休閒娛樂活動',opts:['A. ①②③','B. ②③④','C. ①②④','D. ①③④'],ans:[2],expl:'三段五級中，初段預防（primary prevention）指疾病尚未發生前的健康促進與危險因子控制，①②④皆屬此類（衛教、增進因應能力、休閒倡導）；③「協助精神病人早日返回社區」是針對已患病者的社區復健，屬於三段預防（tertiary prevention），故正確組合為①②④，答案C。'},
@@ -1731,17 +1740,17 @@ QS.push.apply(QS, QS_BASIC_115_1);
 if(typeof EXAM_COURSE!=="undefined"){EXAM_COURSE["basic-115-1"]="basic";}
 window.SUBJ_FILTER_TAGS=window.SUBJ_FILTER_TAGS||{};
 window.SUBJ_FILTER_TAGS.basic=[
-{emoji:"🛏️",label:"活動安全",value:"舒適、活動與安全照護"},
-{emoji:"📋",label:"行政品質",value:"護理行政政策與品質"},
-{emoji:"📊",label:"管理領導",value:"護理管理與領導理論"},
-{emoji:"💬",label:"溝通倫理",value:"治療性溝通與生命倫理"},
-{emoji:"🌡️",label:"生命徵象",value:"生命徵象與身體評估"},
-{emoji:"💊",label:"給藥計算",value:"給藥與藥物計算"},
-{emoji:"🍽️",label:"營養體液",value:"營養與體液照護"},
-{emoji:"📝",label:"護理過程",value:"護理過程與紀錄"},
-{emoji:"🦠",label:"感染管制",value:"感染管制與無菌技術"},
-{emoji:"🚽",label:"排泄管路",value:"排泄與管路照護"},
-{emoji:"📌",label:"其他",value:"其他"}
+{emoji:"🏥",label:"緒論環境",value:"緒論與醫療環境"},
+{emoji:"📝",label:"記錄溝通",value:"記錄、觀察與溝通、護理過程"},
+{emoji:"💊",label:"給藥",value:"給藥"},
+{emoji:"🌡️",label:"體液冷熱療法",value:"體液供給與冷熱療法"},
+{emoji:"🚻",label:"排泄舒適",value:"排泄與舒適"},
+{emoji:"📊",label:"生命徵象",value:"生命徵象"},
+{emoji:"🍽️",label:"營養活動",value:"營養、休息與活動、繃帶與束帶"},
+{emoji:"🚪",label:"出入院臨終",value:"出入院護理、標本收集與臨終護理"},
+{emoji:"📋",label:"緒論規劃",value:"緒論與規劃"},
+{emoji:"🏢",label:"組織人資安全",value:"組織、人力資源管理與醫院安全環境"},
+{emoji:"🎯",label:"領導統御",value:"領導統御與控制"}
 ];
 window.EXAM_SESSIONS=window.EXAM_SESSIONS||{};
 window.EXAM_SESSIONS.basic=window.EXAM_SESSIONS.basic||[];
@@ -3085,12 +3094,11 @@ EXAM_SESSIONS.basicmed.push({code:"basicmed-115-1",title:"115年第一次",subti
 
 window.SUBJ_FILTER_TAGS=window.SUBJ_FILTER_TAGS||{};
 window.SUBJ_FILTER_TAGS.basicmed=[
-{emoji:"🦴",label:"解剖學",value:"解剖學"},
-{emoji:"⚡",label:"生理學",value:"生理學"},
-{emoji:"🔬",label:"病理學",value:"病理學"},
-{emoji:"💊",label:"藥理學",value:"藥理學"},
-{emoji:"🦠",label:"微生物免疫",value:"微生物學與免疫學"},
-{emoji:"📌",label:"其他",value:"其他"}
+{emoji:"💊",label:"藥理",value:"藥理學"},
+{emoji:"⚙️",label:"生理",value:"生理學"},
+{emoji:"🦴",label:"解剖",value:"解剖學"},
+{emoji:"🦠",label:"微生物免疫",value:"微生物與免疫學"},
+{emoji:"🔬",label:"病理",value:"病理學"}
 ];
 const QS_BASICMED_108_1=[
 {"n":3651,"no":1,"subj":"解剖學","q":"下列何者的內襯上皮具有纖毛？","opts":["A. 尿道","B. 輸精管","C. 十二指腸","D. 主支氣管"],"ans":[3],"expl":"(D)正確：主支氣管內襯為假複層纖毛柱狀上皮，纖毛具有清除呼吸道黏液與異物的功能。(A)尿道為移形上皮或假複層柱狀上皮，不具纖毛。(B)輸精管表面為靜纖毛(stereocilia)，並非真正具擺動功能的纖毛。(C)十二指腸為單層柱狀上皮，不具纖毛。"},
@@ -4334,14 +4342,30 @@ EXAM_SESSIONS.obpeds.push({code:"obpeds-115-1",title:"115年第一次",subtitle:
 
 window.SUBJ_FILTER_TAGS=window.SUBJ_FILTER_TAGS||{};
 window.SUBJ_FILTER_TAGS.obpeds=[
-{emoji:"🤰",label:"孕期生理",value:"產科：孕期生理與產前照護"},
-{emoji:"🤱",label:"產程分娩",value:"產科：產程與分娩護理"},
-{emoji:"💗",label:"產後恢復",value:"產科：產後恢復與心理適應"},
-{emoji:"👶",label:"新生兒",value:"新生兒護理"},
-{emoji:"⚠️",label:"高危婦科",value:"產科：高危妊娠與婦科疾病"},
-{emoji:"📏",label:"生長發展",value:"兒科：生長發展與健康評估"},
-{emoji:"🩺",label:"各系統疾病",value:"兒科：各系統疾病與臨床護理"},
-{emoji:"💙",label:"重症家庭",value:"兒科：重症與家庭中心照護"}
+{emoji:"🤱",label:"生產概論",value:"生產家庭照護概論"},
+{emoji:"🤰",label:"妊娠期",value:"妊娠期婦女與家庭護理"},
+{emoji:"🏥",label:"待產生產",value:"待產與生產階段照護"},
+{emoji:"👶",label:"產後期",value:"產後期婦女與家庭照護"},
+{emoji:"🍼",label:"新生兒",value:"新生兒護理"},
+{emoji:"⚠️",label:"高危妊娠",value:"高危險妊娠相關疾患護理"},
+{emoji:"♀️",label:"婦科疾病",value:"婦女常見疾病護理"},
+{emoji:"📖",label:"緒論",value:"緒論"},
+{emoji:"🧒",label:"生長發展",value:"正常兒童生長發展與健康照護"},
+{emoji:"🩺",label:"臨床評估",value:"兒童臨床評估"},
+{emoji:"🚼",label:"高危新生兒",value:"高危險性新生兒護理"},
+{emoji:"🏨",label:"住院兒童",value:"住院兒童護理"},
+{emoji:"📅",label:"慢性病兒童",value:"慢性病兒童與家庭護理"},
+{emoji:"🕊️",label:"瀕死兒童",value:"瀕死兒童護理"},
+{emoji:"🦠",label:"傳染病患童",value:"傳染性疾病患童護理"},
+{emoji:"🫁",label:"呼吸患童",value:"呼吸系統疾病患童護理"},
+{emoji:"🫀",label:"循環患童",value:"循環系統疾病患童護理"},
+{emoji:"💉",label:"血液患童",value:"血液系統疾病患童護理"},
+{emoji:"🧬",label:"內分泌代謝",value:"內分泌與代謝異常兒童護理"},
+{emoji:"🫃",label:"消化患童",value:"消化系統疾病患童護理"},
+{emoji:"🚽",label:"泌尿生殖",value:"泌尿生殖系統疾病患童護理"},
+{emoji:"🧠",label:"神經肌骨患童",value:"神經、肌肉及骨骼系統疾病患童護理"},
+{emoji:"🎗️",label:"癌症兒童",value:"癌症兒童護理"},
+{emoji:"🧩",label:"心理健康",value:"兒童青少年發展與心理健康護理"}
 ];
 
 const QS_OBPEDS_108_1=[
