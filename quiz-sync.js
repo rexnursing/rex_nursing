@@ -32,6 +32,28 @@ import {
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
+// ---------------------------------------------------------------------------
+// 章節分類合併：exam-data.js 的每一題（window.QS）原本沒有 section/chapter
+// 欄位，這裡用 chapter-taxonomy.js 提供的 id→[section,chapter] 對照表
+// （window.CHAPTER_TAXONOMY_BY_ID，key 是題號字串）把新分類欄位掛上去。
+// exam-data.js 和 chapter-taxonomy.js 都是一般 <script>（非 module），會在
+// 這支 module script 執行前就已經載入完成，所以這裡一定拿得到兩份資料；
+// 任一份還沒準備好就直接跳過，不影響頁面其他功能運作（只是章節相關功能
+// 會拿不到分類，subj-filter/模擬考/標籤練習等功能會拿不到資料而顯示空白，
+// 但不會噴錯讓整頁掛掉）。
+// ---------------------------------------------------------------------------
+(function mergeChapterTaxonomy() {
+  if (!window.QS || !window.CHAPTER_TAXONOMY_BY_ID) return;
+  const tax = window.CHAPTER_TAXONOMY_BY_ID;
+  window.QS.forEach(function (q) {
+    const entry = tax[q.n];
+    if (entry) {
+      q.section = entry[0];
+      q.chapter = entry[1];
+    }
+  });
+})();
+
 const firebaseConfig = {
   apiKey: "AIzaSyDTZqe69W7bOsKypP-dbI5IUllWpVkGUWs",
   authDomain: "rex-nursing-quiz.firebaseapp.com",
@@ -518,16 +540,19 @@ function updateReviewBarCounts() {
 // ---------------------------------------------------------------------------
 
 const MEDSURG_DEFAULT_TAGS = [
-  { emoji: "🧠", label: "神經", value: "神經系統" },
+  { emoji: "🧠", label: "腦神經", value: "腦神經系統" },
   { emoji: "🫃", label: "消化", value: "消化系統" },
-  { emoji: "🫀", label: "心臟", value: "心臟血管" },
+  { emoji: "🦴", label: "肌肉骨骼", value: "肌肉骨骼系統" },
+  { emoji: "👂", label: "眼耳鼻喉", value: "眼耳鼻喉" },
+  { emoji: "🫀", label: "心臟血管", value: "心臟血管系統" },
+  { emoji: "💉", label: "血液腫瘤", value: "血液腫瘤" },
+  { emoji: "🩹", label: "皮膚", value: "皮膚" },
+  { emoji: "🛡️", label: "免疫", value: "免疫系統" },
   { emoji: "🫁", label: "呼吸", value: "呼吸系統" },
-  { emoji: "🔬", label: "泌尿", value: "泌尿系統" },
+  { emoji: "🚽", label: "腎臟泌尿", value: "腎臟與泌尿系統" },
   { emoji: "🧬", label: "內分泌", value: "內分泌系統" },
-  { emoji: "💉", label: "腫瘤", value: "腫瘤血液" },
-  { emoji: "🦴", label: "骨骼", value: "骨骼肌肉" },
-  { emoji: "👁", label: "感官", value: "感官系統" },
-  { emoji: "📌", label: "其他", value: "其他" },
+  { emoji: "🚨", label: "急症", value: "急症護理" },
+  { emoji: "🦠", label: "傳染病", value: "傳染病護理" },
 ];
 
 const TAG_PRACTICE_COUNT = 20;
@@ -542,7 +567,7 @@ function getTagsForCourse(course) {
 function getTagPracticeQuestions(course, tagValue) {
   if (!window.QS) return [];
   const pool = window.QS.filter(function (q) {
-    return q.course === course && q.subj === tagValue;
+    return q.course === course && q.chapter === tagValue;
   });
   // Fisher-Yates 洗牌，抽前 TAG_PRACTICE_COUNT 題
   const arr = pool.slice();
@@ -633,46 +658,37 @@ function shuffleArr(a) {
   return a;
 }
 
-// exam-data.js 裡基礎醫學科目有個歷史遺留的標籤打字不一致：多數題目標成
-// 「微生物學與免疫」，少數（26題）多打一個「學」字標成「微生物學與免疫學」，
-// 實際上是同一章節。章節出題熱度頁那邊已經在顯示層合併過一次，這裡抽題
-// 用的是原始 q.subj，必須同樣正規化，否則會被誤判成 6 個章節、多切出一份
-// 配額，導致這個章節整體被分配到的題數變少。未來如果 exam-data.js 本身把
-// 標籤統一了，這裡留著也不影響結果（找不到別名就是原字串本身）。
-var CHAPTER_ALIAS = { "微生物學與免疫學": "微生物學與免疫" };
-function normChapter(subj) {
-  return CHAPTER_ALIAS[subj] || subj;
-}
-
-// 依章節（subj）平均分配抽題，而不是整科純隨機——避免題數多的章節（例如內外科
-// 的腫瘤血液）在 50 題裡被過度抽到，題數少的章節（例如感官系統）幾乎抽不到。
-// 「其他」是未分類題目的暫存分類、不是正式命題大綱章節，抽題平均分配時不計入，
-// 但仍保留在整科題庫中，當某章節題數不足配額時可以當備援池用。
+// 依大章（section）平均分配抽題，而不是整科純隨機——符合模擬考規格（每科 50
+// 題、按大章平均）。內外科、基礎醫學只有一層分類，section 等於 chapter，效果
+// 等同直接依章節平均；基本護理、產兒、精神社區為兩層分類，這裡依「大章」
+// （例如產兒科的「產科護理學」/「兒科護理學」）平均，避免章節數多、單章題數
+// 差異大的科目（例如基本護理「領導統御與控制」一章就有 366 題）被過度抽到。
+// 新分類不保留「其他」，每一題都會落在某個正式章節，全部計入。
 function getMockExamQuestions(course) {
   if (!window.QS) return [];
   const pool = window.QS.filter(function (q) {
     return q.course === course;
   });
-  const byChapter = {};
+  const bySection = {};
   pool.forEach(function (q) {
-    if (q.subj === "其他") return;
-    const key = normChapter(q.subj);
-    if (!byChapter[key]) byChapter[key] = [];
-    byChapter[key].push(q);
+    const key = q.section;
+    if (!key) return;
+    if (!bySection[key]) bySection[key] = [];
+    bySection[key].push(q);
   });
-  const chapters = shuffleArr(Object.keys(byChapter));
-  if (!chapters.length) {
+  const sections = shuffleArr(Object.keys(bySection));
+  if (!sections.length) {
     return shuffleArr(pool.slice()).slice(0, MOCK_EXAM_QUESTION_COUNT);
   }
-  const base = Math.floor(MOCK_EXAM_QUESTION_COUNT / chapters.length);
-  const remainder = MOCK_EXAM_QUESTION_COUNT % chapters.length;
+  const base = Math.floor(MOCK_EXAM_QUESTION_COUNT / sections.length);
+  const remainder = MOCK_EXAM_QUESTION_COUNT % sections.length;
   let picked = [];
-  chapters.forEach(function (name, idx) {
+  sections.forEach(function (name, idx) {
     const quota = base + (idx < remainder ? 1 : 0);
-    picked = picked.concat(shuffleArr(byChapter[name].slice()).slice(0, quota));
+    picked = picked.concat(shuffleArr(bySection[name].slice()).slice(0, quota));
   });
-  // 保險：正常情況下每章節題數都遠大於配額，這裡只是避免萬一有章節題數不足時
-  // 抽不滿 50 題——用同一科其餘題目（含「其他」）補滿。
+  // 保險：正常情況下每個大章題數都遠大於配額，這裡只是避免萬一有大章題數不足
+  // 時抽不滿 50 題——用同一科其餘題目補滿。
   if (picked.length < MOCK_EXAM_QUESTION_COUNT) {
     const pickedSet = new Set(picked.map(function (q) { return q.n; }));
     const rest = shuffleArr(
@@ -1455,7 +1471,7 @@ function searchQuestions(query) {
   const results = [];
   for (let i = 0; i < window.QS.length && results.length < SEARCH_Q_LIMIT; i++) {
     const item = window.QS[i];
-    if ((item.q && item.q.indexOf(query) !== -1) || (item.subj && item.subj.indexOf(query) !== -1)) {
+    if ((item.q && item.q.indexOf(query) !== -1) || (item.chapter && item.chapter.indexOf(query) !== -1)) {
       results.push(item);
     }
   }
@@ -1470,7 +1486,7 @@ function matchVideoEntry(v, query) {
   if (v.n !== undefined) {
     const q = window.QS && window.QS.find((x) => x.n === v.n);
     if (!q) return null;
-    if ((q.q && q.q.indexOf(query) !== -1) || (q.subj && q.subj.indexOf(query) !== -1)) {
+    if ((q.q && q.q.indexOf(query) !== -1) || (q.chapter && q.chapter.indexOf(query) !== -1)) {
       return { id: v.i, n: v.n, displayText: q.q, linkedQ: q };
     }
     return null;
@@ -1676,7 +1692,7 @@ function renderSearchResults(q) {
         '</div><div style="margin-top:3px;font-size:11.5px;color:var(--muted)">' +
         (SEARCH_COURSE_LABELS[item.course] || item.course) +
         " · " +
-        escapeHtml(item.subj) +
+        escapeHtml(item.chapter) +
         "</div></div>";
     });
     html +=
