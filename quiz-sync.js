@@ -564,74 +564,207 @@ function getTagsForCourse(course) {
   return MEDSURG_DEFAULT_TAGS;
 }
 
-function getTagPracticeQuestions(course, tagValue) {
-  if (!window.QS) return [];
+function getTagPracticeQuestions(course, tagValues, count) {
+  if (!Array.isArray(tagValues) || tagValues.length === 0) return [];
+  const uniqueTags = [...new Set(tagValues)];
   const pool = window.QS.filter(function (q) {
-    return q.course === course && q.chapter === tagValue;
+    return q.course === course && uniqueTags.indexOf(q.chapter) !== -1;
   });
-  // Fisher-Yates 洗牌，抽前 TAG_PRACTICE_COUNT 題
-  const arr = pool.slice();
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const tmp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = tmp;
+  const byChapter = {};
+  uniqueTags.forEach(function (tv) { byChapter[tv] = []; });
+  pool.forEach(function (q) { byChapter[q.chapter].push(q); });
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
+    }
+    return arr;
   }
-  return arr.slice(0, TAG_PRACTICE_COUNT);
+  uniqueTags.forEach(function (tv) { shuffle(byChapter[tv]); });
+
+  let result = [];
+  if (count === "all") {
+    // 全部：每個已選章節的題目全部納入，不設上限
+    uniqueTags.forEach(function (tv) { result = result.concat(byChapter[tv]); });
+  } else {
+    // 依題數在已選章節間平均分配（餘數隨機分給部分章節，避免同一章節每次都多抽）
+    const n = uniqueTags.length;
+    const base = Math.floor(count / n);
+    let remainder = count % n;
+    const order = shuffle(uniqueTags.slice());
+    order.forEach(function (tv) {
+      const quota = base + (remainder > 0 ? 1 : 0);
+      if (remainder > 0) remainder--;
+      // 不足配額就該章節有多少出多少，不會跨章節補題
+      result = result.concat(byChapter[tv].slice(0, quota));
+    });
+  }
+  return shuffle(result);
 }
 
 let tagPracticeBarCourse = null;
+let tagPracticeSelectedTags = [];
 
 function ensureTagPracticeBar() {
   const container = document.getElementById("quiz-select");
   if (!container) return;
   const course = window.currentCourse;
-  if (course === tagPracticeBarCourse) return; // 同一科目不用重建
-  const old = document.getElementById("tag-practice-bar");
-  if (old) old.remove();
-  tagPracticeBarCourse = course;
   if (!course) return;
+  const existing = document.getElementById("tag-practice-bar");
+  if (tagPracticeBarCourse === course && existing) return;
+  if (existing) existing.remove();
+  tagPracticeBarCourse = course;
+  tagPracticeSelectedTags = [];
 
   const tags = getTagsForCourse(course);
+  if (!tags || !tags.length) return;
+
   const bar = document.createElement("div");
   bar.id = "tag-practice-bar";
   bar.style.cssText =
-    "display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;padding:14px;background:var(--teal-l);border-radius:var(--r)";
+    "display:flex;flex-direction:column;gap:10px;margin-bottom:20px;padding:14px;background:var(--teal-l);border-radius:var(--r);";
 
-  const heading = document.createElement("div");
-  heading.style.cssText =
-    "width:100%;font-size:13px;font-weight:600;color:var(--teal-d);margin-bottom:2px";
-  heading.textContent =
-    "🔀 依標籤跨考卷練習（隨機抽 " + TAG_PRACTICE_COUNT + " 題）";
-  bar.appendChild(heading);
+  const chipRow = document.createElement("div");
+  chipRow.style.cssText = "display:flex;flex-wrap:wrap;gap:8px;";
+
+  const startBtn = document.createElement("button");
+  const countLabel = document.createElement("span");
+
+  function renderStartBtn() {
+    const n = tagPracticeSelectedTags.length;
+    startBtn.textContent = "🔀 開始練習";
+    startBtn.disabled = n === 0;
+    startBtn.style.opacity = n === 0 ? "0.5" : "1";
+    startBtn.style.cursor = n === 0 ? "not-allowed" : "pointer";
+    countLabel.textContent = n === 0 ? "請選擇至少一個章節" : "已選 " + n + " 個章節";
+  }
 
   tags.forEach(function (t) {
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.style.cssText =
-      "background:var(--white);border:1.5px solid var(--bd);border-radius:50px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:inherit;color:var(--text)";
     btn.textContent = t.emoji + " " + t.label;
+    btn.dataset.value = t.value;
+    function paint() {
+      const selected = tagPracticeSelectedTags.indexOf(t.value) !== -1;
+      btn.style.cssText =
+        "border-radius:50px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:inherit;" +
+        (selected
+          ? "background:var(--teal);border:1.5px solid var(--teal);color:var(--white);"
+          : "background:var(--white);border:1.5px solid var(--bd);color:var(--text);");
+    }
+    paint();
     btn.onclick = function () {
+      const idx = tagPracticeSelectedTags.indexOf(t.value);
+      if (idx === -1) tagPracticeSelectedTags.push(t.value);
+      else tagPracticeSelectedTags.splice(idx, 1);
+      paint();
+      renderStartBtn();
+    };
+    chipRow.appendChild(btn);
+  });
+
+  const actionRow = document.createElement("div");
+  actionRow.style.cssText = "display:flex;align-items:center;gap:12px;flex-wrap:wrap;";
+
+  startBtn.type = "button";
+  startBtn.style.cssText =
+    "background:var(--teal);border:1.5px solid var(--teal);border-radius:50px;padding:8px 18px;font-size:14px;font-weight:600;font-family:inherit;color:var(--white);";
+  startBtn.onclick = function () {
+    if (!tagPracticeSelectedTags.length) return;
+    openTagPracticeCountModal(course, tagPracticeSelectedTags.slice(), tags);
+  };
+
+  countLabel.style.cssText = "font-size:13px;color:var(--muted);";
+
+  renderStartBtn();
+  actionRow.appendChild(startBtn);
+  actionRow.appendChild(countLabel);
+
+  bar.appendChild(chipRow);
+  bar.appendChild(actionRow);
+  container.insertBefore(bar, container.children[1]);
+}
+
+function openTagPracticeCountModal(course, selectedValues, allTags) {
+  const old = document.getElementById("tag-practice-count-modal");
+  if (old) old.remove();
+
+  const selectedLabels = allTags
+    .filter(function (t) { return selectedValues.indexOf(t.value) !== -1; })
+    .map(function (t) { return t.label; });
+  const titleText =
+    selectedLabels.length <= 3
+      ? "🔀 " + selectedLabels.join("、") + " 標籤練習"
+      : "🔀 已選 " + selectedLabels.length + " 個章節標籤練習";
+
+  const overlay = document.createElement("div");
+  overlay.id = "tag-practice-count-modal";
+  overlay.style.cssText =
+    "position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;";
+  overlay.onclick = function (e) {
+    if (e.target === overlay) overlay.remove();
+  };
+
+  const card = document.createElement("div");
+  card.style.cssText =
+    "background:var(--white);border-radius:var(--r);padding:24px;max-width:340px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,0.2);";
+  card.onclick = function (e) { e.stopPropagation(); };
+
+  const title = document.createElement("div");
+  title.textContent = titleText;
+  title.style.cssText = "font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;";
+
+  const subtitle = document.createElement("div");
+  subtitle.textContent = "選擇要練習的題數";
+  subtitle.style.cssText = "font-size:13px;color:var(--muted);margin-bottom:16px;";
+
+  const optRow = document.createElement("div");
+  optRow.style.cssText = "display:flex;flex-direction:column;gap:8px;";
+
+  const options = [
+    { value: 10, label: "10 題" },
+    { value: 20, label: "20 題", recommended: true },
+    { value: 50, label: "50 題" },
+    { value: "all", label: "全部（不設上限）" },
+  ];
+
+  options.forEach(function (opt) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = opt.label + (opt.recommended ? "（推薦）" : "");
+    btn.style.cssText =
+      "background:var(--white);border:1.5px solid " +
+      (opt.recommended ? "var(--teal)" : "var(--bd)") +
+      ";border-radius:var(--rs);padding:12px;font-size:14px;font-family:inherit;color:var(--text);cursor:pointer;text-align:center;";
+    btn.onclick = function () {
+      overlay.remove();
       startReviewList(
-        function () {
-          return getTagPracticeQuestions(course, t.value);
-        },
-        "這個標籤目前沒有題目。",
-        "🔀 " + t.emoji + " " + t.label + " 標籤練習",
+        function () { return getTagPracticeQuestions(course, selectedValues, opt.value); },
+        "這些標籤目前沒有題目。",
+        titleText,
         "quiz-select",
         course
       );
     };
-    bar.appendChild(btn);
+    optRow.appendChild(btn);
   });
 
-  // 插在「選擇考卷」標題列之後、考卷卡片列表之前（quiz-select 的第一個
-  // 子節點是標題列，這裡插在它後面，不動標題列本身）。
-  if (container.children.length > 1) {
-    container.insertBefore(bar, container.children[1]);
-  } else {
-    container.appendChild(bar);
-  }
+  const cancelBtn = document.createElement("button");
+  cancelBtn.type = "button";
+  cancelBtn.textContent = "取消";
+  cancelBtn.style.cssText =
+    "margin-top:14px;background:none;border:none;color:var(--muted);font-size:13px;font-family:inherit;cursor:pointer;width:100%;text-align:center;";
+  cancelBtn.onclick = function () { overlay.remove(); };
+
+  card.appendChild(title);
+  card.appendChild(subtitle);
+  card.appendChild(optRow);
+  card.appendChild(cancelBtn);
+  overlay.appendChild(card);
+  document.body.appendChild(overlay);
 }
 
 // ---------------------------------------------------------------------------
