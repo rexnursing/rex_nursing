@@ -313,4 +313,8 @@ img, svg { max-width: 100%; }
   .content h2 { font-size: 18px; }
   .rm-item { padding: 13px 15px; gap: 12px; }
   .summary-box { padding: 20px; }
+
+  .term-table { font-size: 12.5px; }
+  .term-table th, .term-table td { padding: 7px 8px; }
+  .term-table td:first-child { white-space: normal; }
 }
