@@ -980,14 +980,23 @@ function autoSubmitMockExam() {
 function tickMockExamTimer() {
   const el = document.getElementById("quiz-timer");
   const quizAreaEl = document.getElementById("quiz-area");
+  const pageQuizEl = document.getElementById("page-quiz");
   if (
     !el ||
     !mockExamDeadline ||
     !quizAreaEl ||
-    quizAreaEl.style.display === "none"
+    quizAreaEl.style.display === "none" ||
+    !pageQuizEl ||
+    !pageQuizEl.classList.contains("active")
   ) {
-    // 已經離開作答畫面（正常寫完自動看結果、或使用者手動離開），
-    // 倒數計時沒有必要再繼續跑，順便清掉自己。
+    // 已經離開作答畫面（正常寫完自動看結果、使用者手動離開、或透過上方主
+    // 導覽切到別的頁面），倒數計時沒有必要再繼續跑，順便清掉自己。
+    // 額外檢查 #page-quiz 是否還是 active：只看 quiz-area 的 inline
+    // display 沒辦法偵測到「透過主導覽切到別頁」這種情況——那只會讓
+    // #page-quiz 失去 active class，quiz-area 本身的 inline style 不會
+    // 被動到——若不補這個檢查，計時到期後會在使用者早已離開的情況下，
+    // 仍在背景呼叫 autoSubmitMockExam()，把一次幾乎都沒作答的模擬考
+    // 成績誤存進歷次成績（且會同步到雲端）。
     stopMockExamTimer();
     return;
   }
@@ -1256,7 +1265,15 @@ function ensureTimerDisplay() {
 
 function tickTimer() {
   const el = document.getElementById("quiz-timer");
+  const pageQuizEl = document.getElementById("page-quiz");
   if (!el || !timerStartedAt) return;
+  if (!pageQuizEl || !pageQuizEl.classList.contains("active")) {
+    // 同上（見 tickMockExamTimer 的說明）：透過主導覽切到別頁時只有
+    // #page-quiz 會失去 active class，這裡額外清掉自己，正向碼表才不會
+    // 在使用者離開後繼續在背景累計、白白佔用計時器資源。
+    stopTimer();
+    return;
+  }
   const elapsed = Math.floor((Date.now() - timerStartedAt) / 1000);
   el.textContent = "⏱ " + formatElapsed(elapsed);
   const overTime = elapsed >= TIMER_REFERENCE_SECONDS;
