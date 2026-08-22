@@ -169,10 +169,6 @@ textarea,
 }
 
 @media (max-width: 640px) {
-  nav:not(.nav-r) {
-    position: relative;
-  }
-
   .simple-nav-toggle {
     display: inline-flex;
     align-items: center;
