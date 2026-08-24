@@ -168,6 +168,10 @@ textarea,
   gap: 18px;
 }
 
+.simple-nav-links a {
+  white-space: nowrap;
+}
+
 @media (max-width: 640px) {
   .simple-nav-toggle {
     display: inline-flex;
