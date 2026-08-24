@@ -1069,7 +1069,7 @@ function ensureMockExamBanner() {
     '<div><div style="font-size:15.5px;font-weight:700;margin-bottom:3px">🎯 模擬國考</div>' +
     '<div style="font-size:12.5px;opacity:.85">隨機抽取 ' +
     MOCK_EXAM_QUESTION_COUNT +
-    ' 題．限時 60 分鐘．時間到自動送出，最貼近真實考試節奏</div></div>' +
+    ' 題．限時 60 分鐘．時間到自動送出，最貼近真實考試節奏 <a href="mock-exam-guide.html" target="_blank" style="color:#fff;text-decoration:underline;opacity:.85">怎麼用？</a></div></div>' +
     '<button type="button" id="mock-exam-start-btn" style="flex-shrink:0;background:#fff;color:var(--teal-d);' +
     'border:none;border-radius:50px;padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer;' +
     'font-family:inherit;white-space:nowrap">開始模擬考 →</button>';
