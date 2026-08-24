@@ -31,7 +31,7 @@
   var GROUPS = [
     { key: 'courses', label: '課程影音', ids: ['nav-videos', 'nav-playlists', 'nav-cat-surgical', 'nav-cat-fundamental', 'nav-cat-psych', 'nav-cat-obped', 'nav-cat-admin', 'nav-cat-basicmed'] },
     { key: 'tools', label: '臨床與備考工具', ids: ['nav-breath', 'nav-ekg', 'nav-countdown', 'nav-studyplan'] },
-    { key: 'practice', label: '刷題與講義', ids: ['nav-quiz', 'nav-exam', 'nav-notes'] },
+    { key: 'practice', label: '刷題與講義', ids: ['nav-quiz', 'nav-exam', 'nav-notes', 'nav-mockguide'] },
     { key: 'about', label: '關於 Rex', ids: ['nav-about', 'nav-line', 'nav-shop'] },
     { key: 'more', label: '更多', ids: [] }
   ];
