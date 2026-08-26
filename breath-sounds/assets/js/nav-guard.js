@@ -7,7 +7,8 @@
 // Currently guards:
 //   #nav-breath  (呼吸音教學 → breath-sounds/index.html)
 //   #nav-ekg     (心電圖教學 → ekg/index.html)
-// To add another guarded module later, copy one of the two blocks in
+//   #nav-salary  (護理師薪資調查 → salary.html)
+// To add another guarded module later, copy one of the blocks in
 // ensureExtraNav() and adjust the id / href / label.
 (function () {
   function ensureExtraNav() {
@@ -44,6 +45,18 @@
       // link so the two teaching-module links stay grouped together.
       var breathEl = document.getElementById('nav-breath');
       insertAfter(breathEl || healthLink, ekgLink);
+    }
+
+    // ── 護理師薪資調查 ──
+    if (!document.getElementById('nav-salary')) {
+      var salaryLink = document.createElement('a');
+      salaryLink.href = 'salary.html';
+      salaryLink.id = 'nav-salary';
+      salaryLink.textContent = String.fromCodePoint(0x1F4B0) + ' 護理師薪資調查';
+      // Prefer sitting right after the (now-guaranteed-present) EKG link so
+      // the three independently-added module links stay grouped together.
+      var ekgEl = document.getElementById('nav-ekg');
+      insertAfter(ekgEl || breathEl || healthLink, salaryLink);
     }
   }
   if (document.readyState === 'loading') {
