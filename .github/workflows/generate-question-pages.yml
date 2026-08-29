@@ -1,0 +1,66 @@
+name: Build and deploy site (incl. question pages)
+
+# 每次 push 到 main 都會重新組出完整網站並部署到 GitHub Pages，
+# 這樣既有的所有頁面（health-*.html、breath-sounds/、ekg/ 等）跟這次新增的
+# /questions/、/subjects/ 題目頁都會一起持續發布，行為等同原本的
+# 「Deploy from a branch」，只是多了「發布前先跑產生器」這一步。
+# 也可以在 GitHub 網頁上手動觸發（Actions 分頁 → 選這個 workflow → Run workflow）。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 避免同時有多個部署互相搶跑；新的 push 不取消正在進行中的部署，排隊依序執行。
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 組出要發布的完整網站內容（複製現有檔案，排除開發用檔案）
+        run: |
+          set -e
+          mkdir -p _site
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='scripts/' \
+            --exclude='_site/' \
+            ./ _site/
+
+      - name: 執行題庫產生器（讀 exam-data.js，寫入 _site/questions、_site/subjects）
+        run: node scripts/generate-question-pages.mjs --src=. --out=./_site
+
+      - name: 上傳建置產物
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
