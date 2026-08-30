@@ -264,6 +264,18 @@ ${optsHtml}
 <h2>解析</h2>
 ${fmtExpl(q.expl)}
 </div>
+<script>
+(function(){
+  var els = document.querySelectorAll('.qp-expl');
+  function block(e){ e.preventDefault(); }
+  for (var i = 0; i < els.length; i++) {
+    els[i].addEventListener('copy', block);
+    els[i].addEventListener('cut', block);
+    els[i].addEventListener('contextmenu', block);
+    els[i].addEventListener('selectstart', block);
+  }
+})();
+</script>
 <p class="qp-disclaimer">解析由 AI 協助整理，僅供國考學習參考，如發現內容有誤歡迎回報或私訊 Instagram <a href="https://instagram.com/rex_nursing" target="_blank" rel="noopener">@Rex_Nursing</a> 指正。</p>
 </article>
 <nav class="qp-pagenav">
@@ -587,7 +599,7 @@ h2{font-size:16px;margin:0 0 8px}
 .qp-opts li{padding:10px 14px;margin:7px 0;border:1px solid var(--bd);border-radius:8px;font-size:15px;word-break:break-word}
 .qp-opts li[data-correct="true"]{border-color:var(--teal);background:var(--teal-l);font-weight:600;color:var(--teal-d)}
 .qp-answer{font-weight:700;color:var(--teal-d);font-size:15px}
-.qp-expl{margin-top:16px;padding-top:16px;border-top:1px dashed var(--bd)}
+.qp-expl{margin-top:16px;padding-top:16px;border-top:1px dashed var(--bd);user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}
 .qp-expl p{margin:0 0 10px;white-space:pre-wrap;word-break:break-word}
 .qp-disclaimer{font-size:12.5px;color:#8a94a0;margin-top:16px;line-height:1.7}
 .qp-disclaimer a{color:var(--teal-d)}
