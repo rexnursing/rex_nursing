@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <clipPath id="portrait"><circle cx="965" cy="315" r="210"/></clipPath>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#1f3b5c" flood-opacity=".18"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="#f7f2e9"/>
+  <circle cx="1110" cy="80" r="220" fill="#e3f1f0"/>
+  <circle cx="72" cy="570" r="170" fill="#e3f1f0" opacity=".8"/>
+  <g opacity=".34" fill="#4ba6a1">
+    <circle cx="76" cy="72" r="5"/><circle cx="106" cy="72" r="5"/><circle cx="136" cy="72" r="5"/>
+    <circle cx="76" cy="102" r="5"/><circle cx="106" cy="102" r="5"/><circle cx="136" cy="102" r="5"/>
+  </g>
+  <text x="84" y="122" font-family="Microsoft JhengHei, Noto Sans TC, sans-serif" font-size="30" font-weight="700" letter-spacing="7" fill="#4ba6a1">REX NURSING</text>
+  <text x="80" y="246" font-family="Microsoft JhengHei, Noto Sans TC, sans-serif" font-size="65" font-weight="800" fill="#1f3b5c">護理師國考題</text>
+  <text x="80" y="332" font-family="Microsoft JhengHei, Noto Sans TC, sans-serif" font-size="65" font-weight="800" fill="#1f3b5c">免費線上練習</text>
+  <rect x="80" y="382" width="610" height="72" rx="36" fill="#4ba6a1"/>
+  <text x="385" y="430" text-anchor="middle" font-family="Microsoft JhengHei, Noto Sans TC, sans-serif" font-size="29" font-weight="700" fill="#ffffff">歷屆試題・立即作答・逐題解析</text>
+  <text x="82" y="520" font-family="Microsoft JhengHei, Noto Sans TC, sans-serif" font-size="25" fill="#64748b">用每一次練習，找出真正需要加強的地方。</text>
+  <circle cx="965" cy="315" r="225" fill="#ffffff" stroke="#4ba6a1" stroke-width="10" filter="url(#shadow)"/>
+  <image href="rex-avatar.jpg" x="740" y="88" width="450" height="620" preserveAspectRatio="xMidYMin slice" clip-path="url(#portrait)"/>
+</svg>
