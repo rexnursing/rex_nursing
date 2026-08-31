@@ -10,6 +10,11 @@
 //   #nav-salary  (護理師薪資調查 → salary.html)
 // To add another guarded module later, copy one of the blocks in
 // ensureExtraNav() and adjust the id / href / label.
+//
+// 2026-08-31: all created links now get class="nav-link" so they render
+// with the exact same shared nav style (color/hover/focus/active) as every
+// other nav-r item, instead of relying only on the .nav-r a descendant
+// selector. See index.html's <style> block for the shared rule.
 (function () {
   function ensureExtraNav() {
     var healthLink = document.getElementById('nav-health');
@@ -29,6 +34,7 @@
       var breathLink = document.createElement('a');
       breathLink.href = 'breath-sounds/index.html';
       breathLink.id = 'nav-breath';
+      breathLink.className = 'nav-link';
       breathLink.textContent = String.fromCodePoint(0x1FAC1) + ' 呼吸音教學';
       // Anchor next to the health-education link, which has stayed stable
       // even when the nav container's class name changed (.main-nav -> .nav-r).
@@ -40,6 +46,7 @@
       var ekgLink = document.createElement('a');
       ekgLink.href = 'ekg/index.html';
       ekgLink.id = 'nav-ekg';
+      ekgLink.className = 'nav-link';
       ekgLink.textContent = String.fromCodePoint(0x2764) + String.fromCodePoint(0xFE0F) + ' 心電圖教學';
       // Prefer sitting right after the (now-guaranteed-present) breath-sounds
       // link so the two teaching-module links stay grouped together.
@@ -52,6 +59,7 @@
       var salaryLink = document.createElement('a');
       salaryLink.href = 'salary.html';
       salaryLink.id = 'nav-salary';
+      salaryLink.className = 'nav-link';
       salaryLink.textContent = String.fromCodePoint(0x1F4B0) + ' 護理師薪資調查';
       // Prefer sitting right after the (now-guaranteed-present) EKG link so
       // the three independently-added module links stay grouped together.
