@@ -25,6 +25,15 @@
 //    goPage("videos") 通用影片頁，還沒有真正的分類篩選深連結——影片分類
 //    篩選（filterVids）目前是完全沒有實際按鈕在呼叫的孤兒函式，屬於另一項
 //    「搜尋列：整合影片搜尋結果」任務的範圍，之後才會補上真正的深連結。
+// 6. 2026-09 首次載入分組閃爍修正：首頁 index.html 的 .nav-r 現在直接輸出
+//    「已經分組好」的最終 HTML（data-grouped="1" 從一開始就存在於原始碼），
+//    不再等這支程式載入後才重排 DOM，避免第一次繪製時使用者先看到全部連結
+//    橫向攤開、幾百毫秒後才「跳」成分組樣子。因此 buildNav() 遇到
+//    data-grouped==="1" 時不能只是 return——那樣互動事件（下拉開關、Esc、
+//    點外面關閉）永遠不會被綁定。正確處理是呼叫 wireInteractions(navR) 補
+//    綁事件、不動 DOM，再 return。這支程式對「還沒有改成靜態分組 HTML」
+//    的其他頁面（例如尚未套用新版首頁模板的頁面）完全沒有影響，仍然會照
+//    第 4 點所寫的方式，把扁平清單即時重排成分組樣子。
 (function () {
   'use strict';
 
@@ -42,7 +51,13 @@
   function buildNav() {
     var navR = document.querySelector('.nav-r');
     if (!navR) return;
-    if (navR.getAttribute('data-grouped') === '1') return; // 防止重複執行
+    if (navR.getAttribute('data-grouped') === '1') {
+      // 靜態 HTML 已經是分組後的最終樣子（例如首頁 index.html 直接輸出好的分組
+      // 導覽列，不再靠這支程式在載入後重排），這裡不能直接 return，否則互動
+      // 事件（下拉開關、Esc、點外面關閉等）永遠不會被綁定。只補綁事件，不動 DOM。
+      wireInteractions(navR);
+      return;
+    }
 
     // 1) 先把目前所有 <a> 節點（可能是扁平清單，也可能已被分組過）抓下來，
     //    這些是真實 DOM 節點物件，之後用 appendChild 搬移，不是重建字串。
@@ -143,6 +158,9 @@
   }
 
   function wireInteractions(navR) {
+    if (navR.getAttribute('data-nav-wired') === '1') return; // 防止重複綁定事件
+    navR.setAttribute('data-nav-wired', '1');
+
     // 分組標題點擊：開關自己的下拉選單，並關閉其他已開啟的分組
     navR.querySelectorAll('.nav-group-toggle').forEach(function (toggle) {
       toggle.addEventListener('click', function (e) {
