@@ -89,7 +89,7 @@ const PAGE_SIZE = 20;
 
 function incomeStateInfo(r) {
   var res = window.SalaryVerify.classify(r);
-  if (res.state === 'no_annual_reported') return { html: '尚未回報', short: '尚未回報', res: res };
+  if (res.state === 'no_annual_reported') return { html: '未提供', short: '未提供', res: res };
   if (res.state === 'invalid') return { html: '<span class="income-suppressed">資料驗算不符，暫不顯示</span>', short: '資料驗算不符，暫不顯示', res: res };
   var num = fmtMoney(r.estimatedAnnualSalary);
   if (res.state === 'unverifiable') {
@@ -116,7 +116,7 @@ function detailBodyHtml(r, rid) {
   var sourceLine = isSeed ? '📋 資料來源：護理社群薪資互助彙整文（Dcard）' : '👤 站友回報';
 
   var comp = completenessOf(r);
-  var compLine = '<div class="completeness ' + (comp === COMPLETE_FIELDS.length ? 'full' : '') + '">資料完整度：' + comp + '/' + COMPLETE_FIELDS.length + (comp < COMPLETE_FIELDS.length ? '（尚未回報代表尚無人回報這個項目，不代表沒有這項福利）' : '') + '</div>';
+  var compLine = '<div class="completeness ' + (comp === COMPLETE_FIELDS.length ? 'full' : '') + '">資料完整度：' + comp + '/' + COMPLETE_FIELDS.length + (comp < COMPLETE_FIELDS.length ? '（未提供表示目前沒有這個項目的資料，不代表沒有這項福利）' : '') + '</div>';
 
   var income = incomeStateInfo(r);
   var trustLine = '<div class="s-detail-meta">🔖 資料可信度：' + esc(dataTrustLabel(r, income.res.state)) + '</div>';
@@ -131,8 +131,8 @@ function detailBodyHtml(r, rid) {
     }
   }
 
-  var evLine = '<div class="s-detail-meta">小夜津貼（單班）：' + (fmtMoney(r.eveningDiff) || '尚未回報') + '　大夜津貼（單班）：' + (fmtMoney(r.nightDiff) || '尚未回報') + '</div>';
-  var bonusLine = '<div class="s-detail-meta">年終獎金（原始回報文字）：' + (r.yearEndBonus ? esc(r.yearEndBonus) : '尚未回報') + '</div>';
+  var evLine = '<div class="s-detail-meta">小夜津貼（單班）：' + (fmtMoney(r.eveningDiff) || '未提供') + '　大夜津貼（單班）：' + (fmtMoney(r.nightDiff) || '未提供') + '</div>';
+  var bonusLine = '<div class="s-detail-meta">年終獎金（原始回報文字）：' + (r.yearEndBonus ? esc(r.yearEndBonus) : '未提供') + '</div>';
 
   return (
     (metaParts.length ? '<div class="s-detail-meta">' + metaParts.join(' · ') + '</div>' : '') +
@@ -145,10 +145,10 @@ function detailBodyHtml(r, rid) {
 }
 
 function renderRow(r, idx) {
-  const base = fmtMoney(r.baseSalary) || '尚未回報';
-  const eve = fmtMoney(r.eveningDiff) || '尚未回報';
-  const night = fmtMoney(r.nightDiff) || '尚未回報';
-  const bonus = r.yearEndBonus ? esc(r.yearEndBonus) : '尚未回報';
+  const base = fmtMoney(r.baseSalary) || '未提供';
+  const eve = fmtMoney(r.eveningDiff) || '未提供';
+  const night = fmtMoney(r.nightDiff) || '未提供';
+  const bonus = r.yearEndBonus ? esc(r.yearEndBonus) : '未提供';
   const income = incomeStateInfo(r);
   const civilTag = r.isCivilService === '是' ? `<span class="tag-civil">公職</span>` : '';
 
@@ -170,7 +170,7 @@ function renderRow(r, idx) {
 }
 
 function renderCard(r, idx) {
-  const base = fmtMoney(r.baseSalary) || '尚未回報';
+  const base = fmtMoney(r.baseSalary) || '未提供';
   const income = incomeStateInfo(r);
   const civilTag = r.isCivilService === '是' ? `<span class="tag-civil">公職</span>` : '';
   const rid = `c_${r.__id}`;
@@ -375,21 +375,21 @@ function openCompareModal() {
 
   function numCell(r, field, max) {
     const v = toNum(r[field]);
-    if (v === null) return '<td style="color:var(--muted)">尚未回報</td>';
+    if (v === null) return '<td style="color:var(--muted)">未提供</td>';
     return `<td class="income-cell${max !== null && v === max ? ' cmp-best' : ''}">${fmtMoney(v)}</td>`;
   }
 
   let html = '<table><thead><tr><th></th>' + rows.map(r => `<th>${esc(r.hospitalName || '')}</th>`).join('') + '</tr></thead><tbody>';
-  html += `<tr><th>縣市</th>${rows.map(r => `<td>${esc(r.region || '尚未回報')}</td>`).join('')}</tr>`;
-  html += `<tr><th>層級</th>${rows.map(r => `<td>${esc(r.hospitalTier || '尚未回報')}</td>`).join('')}</tr>`;
+  html += `<tr><th>縣市</th>${rows.map(r => `<td>${esc(r.region || '未提供')}</td>`).join('')}</tr>`;
+  html += `<tr><th>層級</th>${rows.map(r => `<td>${esc(r.hospitalTier || '未提供')}</td>`).join('')}</tr>`;
   html += `<tr><th>是否公職</th>${rows.map(r => `<td>${r.isCivilService === '是' ? '是' : (r.isCivilService === '否' ? '否' : '不確定')}</td>`).join('')}</tr>`;
   html += `<tr><th>底薪</th>${rows.map(r => numCell(r, 'baseSalary', maxBase)).join('')}</tr>`;
   html += `<tr><th>小夜津貼</th>${rows.map(r => numCell(r, 'eveningDiff', maxEve)).join('')}</tr>`;
   html += `<tr><th>大夜津貼</th>${rows.map(r => numCell(r, 'nightDiff', maxNight)).join('')}</tr>`;
-  html += `<tr><th>年終獎金</th>${rows.map(r => `<td>${r.yearEndBonus ? esc(r.yearEndBonus) : '尚未回報'}</td>`).join('')}</tr>`;
+  html += `<tr><th>年終獎金</th>${rows.map(r => `<td>${r.yearEndBonus ? esc(r.yearEndBonus) : '未提供'}</td>`).join('')}</tr>`;
   html += `<tr><th>回報全年總收入</th>${rows.map((r, i) => {
     const st = incomeInfos[i].state;
-    if (st === 'no_annual_reported') return '<td style="color:var(--muted)">尚未回報</td>';
+    if (st === 'no_annual_reported') return '<td style="color:var(--muted)">未提供</td>';
     if (st === 'invalid') return '<td class="income-suppressed">資料驗算不符，暫不顯示</td>';
     const v = toNum(r.estimatedAnnualSalary);
     const isBest = (st === 'verified' || st === 'approximate') && maxComparableAnnual !== null && v === maxComparableAnnual;
