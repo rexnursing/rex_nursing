@@ -13,6 +13,7 @@
 
 <div id="admin-box">
 <div class="top-bar"><span id="notification-note" style="font-size:13px;color:var(--muted);margin-right:auto">開啟此頁時可接收新回報提醒</span><button type="button" id="enable-notifications" class="btn-ghost">🔔 開啟新回報通知</button><button type="button" id="sign-out-admin" class="btn-ghost">登出</button></div>
+<p style="font-size:13px;color:var(--muted);margin-top:10px">免費版公開資料每 6 小時自動同步一次；核准後最晚約 6 小時會出現在薪資查詢頁。</p>
 
 <div class="section-head"><h2>待審核回報<span class="pending-count" id="pending-count">0</span></h2></div>
 <div id="pending-state" class="empty-queue" style="display:none">載入中…</div>
@@ -247,7 +248,6 @@ async function handleApprove(cardEl) {
   btns.forEach(b => b.disabled = true);
   try {
     await updateDoc(doc(db, 'salaryReports', id), { ...result.data, status: 'approved', reviewedAt: serverTimestamp() });
-    localStorage.removeItem('rex_salary_approved_cache_v1');
     cardEl.remove();
     pendingDocs = pendingDocs.filter(p => p.id !== id);
     document.getElementById('pending-count').textContent = pendingDocs.length;

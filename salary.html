@@ -23,7 +23,7 @@
 <div class="form-actions"><button type="submit" class="btn-p">📤 送出回報</button><button type="button" id="cancel-submit-form" class="btn-ghost">✖️ 取消</button></div>
 <div id="form-msg" class="form-msg"></div>
 </form></div></div><footer class="salary-footer"><div class="wrap footer-grid"><div class="footer-brand"><div class="footer-logo">🩺 Rex Nursing</div><div class="footer-tag">護理國考站・為護理人整理國考、衛教與職涯資訊</div></div><nav class="footer-links" aria-label="頁尾連結"><a href="index.html">🏠 護理國考站首頁</a><a href="health.html">🌿 健康衛教</a><a href="https://www.instagram.com/rex_nursing/" target="_blank" rel="noopener">📷 Instagram</a><a href="mailto:rexnursing@gmail.com">📧 問題回報</a></nav></div><div class="wrap footer-bottom"><span>© 2026 Rex Nursing</span><span>rexnursing@gmail.com</span></div></footer><script src="assets/salary/verify-income.js"></script><script type="module">import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
-import { getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -616,36 +616,16 @@ function ensureSignedIn() {
   return signInAnonymously(auth).then(cred => cred.user);
 }
 
-const APPROVED_CACHE_KEY = 'rex_salary_approved_cache_v1';
-const APPROVED_CACHE_TTL = 30 * 60 * 1000;
+const APPROVED_DATA_URL = 'assets/salary/approved-reports.json';
 const SUBMIT_COOLDOWN_KEY = 'rex_salary_last_submit_at_v1';
 const SUBMIT_COOLDOWN_MS = 5 * 60 * 1000;
 
-function readApprovedCache(allowExpired) {
-  try {
-    const cached = JSON.parse(localStorage.getItem(APPROVED_CACHE_KEY) || 'null');
-    if (!cached || !Array.isArray(cached.reports) || !cached.savedAt) return null;
-    if (!allowExpired && Date.now() - cached.savedAt > APPROVED_CACHE_TTL) return null;
-    return cached.reports;
-  } catch (_) {
-    return null;
-  }
-}
-
 async function loadApprovedReports() {
-  const fresh = readApprovedCache(false);
-  if (fresh) return fresh;
-  try {
-    const q = query(collection(db, 'salaryReports'), where('status', '==', 'approved'));
-    const snap = await getDocs(q);
-    const reports = snap.docs.map(d => ({ ...d.data(), __id: d.id }));
-    try { localStorage.setItem(APPROVED_CACHE_KEY, JSON.stringify({ savedAt: Date.now(), reports })); } catch (_) {}
-    return reports;
-  } catch (err) {
-    const stale = readApprovedCache(true);
-    if (stale) return stale;
-    throw err;
-  }
+  const response = await fetch(APPROVED_DATA_URL, { cache: 'default' });
+  if (!response.ok) throw new Error('薪資公開資料載入失敗：' + response.status);
+  const payload = await response.json();
+  if (!payload || !Array.isArray(payload.reports)) throw new Error('薪資公開資料格式不正確');
+  return payload.reports;
 }
 
 function updateIncomeLiveCheck(formEl) {
