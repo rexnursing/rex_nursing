@@ -93,7 +93,7 @@ function incomeStateInfo(r) {
   if (res.state === 'invalid') return { html: '<span class="income-suppressed">資料驗算不符，暫不顯示</span>', short: '資料驗算不符，暫不顯示', res: res };
   var num = fmtMoney(r.estimatedAnnualSalary);
   if (res.state === 'unverifiable') {
-    return { html: num + '<span class="income-badge unverified">自行回報・尚未驗算</span>', short: num + '（自行回報・尚未驗算）', res: res };
+    return { html: num, short: num, res: res };
   }
   var tag = res.state === 'approximate' ? '✓ 約略相符' : '✓ 驗算相符';
   return { html: num + '<span class="income-badge verified">' + tag + '</span>', short: num + '（' + tag + '）', res: res };
@@ -394,13 +394,13 @@ function openCompareModal() {
     const v = toNum(r.estimatedAnnualSalary);
     const isBest = (st === 'verified' || st === 'approximate') && maxComparableAnnual !== null && v === maxComparableAnnual;
     const badge = st === 'unverifiable'
-      ? '<span class="income-badge unverified">未驗算</span>'
+      ? ''
       : `<span class="income-badge verified">${st === 'approximate' ? '約略相符' : '驗算相符'}</span>`;
     return `<td class="income-cell${isBest ? ' cmp-best' : ''}">${fmtMoney(v)}${badge}</td>`;
   }).join('')}</tr>`;
   html += '</tbody></table>';
   if (incomeInfos.some(x => x.state === 'unverifiable')) {
-    html += '<p style="font-size:12.5px;color:var(--muted);margin-top:10px">⚠️ 標示「未驗算」的回報全年總收入為受訪者自行回報，尚未逐項驗算，僅供參考，不代表該醫院薪資確定較高或較低。</p>';
+    html += '<p style="font-size:12.5px;color:var(--muted);margin-top:10px">⚠️ 回報全年總收入為受訪者自行提供，僅供參考，不代表該醫院薪資確定較高或較低。</p>';
   }
 
   document.getElementById('compare-table-wrap').innerHTML = html;
