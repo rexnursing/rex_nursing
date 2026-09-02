@@ -12,7 +12,7 @@
 </div>
 
 <div id="admin-box">
-<div class="top-bar"><button type="button" id="sign-out-admin" class="btn-ghost">登出</button></div>
+<div class="top-bar"><span id="notification-note" style="font-size:13px;color:var(--muted);margin-right:auto">開啟此頁時可接收新回報提醒</span><button type="button" id="enable-notifications" class="btn-ghost">🔔 開啟新回報通知</button><button type="button" id="sign-out-admin" class="btn-ghost">登出</button></div>
 
 <div class="section-head"><h2>待審核回報<span class="pending-count" id="pending-count">0</span></h2></div>
 <div id="pending-state" class="empty-queue" style="display:none">載入中…</div>
@@ -25,7 +25,7 @@
 
 </div><footer class="site" style="border-top:1px solid var(--bd);margin-top:50px;padding:30px 0 50px;color:var(--muted);font-size:15px"><div class="wrap" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px"><span>© 2026 Rex Nursing</span> <span><a href="salary.html">薪資查詢</a></span></div></footer><script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
-import { getFirestore, collection, query, where, getDocs, doc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
+import { getFirestore, collection, query, where, getDocs, doc, updateDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -157,6 +157,45 @@ function collectAndValidate(cardEl) {
 let pendingDocs = [];
 let rejectedDocs = [];
 let rejectedLoaded = false;
+let stopPendingNotifications = null;
+
+function updateNotificationUi() {
+  const btn = document.getElementById('enable-notifications');
+  const note = document.getElementById('notification-note');
+  if (!('Notification' in window)) {
+    btn.disabled = true;
+    btn.textContent = '此瀏覽器不支援通知';
+    note.textContent = '請直接查看待審核清單';
+    return;
+  }
+  if (Notification.permission === 'granted') {
+    btn.textContent = '🔔 新回報通知已開啟';
+    note.textContent = '審核頁保持開啟時，有新回報會立即提醒';
+  } else if (Notification.permission === 'denied') {
+    btn.disabled = true;
+    btn.textContent = '通知已被瀏覽器封鎖';
+    note.textContent = '可在瀏覽器網站設定中重新允許通知';
+  }
+}
+
+function startNotificationWatcher() {
+  if (!('Notification' in window) || Notification.permission !== 'granted' || stopPendingNotifications) return;
+  let firstSnapshot = true;
+  const q = query(collection(db, 'salaryReports'), where('status', '==', 'pending'));
+  stopPendingNotifications = onSnapshot(q, (snap) => {
+    if (firstSnapshot) { firstSnapshot = false; return; }
+    const additions = snap.docChanges().filter(change => change.type === 'added');
+    additions.forEach((change) => {
+      const data = change.doc.data();
+      const notice = new Notification('Rex Nursing：有新的薪資回報', {
+        body: (data.hospitalName || '未提供醫院名稱') + '，等待您審核。',
+        tag: 'salary-report-' + change.doc.id,
+      });
+      notice.onclick = () => { window.focus(); notice.close(); };
+    });
+    if (additions.length) loadPending();
+  }, (err) => console.error('[salary-admin] 通知監聽失敗', err));
+}
 
 async function loadPending() {
   const stateEl = document.getElementById('pending-state');
@@ -208,6 +247,7 @@ async function handleApprove(cardEl) {
   btns.forEach(b => b.disabled = true);
   try {
     await updateDoc(doc(db, 'salaryReports', id), { ...result.data, status: 'approved', reviewedAt: serverTimestamp() });
+    localStorage.removeItem('rex_salary_approved_cache_v1');
     cardEl.remove();
     pendingDocs = pendingDocs.filter(p => p.id !== id);
     document.getElementById('pending-count').textContent = pendingDocs.length;
@@ -309,6 +349,12 @@ document.getElementById('google-signin').addEventListener('click', () => {
 
 document.getElementById('sign-out-denied').addEventListener('click', () => signOut(auth));
 document.getElementById('sign-out-admin').addEventListener('click', () => signOut(auth));
+document.getElementById('enable-notifications').addEventListener('click', async () => {
+  if (!('Notification' in window)) return;
+  const permission = await Notification.requestPermission();
+  updateNotificationUi();
+  if (permission === 'granted') startNotificationWatcher();
+});
 
 function showState(state) {
   document.getElementById('login-box').style.display = state === 'login' ? 'block' : 'none';
@@ -318,6 +364,7 @@ function showState(state) {
 
 onAuthStateChanged(auth, (user) => {
   if (!user) {
+    if (stopPendingNotifications) { stopPendingNotifications(); stopPendingNotifications = null; }
     showState('login');
     return;
   }
@@ -327,6 +374,8 @@ onAuthStateChanged(auth, (user) => {
     return;
   }
   showState('admin');
+  updateNotificationUi();
+  startNotificationWatcher();
   loadPending();
 });
 </script>
