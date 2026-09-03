@@ -492,13 +492,14 @@ function main() {
     const examLabel = examLabelOf(course, exam);
     if (PILOT && examLabel !== PILOT) continue;
 
-    list.forEach((q, idx) => {
-      q.__no = (q.no !== undefined && q.no !== null) ? q.no : idx + 1;
-    });
-    list.sort((a, b) => a.__no - b.__no);
+    // Use one normalized field for both question pages and their index links.
+    const numberedList = list.map((q, idx) => ({
+      ...q,
+      no: (q.no !== undefined && q.no !== null) ? q.no : idx + 1,
+    })).sort((a, b) => a.no - b.no);
 
     if (!byExamLabel.has(examLabel)) byExamLabel.set(examLabel, {});
-    byExamLabel.get(examLabel)[course] = list;
+    byExamLabel.get(examLabel)[course] = numberedList;
 
     if (!subjectExamLabels.has(course)) subjectExamLabels.set(course, new Set());
     subjectExamLabels.get(course).add(examLabel);
@@ -515,19 +516,19 @@ function main() {
 
     for (const course of Object.keys(subjectGroups)) {
       const list = subjectGroups[course];
-      const examIndexUrl = '../index.html';
+      const examIndexUrl = './index.html';
       const subjectIndexUrl = `./${course}/index.html`;
       const subjectHomeUrl = `../../subjects/${course}/index.html`;
 
       list.forEach((q, i) => {
-        const no3 = String(q.__no).padStart(3, '0');
+        const no3 = String(q.no).padStart(3, '0');
         const prevQ = i > 0 ? list[i - 1] : null;
         const nextQ = i < list.length - 1 ? list[i + 1] : null;
-        const prevUrl = prevQ ? `./${course}-${String(prevQ.__no).padStart(3, '0')}.html` : null;
-        const nextUrl = nextQ ? `./${course}-${String(nextQ.__no).padStart(3, '0')}.html` : null;
+        const prevUrl = prevQ ? `./${course}-${String(prevQ.no).padStart(3, '0')}.html` : null;
+        const nextUrl = nextQ ? `./${course}-${String(nextQ.no).padStart(3, '0')}.html` : null;
 
         const html = buildQuestionPage(
-          { ...q, no: q.__no },
+          q,
           { course, examLabel, no3, subj: q.subj, year, sittingLabel, prevUrl, nextUrl, subjectIndexUrl, examIndexUrl, subjectHomeUrl }
         );
         writeFile(`questions/${examLabel}/${course}-${no3}.html`, html);

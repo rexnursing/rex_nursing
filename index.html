@@ -172,7 +172,10 @@ document.addEventListener('contextmenu', function(e){
 
   function injectInto(container){
     if (!container) return;
-    var cards = container.querySelectorAll('[onclick*="startExam("]');
+    // Only the grid's direct children are cards; nested practice buttons must not receive links.
+    var cards = Array.from(container.children).filter(function(card){
+      return (card.getAttribute('onclick') || '').indexOf('startExam(') !== -1;
+    });
     cards.forEach(function(card){
       if (card.querySelector('.qp-inline-link')) return;
       var m = /startExam\(['"]([^'"]+)['"]\)/.exec(card.getAttribute('onclick') || '');
