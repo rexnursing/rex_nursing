@@ -428,6 +428,234 @@ function getFlaggedQuestions() {
   });
 }
 
+// 錯題本不再把所有題目直接混成一份。先提供「依科目／章節」與「依考試
+// 日期」兩種分類入口，使用者選定範圍後才進入既有的逐題複習畫面。
+let wrongBookView = "chapter";
+let wrongBookCourse = null;
+
+function wrongBookCourseLabel(course) {
+  return (
+    (typeof SEARCH_COURSE_LABELS !== "undefined" && SEARCH_COURSE_LABELS[course]) ||
+    course ||
+    "未分類"
+  );
+}
+
+function wrongBookExamLabel(exam, questions) {
+  const sample = (questions || []).find(function (q) {
+    return wrongBookExamKey(q) === exam;
+  });
+  return (sample && getExamOriginLabel(sample)) || exam || "日期未分類";
+}
+
+function wrongBookExamKey(q) {
+  const raw = (q && q.exam) || "";
+  // 各科代碼有些會帶科目前綴（例如 psych-115-1），分類日期時應和
+  // medsurg 的 115-1 視為同一梯次，而不是拆成兩張日期卡。
+  const m = /(\d+)-(\d+)$/.exec(raw);
+  return m ? m[1] + "-" + m[2] : raw || "未分類";
+}
+
+function sortWrongBookExams(a, b) {
+  function score(code) {
+    const m = /(\d+)-(\d+)$/.exec(code || "");
+    return m ? Number(m[1]) * 10 + Number(m[2]) : -1;
+  }
+  return score(b) - score(a) || String(b).localeCompare(String(a));
+}
+
+function makeWrongBookButton(text, count, onClick, options) {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.style.cssText =
+    "display:flex;align-items:center;justify-content:space-between;gap:10px;" +
+    "width:100%;min-height:44px;padding:10px 14px;border:1px solid var(--bd);" +
+    "border-radius:10px;background:" + ((options && options.active) ? "var(--teal-l)" : "var(--white)") + ";" +
+    "color:var(--text);font-family:inherit;font-size:13px;cursor:pointer;text-align:left";
+  const label = document.createElement("span");
+  label.textContent = text;
+  const badge = document.createElement("span");
+  badge.textContent = count + " 題";
+  badge.style.cssText =
+    "flex-shrink:0;border-radius:20px;padding:2px 9px;background:#faece7;color:#993c1d;" +
+    "font-size:11.5px;font-weight:600";
+  btn.appendChild(label);
+  btn.appendChild(badge);
+  btn.onclick = onClick;
+  return btn;
+}
+
+function startWrongBookGroup(filter, title) {
+  startReviewList(
+    function () {
+      return getWrongQuestions().filter(filter);
+    },
+    "這個分類目前沒有錯題。",
+    "📕 " + title
+  );
+}
+
+function renderWrongBookPanel() {
+  const panel = document.getElementById("wrong-book-panel");
+  if (!panel) return;
+  const questions = getWrongQuestions();
+  panel.innerHTML = "";
+
+  const head = document.createElement("div");
+  head.style.cssText = "display:flex;align-items:flex-start;gap:12px;margin-bottom:14px";
+  const titleBox = document.createElement("div");
+  titleBox.style.cssText = "flex:1;min-width:0";
+  const title = document.createElement("div");
+  title.textContent = "📕 錯題分類";
+  title.style.cssText = "font-size:17px;font-weight:700;color:var(--teal-d)";
+  const summary = document.createElement("div");
+  summary.textContent = "共 " + questions.length + " 題，選擇分類後開始複習";
+  summary.style.cssText = "font-size:12.5px;color:var(--muted);margin-top:3px";
+  titleBox.appendChild(title);
+  titleBox.appendChild(summary);
+  const close = document.createElement("button");
+  close.type = "button";
+  close.textContent = "關閉";
+  close.style.cssText =
+    "border:1px solid var(--bd);border-radius:20px;background:var(--white);padding:5px 12px;" +
+    "color:var(--muted);font-family:inherit;cursor:pointer";
+  close.onclick = function () {
+    panel.remove();
+  };
+  head.appendChild(titleBox);
+  head.appendChild(close);
+  panel.appendChild(head);
+
+  if (!questions.length) {
+    const empty = document.createElement("div");
+    empty.textContent = "目前沒有錯題，繼續保持！";
+    empty.style.cssText = "padding:22px;text-align:center;color:var(--muted);font-size:13px";
+    panel.appendChild(empty);
+    return;
+  }
+
+  const allBtn = makeWrongBookButton("全部錯題", questions.length, function () {
+    startWrongBookGroup(function () { return true; }, "全部錯題複習");
+  });
+  allBtn.style.marginBottom = "12px";
+  panel.appendChild(allBtn);
+
+  const tabs = document.createElement("div");
+  tabs.style.cssText = "display:flex;gap:8px;margin-bottom:12px";
+  [
+    ["chapter", "依科目／章節"],
+    ["exam", "依考試日期"],
+  ].forEach(function (entry) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = entry[1];
+    btn.style.cssText =
+      "flex:1;min-height:42px;border-radius:9px;border:1px solid " +
+      (wrongBookView === entry[0] ? "var(--teal)" : "var(--bd)") +
+      ";background:" + (wrongBookView === entry[0] ? "var(--teal-l)" : "var(--white)") +
+      ";color:var(--teal-d);font-family:inherit;font-weight:600;cursor:pointer";
+    btn.onclick = function () {
+      wrongBookView = entry[0];
+      renderWrongBookPanel();
+    };
+    tabs.appendChild(btn);
+  });
+  panel.appendChild(tabs);
+
+  const content = document.createElement("div");
+  content.style.cssText = "display:grid;gap:8px";
+
+  if (wrongBookView === "exam") {
+    const byExam = {};
+    questions.forEach(function (q) {
+      const key = wrongBookExamKey(q);
+      if (!byExam[key]) byExam[key] = [];
+      byExam[key].push(q);
+    });
+    Object.keys(byExam).sort(sortWrongBookExams).forEach(function (exam) {
+      const examBtn = makeWrongBookButton(wrongBookExamLabel(exam, questions), byExam[exam].length, function () {
+        startWrongBookGroup(function (q) { return wrongBookExamKey(q) === exam; }, wrongBookExamLabel(exam, questions));
+      });
+      examBtn.dataset.wrongExam = exam;
+      content.appendChild(examBtn);
+    });
+  } else {
+    const byCourse = {};
+    questions.forEach(function (q) {
+      const key = q.course || "未分類";
+      if (!byCourse[key]) byCourse[key] = [];
+      byCourse[key].push(q);
+    });
+    const courses = Object.keys(byCourse).sort(function (a, b) {
+      return wrongBookCourseLabel(a).localeCompare(wrongBookCourseLabel(b), "zh-Hant");
+    });
+    if (!wrongBookCourse || !byCourse[wrongBookCourse]) wrongBookCourse = courses[0];
+
+    const courseGrid = document.createElement("div");
+    courseGrid.style.cssText = "display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:4px";
+    courses.forEach(function (course) {
+      const courseBtn = makeWrongBookButton(wrongBookCourseLabel(course), byCourse[course].length, function () {
+        wrongBookCourse = course;
+        renderWrongBookPanel();
+      }, { active: wrongBookCourse === course });
+      courseBtn.dataset.wrongCourse = course;
+      courseGrid.appendChild(courseBtn);
+    });
+    content.appendChild(courseGrid);
+
+    const selected = byCourse[wrongBookCourse] || [];
+    const courseAll = makeWrongBookButton("此科全部錯題", selected.length, function () {
+      const course = wrongBookCourse;
+      startWrongBookGroup(function (q) { return (q.course || "未分類") === course; }, wrongBookCourseLabel(course) + "錯題");
+    });
+    courseAll.style.marginTop = "6px";
+    content.appendChild(courseAll);
+
+    const byChapter = {};
+    selected.forEach(function (q) {
+      const key = q.chapter || q.section || "章節未分類";
+      if (!byChapter[key]) byChapter[key] = [];
+      byChapter[key].push(q);
+    });
+    Object.keys(byChapter).sort(function (a, b) { return a.localeCompare(b, "zh-Hant"); }).forEach(function (chapter) {
+      const course = wrongBookCourse;
+      const chapterBtn = makeWrongBookButton(chapter, byChapter[chapter].length, function () {
+        startWrongBookGroup(
+          function (q) {
+            return (q.course || "未分類") === course && (q.chapter || q.section || "章節未分類") === chapter;
+          },
+          wrongBookCourseLabel(course) + " · " + chapter
+        );
+      });
+      chapterBtn.dataset.wrongChapter = chapter;
+      content.appendChild(chapterBtn);
+    });
+  }
+  panel.appendChild(content);
+}
+
+function openWrongBookPanel() {
+  const questions = getWrongQuestions();
+  if (!questions.length) {
+    alert("目前沒有錯題，繼續保持！");
+    return;
+  }
+  const container = document.getElementById("course-select");
+  const bar = document.getElementById("review-bar");
+  if (!container || !bar) return;
+  let panel = document.getElementById("wrong-book-panel");
+  if (!panel) {
+    panel = document.createElement("section");
+    panel.id = "wrong-book-panel";
+    panel.style.cssText =
+      "background:var(--white);border:1px solid var(--bd);border-radius:14px;padding:18px;" +
+      "margin:-6px 0 20px;box-shadow:0 8px 24px rgba(31,59,92,.06)";
+    bar.insertAdjacentElement("afterend", panel);
+  }
+  renderWrongBookPanel();
+  panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
 let inReviewMode = false;
 let currentReviewGetter = null;
 // 複習/練習結束後要回到哪裡：預設回最上層科目選擇（course-select）；
@@ -515,7 +743,7 @@ function ensureReviewBar() {
     '<button id="review-flagged-btn" style="display:inline-flex;align-items:center;gap:7px;background:var(--white);border:1.5px solid var(--bd);border-radius:50px;padding:9px 18px;font-size:13.5px;font-weight:500;cursor:pointer;font-family:inherit;color:var(--text)">⭐ 疑難標記 <span id="review-flagged-count" style="background:var(--teal-l);color:var(--teal-d);border-radius:20px;padding:1px 9px;font-size:12px;font-weight:600">0</span></button>';
   container.insertBefore(bar, container.firstChild);
   document.getElementById("review-wrong-btn").onclick = function () {
-    startReviewList(getWrongQuestions, "目前沒有錯題，繼續保持！", "📕 錯題本複習");
+    openWrongBookPanel();
   };
   document.getElementById("review-flagged-btn").onclick = function () {
     startReviewList(
@@ -532,6 +760,7 @@ function updateReviewBarCounts() {
   const flaggedEl = document.getElementById("review-flagged-count");
   if (wrongEl) wrongEl.textContent = getWrongQuestions().length;
   if (flaggedEl) flaggedEl.textContent = getFlaggedQuestions().length;
+  if (document.getElementById("wrong-book-panel")) renderWrongBookPanel();
 }
 
 // ---------------------------------------------------------------------------
@@ -1992,7 +2221,11 @@ function initQuizHooks() {
     inReviewMode = false;
     currentReviewGetter = null;
     leaveActiveMockExamView();
-    origGoPage(page);
+    // 原始 goPage() 會回傳 false，供導覽列的
+    // onclick='return goPage("quiz")' 阻止 <a href="quiz.html"> 的預設跳轉。
+    // 包裝後也必須把這個回傳值原樣交回去；若漏掉 return，inline handler
+    // 取得 undefined，瀏覽器就會繼續開啟獨立的 quiz.html 介紹頁。
+    const routeResult = origGoPage(page);
     if (page === "quiz") {
       // 立刻畫一次：多數情況下（例如本來就停在 course-select 或另一個
       // 分頁）#course-select 這時已經是唯一可見的畫面，可以馬上看到卡片。
@@ -2011,6 +2244,7 @@ function initQuizHooks() {
         syncAndroidBetaCardVisibility();
       }, 20);
     }
+    return routeResult;
   };
 
   // 正式模擬考的題目卡上，只標出「目前選了哪一個」（中性樣式，不透露對錯），

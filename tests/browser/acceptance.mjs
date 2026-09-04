@@ -60,7 +60,10 @@ const BASE = 'http://127.0.0.1:' + PORT;
 // 4 項被保留的線上既有功能沒有被合併過程弄壞，總數改成 101+17=118（S19=3
 // 項、S20=6 項、S21=4 項、S22=4 項）。用合併後的實際檔案連續完整重跑，
 // 確認 TOTAL=118 PASSED=118 FAILED=0。
-const EXPECTED_TOTAL = 118;
+// 2026-09-04 修正錯題本缺少分類，以及新版 goPage 包裝漏回傳 false 造成
+// 導覽列「線上歷屆考題測驗」誤跳 quiz.html，新增 S23 共 9 項（含 375px
+// 錯題分類面板不產生橫向捲動），總數 127。
+const EXPECTED_TOTAL = 127;
 
 let total = 0, passed = 0;
 const results = [];
@@ -1232,6 +1235,107 @@ async function scenario22() {
   record('S22: mock-exam-guide.html 實際存在、回應正常（不是死連結）', guideResp.ok, guideResp);
 }
 
+async function scenario23() {
+  console.log('\n### Scenario 23: 錯題本依科目／章節與考試日期分類；導覽列維持站內作答頁 ###');
+  await freshLoad();
+
+  // 直接從正式題庫挑出跨科目、跨章節、跨考試梯次的題目，寫入真正的
+  // rex_quiz_myprogress_v1；每題選一個不在正解裡的選項，確保都會進錯題本。
+  const seed = await page.evaluate(() => {
+    const picked = [];
+    const candidates = window.QS.filter((q) => q.course && q.chapter && q.exam);
+    const first = candidates[0];
+    if (first) picked.push(first);
+    const secondChapter = candidates.find((q) => q.course === first.course && q.chapter !== first.chapter);
+    if (secondChapter) picked.push(secondChapter);
+    const secondCourse = candidates.find((q) => q.course !== first.course);
+    if (secondCourse) picked.push(secondCourse);
+    const secondExam = candidates.find((q) => q.exam !== first.exam && !picked.some((p) => p.n === q.n));
+    if (secondExam) picked.push(secondExam);
+
+    const answers = {};
+    picked.forEach((q) => {
+      answers[q.n] = [0, 1, 2, 3].find((idx) => !q.ans.includes(idx));
+    });
+    localStorage.setItem('rex_quiz_myprogress_v1', JSON.stringify({ answers, flagged: {}, mockHistory: [] }));
+    return {
+      count: picked.length,
+      courses: [...new Set(picked.map((q) => q.course))],
+      chapters: [...new Set(picked.map((q) => q.chapter))],
+      exams: [...new Set(picked.map((q) => {
+        const m = /(\d+)-(\d+)$/.exec(q.exam || '');
+        return m ? m[1] + '-' + m[2] : q.exam;
+      }))],
+    };
+  });
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await waitForMockExamModuleReady();
+  await goToQuizPage();
+  await page.click('#review-wrong-btn');
+  await page.waitForSelector('#wrong-book-panel', { timeout: 5000 });
+
+  const initial = await page.evaluate(() => {
+    const panel = document.getElementById('wrong-book-panel');
+    return {
+      count: document.getElementById('review-wrong-count').textContent,
+      text: panel ? panel.innerText : '',
+      buttons: panel ? Array.from(panel.querySelectorAll('button')).map((b) => b.innerText) : [],
+    };
+  });
+  record('S23: 錯題本按鈕顯示的題數與實際種入的錯題數一致', Number(initial.count) === seed.count, { seed, initial });
+  record('S23: 點錯題本先開啟分類面板，不再直接混成一份開始作答', initial.text.includes('錯題分類'), initial);
+  record('S23: 分類面板同時提供「依科目／章節」與「依考試日期」兩種入口', initial.text.includes('依科目／章節') && initial.text.includes('依考試日期'), initial.text);
+  const classificationCounts = await page.evaluate(() => ({
+    courseButtons: document.querySelectorAll('#wrong-book-panel [data-wrong-course]').length,
+    chapterButtons: document.querySelectorAll('#wrong-book-panel [data-wrong-chapter]').length,
+  }));
+  record('S23: 依科目／章節頁列出至少兩個實際有錯題的科目', seed.courses.length >= 2 && classificationCounts.courseButtons === seed.courses.length, { seed, classificationCounts });
+  record('S23: 依科目／章節頁顯示選定科目的章節按鈕與題數', classificationCounts.chapterButtons >= 1 && seed.chapters.some((chapter) => initial.buttons.some((t) => t.includes(chapter) && /\d+\s*題/.test(t))), { seed, classificationCounts, buttons: initial.buttons });
+
+  await page.setViewportSize({ width: 375, height: 812 });
+  const mobileLayout = await page.evaluate(() => {
+    const panel = document.getElementById('wrong-book-panel');
+    const rect = panel.getBoundingClientRect();
+    return { left: rect.left, right: rect.right, viewport: innerWidth, scrollWidth: document.documentElement.scrollWidth };
+  });
+  record('S23: 375px 手機寬度下錯題分類面板完整落在畫面內，沒有水平捲動', mobileLayout.left >= 0 && mobileLayout.right <= mobileLayout.viewport && mobileLayout.scrollWidth <= mobileLayout.viewport, mobileLayout);
+
+  await page.locator('#wrong-book-panel button', { hasText: '依考試日期' }).click();
+  const examView = await page.evaluate(() => ({
+    text: document.getElementById('wrong-book-panel').innerText,
+    buttons: Array.from(document.querySelectorAll('#wrong-book-panel button')).map((b) => b.innerText),
+  }));
+  const examButtonCount = await page.evaluate(() => document.querySelectorAll('#wrong-book-panel [data-wrong-exam]').length);
+  record('S23: 切到依考試日期後，列出的梯次數與錯題來源的不同考試梯次數一致', examButtonCount === seed.exams.length, { seed, examButtonCount, examView });
+
+  // 真正點一個日期分類，確認進入後 qList 只含該梯次，而不只是畫面上有分類文字。
+  const clickedExam = await page.evaluate(() => {
+    const btn = document.querySelector('#wrong-book-panel [data-wrong-exam]');
+    if (!btn) return null;
+    const exam = btn.dataset.wrongExam;
+    btn.click();
+    return { text: btn.innerText, exam };
+  });
+  const filtered = await page.evaluate(() => ({
+    exams: [...new Set(window.qList.map((q) => {
+      const m = /(\d+)-(\d+)$/.exec(q.exam || '');
+      return m ? m[1] + '-' + m[2] : q.exam;
+    }))],
+    len: window.qList.length,
+  }));
+  record('S23: 點選日期分類後真的只載入單一考試梯次的錯題', !!clickedExam && filtered.len > 0 && filtered.exams.length === 1 && filtered.exams[0] === clickedExam.exam, { clickedExam, filtered });
+
+  // 重新載入後，以真實滑鼠點導覽列連結；若新版 window.goPage 包裝沒把
+  // origGoPage() 的 false 傳回 inline onclick，這裡會直接導航到 /quiz.html。
+  await freshLoad();
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.click('[data-group="practice"] .nav-group-toggle');
+  await page.click('#nav-quiz');
+  await page.waitForTimeout(250);
+  const route = await page.evaluate(() => ({ pathname: location.pathname, hash: location.hash, quizActive: document.getElementById('page-quiz').classList.contains('active') }));
+  record('S23: 點「線上歷屆考題測驗」留在 index.html 的站內作答頁，不再跳到 quiz.html', /\/index\.html$/.test(route.pathname) && route.hash === '#quiz' && route.quizActive, route);
+}
+
 async function main() {
   server = await startServer(SITE_ROOT, PORT);
   browser = await chromium.launch();
@@ -1250,6 +1354,10 @@ async function main() {
   });
 
   try {
+    if (process.env.REX_TEST_SCENARIO === '23') {
+      try { await scenario23(); } catch (e) { record('S23: threw an unexpected exception', false, e.stack || String(e)); }
+      record('No uncaught page errors or console.error across the targeted run', pageErrors.length === 0, pageErrors.join(' | '));
+    } else {
     try { await scenario1(); } catch (e) { record('S1: threw an unexpected exception', false, e.stack || String(e)); }
     try { await scenario2(); } catch (e) { record('S2: threw an unexpected exception', false, e.stack || String(e)); }
     try { await scenario3(); } catch (e) { record('S3: threw an unexpected exception', false, e.stack || String(e)); }
@@ -1272,23 +1380,26 @@ async function main() {
     try { await scenario20(); } catch (e) { record('S20: threw an unexpected exception', false, e.stack || String(e)); }
     try { await scenario21(); } catch (e) { record('S21: threw an unexpected exception', false, e.stack || String(e)); }
     try { await scenario22(); } catch (e) { record('S22: threw an unexpected exception', false, e.stack || String(e)); }
+    try { await scenario23(); } catch (e) { record('S23: threw an unexpected exception', false, e.stack || String(e)); }
 
-    record('No uncaught page errors or console.error across the entire run', pageErrors.length === 0, pageErrors.join(' | '));
+      record('No uncaught page errors or console.error across the entire run', pageErrors.length === 0, pageErrors.join(' | '));
+    }
   } finally {
     if (browser) await browser.close();
     if (server) server.close();
   }
   console.log('\n=====================================');
   console.log('TOTAL=' + total + ' PASSED=' + passed + ' FAILED=' + (total - passed));
-  if (total !== EXPECTED_TOTAL) {
+  const expectedTotal = process.env.REX_TEST_SCENARIO === '23' ? 10 : EXPECTED_TOTAL;
+  if (total !== expectedTotal) {
     console.log(
       '⚠️  本次執行的斷言總數（' + total + '）跟完整跑完應有的數量（EXPECTED_TOTAL=' + EXPECTED_TOTAL + '）不一樣——' +
       '代表有情境中途拋出例外、後面的斷言根本沒有執行到，不是「這次剛好比較少」。' +
       '請往上找 "threw an unexpected exception" 那一行，那就是提前中斷的情境。'
     );
   }
-  fs.writeFileSync(path.join(__dirname, 'acceptance-result.json'), JSON.stringify({ total, passed, expectedTotal: EXPECTED_TOTAL, results }, null, 2));
-  process.exit(total === passed && total === EXPECTED_TOTAL ? 0 : 1);
+  fs.writeFileSync(path.join(__dirname, 'acceptance-result.json'), JSON.stringify({ total, passed, expectedTotal, results }, null, 2));
+  process.exit(total === passed && total === expectedTotal ? 0 : 1);
 }
 
 main().catch((e) => {
