@@ -432,6 +432,7 @@ function getFlaggedQuestions() {
 // 日期」兩種分類入口，使用者選定範圍後才進入既有的逐題複習畫面。
 let wrongBookView = "chapter";
 let wrongBookCourse = null;
+let wrongBookExpanded = true;
 
 function wrongBookCourseLabel(course) {
   return (
@@ -515,16 +516,23 @@ function renderWrongBookPanel() {
   titleBox.appendChild(summary);
   const close = document.createElement("button");
   close.type = "button";
-  close.textContent = "關閉";
+  close.textContent = wrongBookExpanded ? "收起 ▲" : "展開 ▼";
+  close.setAttribute("aria-expanded", wrongBookExpanded ? "true" : "false");
   close.style.cssText =
     "border:1px solid var(--bd);border-radius:20px;background:var(--white);padding:5px 12px;" +
     "color:var(--muted);font-family:inherit;cursor:pointer";
   close.onclick = function () {
-    panel.remove();
+    wrongBookExpanded = !wrongBookExpanded;
+    renderWrongBookPanel();
   };
   head.appendChild(titleBox);
   head.appendChild(close);
+  head.style.marginBottom = wrongBookExpanded ? "14px" : "0";
   panel.appendChild(head);
+
+  // 收起時保留一列精簡摘要，讓使用者知道錯題本仍在、也能隨時再展開，
+  // 但不讓完整分類清單長時間占據手機畫面。
+  if (!wrongBookExpanded) return;
 
   if (!questions.length) {
     const empty = document.createElement("div");
@@ -651,9 +659,15 @@ function openWrongBookPanel() {
       "background:var(--white);border:1px solid var(--bd);border-radius:14px;padding:18px;" +
       "margin:-6px 0 20px;box-shadow:0 8px 24px rgba(31,59,92,.06)";
     bar.insertAdjacentElement("afterend", panel);
+    wrongBookExpanded = true;
+  } else {
+    // 再按一次上方的「錯題本」膠囊按鈕，也可以快速收起／展開。
+    wrongBookExpanded = !wrongBookExpanded;
   }
   renderWrongBookPanel();
-  panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  if (wrongBookExpanded) {
+    panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
 }
 
 let inReviewMode = false;
@@ -2262,6 +2276,46 @@ function initQuizHooks() {
     });
   }
 
+  // 選完答案後自動前往下一個尚未作答的題目，省去手機上每題都要再按一次
+  // 「下一題」。保留短暫 650ms，讓一般練習仍看得到答對／答錯的即時提示。
+  // 若使用者在等待期間自己點了題號、上一題或下一題，qIdx 已改變，舊計時器
+  // 就會安全失效，不會再多跳一題。
+  let autoAdvanceTimerId = null;
+  function scheduleAutoAdvance(answeredIndex, boundAttemptId) {
+    if (autoAdvanceTimerId !== null) clearTimeout(autoAdvanceTimerId);
+    autoAdvanceTimerId = setTimeout(function () {
+      autoAdvanceTimerId = null;
+      const area = document.getElementById("quiz-area");
+      if (!area || area.style.display === "none") return;
+      if (!window.qList || !window.qList.length || window.qIdx !== answeredIndex) return;
+
+      if (reviewIsMockExam) {
+        if (boundAttemptId !== currentMockAttemptId) return;
+        // 全部作答完成時，既有 maybePromptFiftyComplete() 會詢問是否交卷；
+        // 不在確認框底下偷偷換題或自動交卷。
+        if (Object.keys(window.answered || {}).length >= window.qList.length) return;
+        let next = -1;
+        for (let i = answeredIndex + 1; i < window.qList.length; i++) {
+          if (window.answered[i] === undefined) { next = i; break; }
+        }
+        if (next === -1) {
+          for (let i = 0; i < answeredIndex; i++) {
+            if (window.answered[i] === undefined) { next = i; break; }
+          }
+        }
+        if (next !== -1) {
+          window.qIdx = next;
+          window.renderQ();
+        }
+        return;
+      }
+
+      // 一般練習與錯題複習沿用既有 nextQ()：它會找下一個未作答題目，
+      // 最後一題完成時則會進入原本的成績畫面。
+      window.nextQ();
+    }, 650);
+  }
+
   const origSelectOpt = window.selectOpt;
   window.selectOpt = function (n) {
     const wasAnswered =
@@ -2280,6 +2334,7 @@ function initQuizHooks() {
       updateStickyProgressBar();
       persistCurrentMockSession(); // requirement 四：修改答案也要自動保存
       maybePromptFiftyComplete(currentMockAttemptId);
+      scheduleAutoAdvance(window.qIdx, currentMockAttemptId);
       return;
     }
 
@@ -2296,6 +2351,7 @@ function initQuizHooks() {
       persistCurrentMockSession();
       maybePromptFiftyComplete(currentMockAttemptId);
     }
+    scheduleAutoAdvance(window.qIdx, currentMockAttemptId);
   };
 
   const origStartExam = window.startExam;
