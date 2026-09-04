@@ -63,7 +63,7 @@ const BASE = 'http://127.0.0.1:' + PORT;
 // 2026-09-04 修正錯題本缺少分類，以及新版 goPage 包裝漏回傳 false 造成
 // 導覽列「線上歷屆考題測驗」誤跳 quiz.html，新增 S23 共 9 項（含 375px
 // 錯題分類面板不產生橫向捲動），總數 127。
-const EXPECTED_TOTAL = 127;
+const EXPECTED_TOTAL = 133;
 
 let total = 0, passed = 0;
 const results = [];
@@ -1336,6 +1336,79 @@ async function scenario23() {
   record('S23: 點「線上歷屆考題測驗」留在 index.html 的站內作答頁，不再跳到 quiz.html', /\/index\.html$/.test(route.pathname) && route.hash === '#quiz' && route.quizActive, route);
 }
 
+async function scenario24() {
+  console.log('\n### Scenario 24: 錯題分類可收起；選完答案自動前往下一題 ###');
+  await freshLoad();
+
+  await page.evaluate(() => {
+    const picked = window.QS.find((q) => q.course && q.chapter && q.exam);
+    const wrong = [0, 1, 2, 3].find((idx) => !picked.ans.includes(idx));
+    localStorage.setItem('rex_quiz_myprogress_v1', JSON.stringify({
+      answers: { [picked.n]: wrong },
+      flagged: {},
+      mockHistory: [],
+    }));
+  });
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await waitForMockExamModuleReady();
+  await goToQuizPage();
+  await page.click('#review-wrong-btn');
+  await page.waitForSelector('#wrong-book-panel');
+
+  const expanded = await page.evaluate(() => ({
+    toggle: document.querySelector('#wrong-book-panel [aria-expanded="true"]')?.textContent || '',
+    groups: document.querySelectorAll('#wrong-book-panel [data-wrong-course], #wrong-book-panel [data-wrong-exam]').length,
+  }));
+  record('S24: 錯題分類展開時有清楚的「收起」按鈕', expanded.toggle.includes('收起') && expanded.groups > 0, expanded);
+
+  await page.click('#wrong-book-panel [aria-expanded="true"]');
+  const collapsed = await page.evaluate(() => ({
+    text: document.getElementById('wrong-book-panel')?.innerText || '',
+    expanded: document.querySelector('#wrong-book-panel [aria-expanded]')?.getAttribute('aria-expanded'),
+    groups: document.querySelectorAll('#wrong-book-panel [data-wrong-course], #wrong-book-panel [data-wrong-exam], #wrong-book-panel [data-wrong-chapter]').length,
+    height: document.getElementById('wrong-book-panel')?.getBoundingClientRect().height || 0,
+  }));
+  record('S24: 收起後只保留精簡摘要與「展開」按鈕，完整分類清單不再占版面', collapsed.expanded === 'false' && collapsed.text.includes('展開') && collapsed.groups === 0 && collapsed.height < 100, collapsed);
+
+  await page.setViewportSize({ width: 375, height: 812 });
+  const mobileCollapsed = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    viewport: innerWidth,
+    panelRight: document.getElementById('wrong-book-panel')?.getBoundingClientRect().right || 0,
+  }));
+  record('S24: 375px 手機寬度下，收起狀態不造成水平溢出', mobileCollapsed.scrollWidth <= mobileCollapsed.viewport && mobileCollapsed.panelRight <= mobileCollapsed.viewport, mobileCollapsed);
+
+  await page.click('#review-wrong-btn');
+  const reopened = await page.evaluate(() => ({
+    expanded: document.querySelector('#wrong-book-panel [aria-expanded]')?.getAttribute('aria-expanded'),
+    groups: document.querySelectorAll('#wrong-book-panel [data-wrong-course], #wrong-book-panel [data-wrong-exam]').length,
+  }));
+  record('S24: 再按一次錯題本膠囊按鈕即可重新展開分類', reopened.expanded === 'true' && reopened.groups > 0, reopened);
+
+  await freshLoad();
+  await goToQuizPage();
+  await page.evaluate(() => {
+    window.selectCourse('medsurg');
+    window.startExam('115-1');
+  });
+  await page.waitForFunction(() => window.qList && window.qList.length > 1 && window.qIdx === 0);
+  await page.click('#q-opts .opt-btn');
+  await page.waitForFunction(() => window.qIdx === 1, null, { timeout: 3000 });
+  const autoNext = await page.evaluate(() => ({ qIdx: window.qIdx, answered: Object.keys(window.answered || {}).length }));
+  record('S24: 一般練習選完答案後自動前往下一題，且只前進一題', autoNext.qIdx === 1 && autoNext.answered === 1, autoNext);
+
+  await freshLoad();
+  await startMockExam('medsurg');
+  await page.click('#q-opts .opt-btn');
+  await page.waitForFunction(() => window.qIdx === 1, null, { timeout: 3000 });
+  const mockAutoNext = await page.evaluate(() => ({
+    qIdx: window.qIdx,
+    answered: Object.keys(window.answered || {}).length,
+    resultVisible: document.getElementById('quiz-result').style.display !== 'none',
+  }));
+  record('S24: 模擬考選完答案也自動前往下一題，但不會提前交卷', mockAutoNext.qIdx === 1 && mockAutoNext.answered === 1 && !mockAutoNext.resultVisible, mockAutoNext);
+}
+
 async function main() {
   server = await startServer(SITE_ROOT, PORT);
   browser = await chromium.launch();
@@ -1356,6 +1429,9 @@ async function main() {
   try {
     if (process.env.REX_TEST_SCENARIO === '23') {
       try { await scenario23(); } catch (e) { record('S23: threw an unexpected exception', false, e.stack || String(e)); }
+      record('No uncaught page errors or console.error across the targeted run', pageErrors.length === 0, pageErrors.join(' | '));
+    } else if (process.env.REX_TEST_SCENARIO === '24') {
+      try { await scenario24(); } catch (e) { record('S24: threw an unexpected exception', false, e.stack || String(e)); }
       record('No uncaught page errors or console.error across the targeted run', pageErrors.length === 0, pageErrors.join(' | '));
     } else {
     try { await scenario1(); } catch (e) { record('S1: threw an unexpected exception', false, e.stack || String(e)); }
@@ -1381,6 +1457,7 @@ async function main() {
     try { await scenario21(); } catch (e) { record('S21: threw an unexpected exception', false, e.stack || String(e)); }
     try { await scenario22(); } catch (e) { record('S22: threw an unexpected exception', false, e.stack || String(e)); }
     try { await scenario23(); } catch (e) { record('S23: threw an unexpected exception', false, e.stack || String(e)); }
+    try { await scenario24(); } catch (e) { record('S24: threw an unexpected exception', false, e.stack || String(e)); }
 
       record('No uncaught page errors or console.error across the entire run', pageErrors.length === 0, pageErrors.join(' | '));
     }
@@ -1390,7 +1467,7 @@ async function main() {
   }
   console.log('\n=====================================');
   console.log('TOTAL=' + total + ' PASSED=' + passed + ' FAILED=' + (total - passed));
-  const expectedTotal = process.env.REX_TEST_SCENARIO === '23' ? 10 : EXPECTED_TOTAL;
+  const expectedTotal = process.env.REX_TEST_SCENARIO === '23' ? 10 : process.env.REX_TEST_SCENARIO === '24' ? 7 : EXPECTED_TOTAL;
   if (total !== expectedTotal) {
     console.log(
       '⚠️  本次執行的斷言總數（' + total + '）跟完整跑完應有的數量（EXPECTED_TOTAL=' + EXPECTED_TOTAL + '）不一樣——' +
