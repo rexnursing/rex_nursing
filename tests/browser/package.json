@@ -1,0 +1,14 @@
+{
+  "name": "rex-nursing-browser-acceptance-tests",
+  "private": true,
+  "type": "module",
+  "description": "Playwright 瀏覽器驗收測試（模擬考功能）。不依賴 python，npm test 內部會自己起一個暫時的靜態伺服器、測完自動關閉。",
+  "scripts": {
+    "postinstall": "playwright install chromium",
+    "test": "node acceptance.mjs",
+    "posttest": "echo 完成。詳細結果另存在 acceptance-result.json，截圖存在 screenshots/ 資料夾。"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.0"
+  }
+}
