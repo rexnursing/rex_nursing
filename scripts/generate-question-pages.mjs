@@ -89,6 +89,14 @@ function parseExamLabel(label) {
   };
 }
 
+// 由梯次標籤（如 108-1、115-2）算出年度範圍文字，例如「108–115」，供標題／描述使用
+function yearRangeOf(labels) {
+  const ys = [...labels].map(l => parseInt(parseExamLabel(l).year, 10)).filter(Number.isFinite);
+  if (!ys.length) return '';
+  const lo = Math.min(...ys), hi = Math.max(...ys);
+  return lo === hi ? `${lo}` : `${lo}–${hi}`;
+}
+
 // 依考選部梯次慣例（2月=第一次、7月=第二次、11月=第三次；民國年+1911=西元年）推算穩定的
 // lastmod，避免每次執行 sitemap 都填「今天」（見專案規則：不要每次執行都填今天）。
 function lastmodFromExamLabel(label) {
@@ -305,8 +313,8 @@ ${nextUrl ? `<a href="${nextUrl}">下一題 →</a>` : '<span></span>'}
 // ---------- 產生「該次考卷．單科」索引頁 ----------
 function buildExamSubjectIndex(course, examLabel, list, year, sittingLabel) {
   const s = SUBJECTS[course];
-  const titleTag = `${year}年${sittingLabel}${s.name}題目列表｜${SITE_NAME}`;
-  const description = `${year}年${sittingLabel}護理師國考${s.name}全部題目列表，共${list.length}題，逐題附答案與解析，方便練習與查詢。`;
+  const titleTag = `${year}年${sittingLabel}護理師國考${s.name}題目｜${list.length}題答案與詳解｜${SITE_NAME}`;
+  const description = `${year}年${sittingLabel}護理師國考${s.name}完整題目，共${list.length}題，每題附正確答案與逐題詳解，可免費瀏覽。`;
   const canonical = `${SITE_ROOT}questions/${examLabel}/${course}/index.html`;
 
   const items = list.map(q => {
@@ -344,9 +352,9 @@ ${items}
 
 // ---------- 產生「該次考卷」總索引頁（各科） ----------
 function buildExamIndex(examLabel, subjectGroups, year, sittingLabel) {
-  const titleTag = `${year}年${sittingLabel}護理師國考題目列表｜${SITE_NAME}`;
   const totalQ = Object.values(subjectGroups).reduce((a, l) => a + l.length, 0);
-  const description = `${year}年${sittingLabel}護理師國考各科題目列表，共${totalQ}題，涵蓋${SUBJECT_ORDER.filter(c => subjectGroups[c]).map(c => SUBJECTS[c].name).join('、')}，附答案與解析。`;
+  const titleTag = `${year}年${sittingLabel}護理師國考題目｜${totalQ}題答案與詳解｜${SITE_NAME}`;
+  const description = `${year}年${sittingLabel}（${examLabel}）護理師國考完整題目，共${totalQ}題，涵蓋${SUBJECT_ORDER.filter(c => subjectGroups[c]).map(c => SUBJECTS[c].name).join('、')}，每題附正確答案與逐題詳解，可免費瀏覽。`;
   const canonical = `${SITE_ROOT}questions/${examLabel}/index.html`;
 
   const cards = SUBJECT_ORDER.filter(c => subjectGroups[c]).map(c => {
@@ -383,8 +391,9 @@ ${cards}
 
 // ---------- 產生題庫總索引頁 ----------
 function buildQuestionsIndex(examLabels, sessionsByExam) {
-  const titleTag = `護理師國考歷屆題目總覽｜${SITE_NAME}`;
-  const description = `護理師國考歷屆試題題目網頁版，依年度、次別、科目整理，內外科、基護、基礎醫學、產兒科、精神衛生與社區護理全部涵蓋，逐題附答案與解析。`;
+  const yr = yearRangeOf(examLabels);
+  const titleTag = `護理師國考歷屆試題（${yr}年）｜題目、答案與詳解｜${SITE_NAME}`;
+  const description = `護理師國考${yr}年歷屆試題，共${examLabels.length}個梯次，依年度、次別、科目整理，內外科、基護、基礎醫學、產兒科、精神衛生與社區護理全部涵蓋，逐題附答案與詳解，可免費線上練習。`;
   const canonical = `${SITE_ROOT}questions/index.html`;
 
   const sortedLabels = [...examLabels].sort((a, b) => {
@@ -434,8 +443,9 @@ ${items}
 // ---------- 產生科目索引頁（跨年度） ----------
 function buildSubjectIndex(course, examLabelsForSubject) {
   const s = SUBJECTS[course];
-  const titleTag = `${s.name}歷屆國考題目｜${SITE_NAME}`;
-  const description = `護理師國考${s.name}歷屆試題題目網頁版，依年度次別整理，逐題附答案與解析，適合分科複習與章節練習。`;
+  const yr = yearRangeOf(examLabelsForSubject);
+  const titleTag = `護理師國考${s.name}歷屆試題（${yr}年）｜答案與詳解｜${SITE_NAME}`;
+  const description = `護理師國考${s.name}${yr}年歷屆試題，依年度次別整理，逐題附正確答案與詳解，適合分科複習與章節練習，可免費瀏覽。`;
   const canonical = `${SITE_ROOT}subjects/${course}/index.html`;
 
   const sorted = [...examLabelsForSubject].sort((a, b) => {
