@@ -13,6 +13,15 @@ execFileSync(process.execPath, [path.join(root, 'scripts/generate-question-pages
 const data = { window: null };
 data.window = data;
 vm.runInNewContext(fs.readFileSync(path.join(root, 'exam-data.js'), 'utf8'), data);
+const question4852 = data.QS.find(question => question.n === 4852);
+const question4853 = data.QS.find(question => question.n === 4853);
+assert.ok(question4852, 'question 4852 must exist');
+assert.deepEqual([...question4852.ans], [1], 'question 4852 official answer must be B');
+assert.ok(question4853, 'question 4853 must exist');
+assert.ok(!question4853.q.startsWith('承上題'), 'question 4853 must be independently answerable');
+assert.match(question4853.q, /G1P0/);
+assert.match(question4853.q, /ROA/);
+assert.match(question4853.q, /station\s*=\s*0/i);
 const groups = new Map();
 for (const q of data.QS) {
   const key = `${q.course}|${q.exam}`;
