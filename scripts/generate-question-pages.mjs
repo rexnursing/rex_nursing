@@ -45,6 +45,7 @@ const SUBJECT_ORDER = ['medsurg', 'basicmed', 'basic', 'obpeds', 'psych'];
 
 const SITE_ROOT = 'https://rexnursing.github.io/rex_nursing/';
 const SITE_NAME = 'Rex Nursing';
+const GA_MEASUREMENT_ID = 'G-E0F8V01KQ5';
 
 // ---------- 讀取 exam-data.js 並在沙盒中執行，取得正規化後的 QS / EXAM_SESSIONS ----------
 function loadExamData() {
@@ -202,6 +203,8 @@ function pageShell({ titleTag, description, canonical, ogType, bodyHtml, extraHe
   return `<!doctype html>
 <html lang="zh-TW">
 <head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${escapeHtml(titleTag)}</title>

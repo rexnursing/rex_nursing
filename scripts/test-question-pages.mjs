@@ -81,4 +81,20 @@ context.window.renderCourseGrid('obpeds');
 context.window.renderCourseGrid('obpeds');
 for (const entry of [medsurg, obpeds]) assert.equal(entry.wrappers.length, 1);
 assert.ok(obpeds.wrappers[0].innerHTML.includes('questions/114-3/obpeds/index.html'));
-console.log(`PASS: ${checked} question links across ${groups.size} exams; one list link per card.`);
+
+const htmlFiles = [];
+function collectHtmlFiles(dir) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) collectHtmlFiles(full);
+    else if (entry.name.endsWith('.html')) htmlFiles.push(full);
+  }
+}
+collectHtmlFiles(out);
+for (const file of htmlFiles) {
+  const html = fs.readFileSync(file, 'utf8');
+  assert.ok(html.includes('G-E0F8V01KQ5'), `${file}: current GA measurement ID is missing`);
+  assert.ok(!html.includes('G-68DL5S3JGR'), `${file}: obsolete GA measurement ID remains`);
+}
+
+console.log(`PASS: ${checked} question links across ${groups.size} exams; ${htmlFiles.length} generated HTML pages use the current GA measurement ID; one list link per card.`);
