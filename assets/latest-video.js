@@ -76,7 +76,7 @@
 
   render(fallbackVideo);
 
-  fetch("assets/latest-video.json", { cache: "no-store" })
+  fetch("assets/latest-video.json?v=20261028-longform2", { cache: "no-store" })
     .then(function (response) {
       if (!response.ok) throw new Error("Latest video data unavailable");
       return response.json();
