@@ -2,12 +2,75 @@
   "use strict";
 
   var CARD_ID = "ios-app-exam-card";
-  var APP_STORE_URL = "https://apps.apple.com/tw/app/id6802031082";
+  var APP_STORE_URL = "https://apps.apple.com/tw/app/rex-nursing-%E8%AD%B7%E7%90%86%E5%B8%AB%E5%9C%8B%E8%80%83%E9%A1%8C%E5%BA%AB/id6802031082";
   var INSTAGRAM_URL = "https://www.instagram.com/rex_nursing/";
 
   function track(eventName) {
     if (typeof window.gtag === "function") {
       window.gtag("event", eventName, { placement: "exam_download_page" });
+    }
+  }
+
+  function createDownloadCard(id, titleId, placement) {
+    var card = document.createElement("section");
+    card.id = id;
+    card.setAttribute("aria-labelledby", titleId);
+    card.style.cssText =
+      "background:var(--white);border:1px solid var(--bd);border-left:5px solid var(--teal);" +
+      "border-radius:var(--r);padding:18px 20px;margin:0 0 24px;position:relative;z-index:2;" +
+      "box-shadow:0 8px 24px rgba(31,59,92,.08)";
+
+    card.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap">' +
+        '<div style="display:flex;align-items:center;gap:14px;flex:1 1 420px;min-width:0">' +
+          '<img src="favicon.png" alt="Rex Nursing App 圖示" width="58" height="58" ' +
+            'style="width:58px;height:58px;border-radius:14px;flex-shrink:0;box-shadow:0 4px 12px rgba(31,59,92,.15)">' +
+          '<div style="min-width:0">' +
+            '<div style="font-size:10.5px;letter-spacing:.09em;font-weight:700;color:var(--teal);margin-bottom:2px">' +
+              'REX NURSING · iOS APP</div>' +
+            '<h3 id="' + titleId + '" style="font-size:17px;line-height:1.45;color:var(--teal-d);margin:0 0 3px">' +
+              '下載 Rex Nursing iOS App</h3>' +
+            '<p style="font-size:13px;line-height:1.65;color:var(--muted);margin:0">' +
+              '隨時練習護理師國考題庫，免費下載。</p>' +
+          '</div>' +
+        '</div>' +
+        '<a href="' + APP_STORE_URL + '" target="_blank" rel="noopener noreferrer" ' +
+          'data-ios-app-placement="' + placement + '" ' +
+          'aria-label="下載 Rex Nursing iOS App（在新分頁開啟 App Store）" ' +
+          'style="display:inline-flex;align-items:center;justify-content:center;min-height:48px;' +
+            'padding:0 22px;border-radius:12px;background:#111827;color:#fff;font-size:14px;' +
+            'font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 4px 12px rgba(17,24,39,.2)">' +
+          'App Store 下載 →</a>' +
+      '</div>';
+
+    var link = card.querySelector("a");
+    if (link) {
+      link.addEventListener("click", function () {
+        if (typeof window.gtag === "function") {
+          window.gtag("event", "ios_app_download_click", { placement: placement });
+        }
+      });
+    }
+    return card;
+  }
+
+  function ensurePrimaryDownloadCards() {
+    var homePage = document.getElementById("page-home");
+    var homeHero = homePage && homePage.querySelector(".hero.hero-wrap");
+    if (homeHero && !document.getElementById("ios-app-home-card")) {
+      homeHero.insertAdjacentElement(
+        "afterend",
+        createDownloadCard("ios-app-home-card", "ios-app-home-title", "home")
+      );
+    }
+
+    var quizPage = document.getElementById("page-quiz");
+    var syncBar = quizPage && quizPage.querySelector("#sync-bar");
+    if (syncBar && !document.getElementById("ios-app-quiz-card")) {
+      syncBar.insertAdjacentElement(
+        "afterend",
+        createDownloadCard("ios-app-quiz-card", "ios-app-quiz-title", "quiz")
+      );
     }
   }
 
@@ -79,9 +142,14 @@
     }
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", ensureIosAppCard, { once: true });
-  } else {
+  function initializeIosAppCards() {
+    ensurePrimaryDownloadCards();
     ensureIosAppCard();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeIosAppCards, { once: true });
+  } else {
+    initializeIosAppCards();
   }
 })();
