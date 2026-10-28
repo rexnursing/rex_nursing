@@ -1,0 +1,49 @@
+name: Update latest regular YouTube video
+
+on:
+  schedule:
+    # 每小時檢查一次；Shorts 會由更新程式排除。
+    - cron: '37 * * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: latest-youtube-video
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 讀取頻道並排除 Shorts
+        run: node scripts/update-latest-video.mjs
+
+      - name: 最新一般影片變更時提交回 main
+        shell: bash
+        run: |
+          if git diff --quiet -- assets/latest-video.json; then
+            echo "Latest regular video unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/latest-video.json
+          git commit -m "自動更新 YouTube 最新一般影片"
+          git pull --rebase origin main
+          git push origin HEAD:main
+          gh workflow run generate-question-pages.yml --ref main
+        env:
+          GH_TOKEN: ${{ github.token }}
