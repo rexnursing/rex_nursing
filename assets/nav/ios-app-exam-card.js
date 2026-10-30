@@ -3,6 +3,7 @@
 
   var CARD_ID = "ios-app-exam-card";
   var APP_STORE_URL = "https://apps.apple.com/tw/app/rex-nursing-%E8%AD%B7%E7%90%86%E5%B8%AB%E5%9C%8B%E8%80%83%E9%A1%8C%E5%BA%AB/id6802031082";
+  var APP_ICON_URL = "images/rex-app-icon.png?v=20261030";
   var INSTAGRAM_URL = "https://www.instagram.com/rex_nursing/";
 
   function track(eventName) {
@@ -23,7 +24,7 @@
     card.innerHTML =
       '<div style="display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap">' +
         '<div style="display:flex;align-items:center;gap:14px;flex:1 1 420px;min-width:0">' +
-          '<img src="favicon.png" alt="Rex Nursing App 圖示" width="58" height="58" ' +
+          '<img src="' + APP_ICON_URL + '" alt="Rex Nursing App 圖示" width="58" height="58" ' +
             'style="width:58px;height:58px;border-radius:14px;flex-shrink:0;box-shadow:0 4px 12px rgba(31,59,92,.15)">' +
           '<div style="min-width:0">' +
             '<div style="font-size:10.5px;letter-spacing:.09em;font-weight:700;color:var(--teal);margin-bottom:2px">' +
@@ -96,16 +97,20 @@
 
     card.innerHTML =
       '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:22px;flex-wrap:wrap">' +
-        '<div style="flex:1 1 360px">' +
-          '<div style="display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.13);' +
-            'border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:5px 12px;' +
-            'font-size:11.5px;font-weight:700;letter-spacing:.06em;margin-bottom:12px">' +
-            '📱 iOS APP 已上架</div>' +
-          '<h3 id="ios-app-exam-title" style="font-family:\'Noto Serif TC\',serif;font-size:20px;' +
-            'line-height:1.5;color:#fff;margin:0 0 8px">Rex Nursing 護理師國考題庫</h3>' +
-          '<p style="font-size:13.5px;line-height:1.85;color:rgba(255,255,255,.82);margin:0">' +
-            '使用 iPhone／iPad 隨時練習歷屆國考題、模擬考、錯題本與學習紀錄，' +
-            '通勤或離線時也能繼續複習。</p>' +
+        '<div style="display:flex;align-items:center;gap:16px;flex:1 1 360px;min-width:0">' +
+          '<img src="' + APP_ICON_URL + '" alt="Rex Nursing App 圖示" width="74" height="74" ' +
+            'style="width:74px;height:74px;border-radius:18px;flex-shrink:0;box-shadow:0 6px 18px rgba(0,0,0,.2)">' +
+          '<div style="min-width:0">' +
+            '<div style="display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.13);' +
+              'border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:5px 12px;' +
+              'font-size:11.5px;font-weight:700;letter-spacing:.06em;margin-bottom:12px">' +
+              '📱 iOS APP 已上架</div>' +
+            '<h3 id="ios-app-exam-title" style="font-family:\'Noto Serif TC\',serif;font-size:20px;' +
+              'line-height:1.5;color:#fff;margin:0 0 8px">Rex Nursing 護理師國考題庫</h3>' +
+            '<p style="font-size:13.5px;line-height:1.85;color:rgba(255,255,255,.82);margin:0">' +
+              '使用 iPhone／iPad 隨時練習歷屆國考題、模擬考、錯題本與學習紀錄，' +
+              '通勤或離線時也能繼續複習。</p>' +
+          '</div>' +
         '</div>' +
         '<div style="flex:0 1 auto;align-self:center">' +
           '<a id="ios-app-store-download" href="' + APP_STORE_URL + '" target="_blank" ' +
