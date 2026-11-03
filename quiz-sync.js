@@ -2233,6 +2233,84 @@ async function renderGlobalStats(q, picked) {
     '<div style="font-size:11.5px;color:var(--muted);margin-top:4px">共 ' + total + " 位登入同學作答（每人每題只算第一次）</div>";
 }
 
+// ---------------------------------------------------------------------------
+// ▶ Rex 影片解析按鈕：exam-data.js 題目有 video（YouTube 影片 ID）時，在解析
+// 下方與結果頁錯題清單加上紅色按鈕，並把解析底部的「解析由 AI 協助生成」
+// 改成「依 Rex 影片解析修訂」。放在這裡而不是 index.html，是因為 index.html
+// 會被另一個衛教工具整份重新產生（見檔案開頭說明），寫在那邊會被洗掉。
+// ---------------------------------------------------------------------------
+
+const AI_EXPL_NOTE = "解析由 AI 協助生成";
+const REX_EXPL_NOTE = "依 Rex 影片解析修訂";
+
+function rexVideoButtonHtml(videoId) {
+  if (!/^[A-Za-z0-9_-]{11}$/.test(videoId || "")) return "";
+  return (
+    '<a href="https://youtu.be/' + videoId + '" target="_blank" rel="noopener" ' +
+    'style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;background:#C4302B;color:#fff;font-size:13px;font-weight:500;text-decoration:none">▶ 看 Rex 影片解析</a>'
+  );
+}
+
+// 解析區的底部註記是一段純文字，直接換掉文字節點裡的那幾個字，
+// 不依賴 index.html 有沒有替它包 id。
+function setExplSourceNote(fromRexVideo) {
+  const box = document.getElementById("feedback-box");
+  if (!box) return;
+  const [from, to] = fromRexVideo ? [AI_EXPL_NOTE, REX_EXPL_NOTE] : [REX_EXPL_NOTE, AI_EXPL_NOTE];
+  const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
+  for (let t = walker.nextNode(); t; t = walker.nextNode()) {
+    if (t.nodeValue.includes(from)) {
+      t.nodeValue = t.nodeValue.replace(from, to);
+      return;
+    }
+  }
+}
+
+function renderFeedbackVideo(q) {
+  const fbText = document.getElementById("fb-text");
+  if (!fbText) return;
+  let slot = document.getElementById("fb-video");
+  if (!slot) {
+    slot = document.createElement("div");
+    slot.id = "fb-video";
+    slot.style.marginBottom = "12px";
+    fbText.insertAdjacentElement("afterend", slot);
+  }
+  const btn = rexVideoButtonHtml(q && q.video);
+  slot.innerHTML = btn;
+  slot.style.display = btn ? "block" : "none";
+  setExplSourceNote(!!btn);
+}
+
+// 結果頁錯題清單：index.html 的 showResult() 依 answered 的順序，每個答錯的
+// 題目畫一張淺紅色卡片；這裡照同樣順序把影片按鈕補到對應卡片最後面。
+function addVideoButtonsToWrongList() {
+  const list = document.getElementById("wrong-list");
+  if (!list || !window.qList || !window.answered) return;
+  const wrongQs = Object.entries(window.answered)
+    .filter(([i, pick]) => window.qList[i] && !window.qList[i].ans.includes(pick))
+    .map(([i]) => window.qList[i]);
+  const cards = list.querySelectorAll('div[style*="#FAECE7"]');
+  if (cards.length !== wrongQs.length) return; // 版面跟預期不同就不硬塞，避免按鈕配錯題
+  cards.forEach((card, i) => {
+    const btn = rexVideoButtonHtml(wrongQs[i].video);
+    if (!btn || card.querySelector('a[href^="https://youtu.be/"]')) return;
+    const wrap = document.createElement("div");
+    wrap.style.marginTop = "8px";
+    wrap.innerHTML = btn;
+    card.appendChild(wrap);
+  });
+}
+
+// 解析常有分段（\n），結果頁錯題清單原本沒有保留換行。
+(function ensureWrongListExplStyle() {
+  if (document.getElementById("wrong-list-expl-style")) return;
+  const style = document.createElement("style");
+  style.id = "wrong-list-expl-style";
+  style.textContent = '#wrong-list div[style*="line-height:1.75"]{white-space:pre-wrap}';
+  document.head.appendChild(style);
+})();
+
 // 登入／登出後，如果解析區正開著，重新畫一次分佈。
 function refreshVisibleStats() {
   const fb = document.getElementById("q-feedback");
@@ -2457,12 +2535,14 @@ function initQuizHooks() {
     scheduleAutoAdvance(window.qIdx, currentMockAttemptId);
   };
 
-  // 解析區的「全站答題分佈」：index.html 原本畫的是本機 localStorage 統計，
-  // 畫完之後換成 Firestore 全站資料。正式模擬考作答當下不顯示解析，不必讀。
+  // 解析區：補上 Rex 影片解析按鈕；「全站答題分佈」index.html 原本畫的是本機
+  // localStorage 統計，畫完之後換成 Firestore 全站資料。正式模擬考作答當下不顯示
+  // 解析，不必讀分佈。
   const origShowFeedback = window.showFeedback;
   if (typeof origShowFeedback === "function") {
     window.showFeedback = function (n, stats) {
       origShowFeedback(n, stats);
+      renderFeedbackVideo(window.qList && window.qList[window.qIdx]);
       if (reviewIsMockExam) return;
       lastFeedbackQ = window.qList && window.qList[window.qIdx];
       lastFeedbackPick = n;
@@ -2543,6 +2623,7 @@ function initQuizHooks() {
       return;
     }
     origShowResult();
+    addVideoButtonsToWrongList();
     syncAndroidBetaCardVisibility();
   };
 
