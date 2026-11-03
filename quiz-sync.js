@@ -30,6 +30,8 @@ import {
   getDoc,
   setDoc,
   serverTimestamp,
+  writeBatch,
+  increment,
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 import * as mockExam from "./quiz-mock-exam.js";
 
@@ -2141,6 +2143,104 @@ function stopTimer() {
 }
 
 // ---------------------------------------------------------------------------
+// 📊 全站答題分佈：Firestore questionStats/{n} = { o0..o3: 人數 }。
+// 只有登入者計票，每人每題只算第一次作答——同一個 batch 裡建立
+// questionStats/{n}/voters/{uid} 並把對應選項 +1，Firestore 規則兩邊互相
+// 檢查，擋掉重複投票與亂加票。沒登入的人看不到分佈，改顯示登入按鈕。
+// index.html 的 showFeedback() 仍會先畫出舊的本機統計，這裡在它之後把
+// #stats-bars 整塊換成全站資料（不動 index.html，見檔案開頭說明）。
+// ---------------------------------------------------------------------------
+
+const pendingVotes = {}; // n -> Promise：讓分佈等這一票寫完再讀，才看得到自己那一票
+let statsRenderSeq = 0; // 切題很快時，丟掉比較舊的非同步結果
+let lastFeedbackQ = null;
+let lastFeedbackPick = null;
+
+async function castVote(n, idx) {
+  const statsRef = doc(db, "questionStats", String(n));
+  const voterRef = doc(db, "questionStats", String(n), "voters", currentUser.uid);
+  try {
+    if ((await getDoc(voterRef)).exists()) return; // 這題之前投過，只算第一次
+    const batch = writeBatch(db);
+    batch.set(voterRef, { opt: idx, at: serverTimestamp() });
+    batch.set(statsRef, { ["o" + idx]: increment(1) }, { merge: true });
+    await batch.commit();
+  } catch (err) {
+    console.warn("[quiz-sync] 全站答題分佈投票失敗", err);
+  }
+}
+
+function voteForAnswer(n, idx) {
+  if (!currentUser || n === undefined || n === null) return;
+  if (!Number.isInteger(idx) || idx < 0 || idx > 3) return;
+  pendingVotes[n] = castVote(n, idx);
+}
+
+const STATS_NOTE_STYLE = "font-size:12.5px;color:var(--muted);line-height:1.7";
+
+function renderStatsLoginPrompt(box) {
+  box.innerHTML =
+    '<div style="' + STATS_NOTE_STYLE + '">登入後才看得到全站答題分佈，你的作答也會計入統計（每題只算第一次作答）。</div>' +
+    '<button type="button" id="stats-login-btn" style="margin-top:8px;padding:7px 14px;border-radius:999px;border:1px solid var(--teal);background:0 0;color:var(--teal);font-size:13px;cursor:pointer;font-family:inherit">🔑 使用 Google 登入查看</button>';
+  const btn = document.getElementById("stats-login-btn");
+  if (btn) btn.onclick = login;
+}
+
+async function renderGlobalStats(q, picked) {
+  const box = document.getElementById("stats-bars");
+  if (!box || !q) return;
+  const seq = ++statsRenderSeq;
+  if (!currentUser) {
+    renderStatsLoginPrompt(box);
+    return;
+  }
+  box.innerHTML = '<div style="' + STATS_NOTE_STYLE + '">載入全站答題分佈中…</div>';
+  let counts;
+  try {
+    if (pendingVotes[q.n]) await pendingVotes[q.n];
+    const snap = await getDoc(doc(db, "questionStats", String(q.n)));
+    const d = snap.exists() ? snap.data() : {};
+    counts = q.opts.map((_, i) => d["o" + i] || 0);
+  } catch (err) {
+    console.warn("[quiz-sync] 讀取全站答題分佈失敗", err);
+    if (seq === statsRenderSeq) {
+      box.innerHTML = '<div style="' + STATS_NOTE_STYLE + '">暫時讀不到全站答題分佈，請稍後再試。</div>';
+    }
+    return;
+  }
+  if (seq !== statsRenderSeq) return;
+  const total = counts.reduce((a, b) => a + b, 0);
+  if (!total) {
+    box.innerHTML = '<div style="' + STATS_NOTE_STYLE + '">還沒有登入的同學答過這題。</div>';
+    return;
+  }
+  const labels = ["A", "B", "C", "D"];
+  box.innerHTML =
+    counts
+      .map((c, i) => {
+        const pct = Math.round((c / total) * 100);
+        const isAns = q.ans.includes(i);
+        const isWrongPick = i === picked && !isAns;
+        const color = isAns ? "#4BA6A1" : isWrongPick ? "#D85A30" : "#B4B2A9";
+        return (
+          '<div class="stat-bar-row"><div class="stat-bar-label"><span>' +
+          labels[i] + (isAns ? " ✓" : "") + (isWrongPick ? " ✗" : "") +
+          "</span><span>" + pct + "% (" + c + "人)</span></div>" +
+          '<div class="stat-bar-track"><div class="stat-bar-fill" style="width:' + pct + "%;background:" + color + '"></div></div></div>'
+        );
+      })
+      .join("") +
+    '<div style="font-size:11.5px;color:var(--muted);margin-top:4px">共 ' + total + " 位登入同學作答（每人每題只算第一次）</div>";
+}
+
+// 登入／登出後，如果解析區正開著，重新畫一次分佈。
+function refreshVisibleStats() {
+  const fb = document.getElementById("q-feedback");
+  if (!fb || fb.style.display === "none" || !lastFeedbackQ) return;
+  renderGlobalStats(lastFeedbackQ, lastFeedbackPick);
+}
+
+// ---------------------------------------------------------------------------
 // 掛勾層：在不改動 index.html 既有函式本體的前提下，
 // 把「記錄作答」「還原進度」「疑難標記」「錯題本／疑難標記複習」接到既有的
 // selectOpt / startExam / filterSubj / beginQuiz / renderQ /
@@ -2339,6 +2439,9 @@ function initQuizHooks() {
     }
 
     const q = window.qList && window.qList[window.qIdx];
+    // 要在 origSelectOpt() 之前送出：它會同步呼叫 showFeedback()，
+    // renderGlobalStats() 需要先拿到這一票的 Promise 才能等它寫完。
+    if (q && !wasAnswered) voteForAnswer(q.n, n);
     origSelectOpt(n);
     if (q) recordAnswer(q.n, n);
     updateStickyProgressBar();
@@ -2353,6 +2456,19 @@ function initQuizHooks() {
     }
     scheduleAutoAdvance(window.qIdx, currentMockAttemptId);
   };
+
+  // 解析區的「全站答題分佈」：index.html 原本畫的是本機 localStorage 統計，
+  // 畫完之後換成 Firestore 全站資料。正式模擬考作答當下不顯示解析，不必讀。
+  const origShowFeedback = window.showFeedback;
+  if (typeof origShowFeedback === "function") {
+    window.showFeedback = function (n, stats) {
+      origShowFeedback(n, stats);
+      if (reviewIsMockExam) return;
+      lastFeedbackQ = window.qList && window.qList[window.qIdx];
+      lastFeedbackPick = n;
+      renderGlobalStats(lastFeedbackQ, n);
+    };
+  }
 
   const origStartExam = window.startExam;
   window.startExam = function (examCode) {
@@ -2920,6 +3036,7 @@ function startSearchPractice(questions, title) {
 onAuthStateChanged(auth, (user) => {
   currentUser = user;
   dispatchAuthChange();
+  refreshVisibleStats();
   if (user) pullAndMergeOnLogin(user);
 });
 
