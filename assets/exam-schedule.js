@@ -1,1 +1,1 @@
-window.EXAM_SCHEDULE={reg3Start:"2026-08-28T00:00:00+08:00",reg3End:"2026-09-03T23:59:59+08:00",exam3Date:"2026-11-08T00:00:00+08:00",exam2Start:"2026-07-25T00:00:00+08:00",exam2End:"2026-07-27T23:59:59+08:00",exam3Label:"115年第三次",exam2Label:"115年第二次",sourceUpdated:"115/06/17"};
+window.EXAM_SCHEDULE={reg3Start:"2026-10-20T00:00:00+08:00",reg3End:"2026-10-29T23:59:59+08:00",exam3Date:"2027-02-20T00:00:00+08:00",exam2Start:"2026-10-20T00:00:00+08:00",exam2End:"2026-10-29T23:59:59+08:00",exam3Label:"116年第一次",exam2Label:"116年第一次",sourceUpdated:"115/10/15"};
